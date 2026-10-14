@@ -10,6 +10,7 @@ const TARGET_GMAIL = 'amitpatel42203@gmail.com';
 const FORMSUBMIT_URL = `https://formsubmit.co/ajax/${TARGET_GMAIL}`;
 const FOUNDER_NAME = 'Amit Verma';
 const FOUNDER_PHONE = '+91 76199 17057';
+const SITE_URL = 'https://him-ytra.vercel.app/';
 
 /**
  * Send automated professional email alert for a Customer Inquiry / Callback Request
@@ -20,6 +21,7 @@ export async function sendInquiryEmail(inquiry) {
       _subject: `🔔 [NEW INQUIRY] ${inquiry.name || 'Traveler'} | Phone: ${inquiry.phone} - HimYatra`,
       _template: 'table',
       _captcha: 'false',
+      _next: SITE_URL,
       '--- LEAD OVERVIEW ---': '----------------------------------------',
       'Inquiry Type': 'General Tour Inquiry / Instant Callback Request',
       'Customer Full Name': inquiry.name || 'Not provided',
@@ -27,6 +29,7 @@ export async function sendInquiryEmail(inquiry) {
       'Customer Email Address': inquiry.email || 'Not provided',
       'Inquiry Message / Request': inquiry.message || 'Interested in Himalayan travel packages & custom quote',
       'Website Section Source': inquiry.source || 'Website Inquire Modal',
+      'Website': SITE_URL,
       '--- COMPANY & FOUNDER DETAILS ---': '----------------------------------------',
       'Agency Name': 'HimYatra Holidays Private Limited',
       'Founder': `${FOUNDER_NAME} (${FOUNDER_PHONE})`,
@@ -63,6 +66,7 @@ export async function sendBookingEmail(booking) {
         : `🎟️ [NEW VACATION RESERVATION] ${booking.packageTitle || 'Tour Package'} | Ref: ${booking.bookingId} - ₹${Number(booking.finalTotal || 0).toLocaleString('en-IN')} | ${booking.name}`,
       _template: 'table',
       _captcha: 'false',
+      _next: SITE_URL,
       '--- VACATION RESERVATION DETAILS ---': '----------------------------------------',
       'Booking Reference ID': booking.bookingId || booking.booking_reference,
       'Package / Vacation Title': booking.packageTitle || booking.package_title,
@@ -88,6 +92,7 @@ export async function sendBookingEmail(booking) {
       'Founder': `${FOUNDER_NAME} (${FOUNDER_PHONE})`,
       'Company Helpline': FOUNDER_PHONE,
       'Company Email': TARGET_GMAIL,
+      'Company Website': SITE_URL,
       'Submission Timestamp': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
     };
 
