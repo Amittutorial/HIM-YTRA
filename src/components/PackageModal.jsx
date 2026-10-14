@@ -25,6 +25,10 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
             src={pkg.image}
             alt={pkg.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
 

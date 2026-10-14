@@ -6,65 +6,93 @@ export default function Hero({ onOpenBooking, onExploreClick }) {
 
   const heroBackgrounds = [
     {
+      id: 'himachal',
+      name: 'Himachal',
       url: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=2000&q=85',
       location: 'Solang Valley & Rohtang Pass, Himachal Pradesh',
       tag: 'Snow & Alpine Valleys'
     },
     {
-      url: 'https://images.unsplash.com/photo-1548013146-72479768bbaa?auto=format&fit=crop&w=2000&q=85',
+      id: 'uttarakhand',
+      name: 'Uttarakhand',
+      url: 'https://images.unsplash.com/photo-1612438214708-f428a707dd4e?auto=format&fit=crop&w=2000&q=85',
       location: 'Kedarnath & Badrinath Peaks, Uttarakhand',
       tag: 'Sacred Devbhoomi'
     },
     {
+      id: 'spiti',
+      name: 'Spiti',
       url: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2000&q=85',
       location: 'Spiti Valley & Chandratal Lake, Himachal Pradesh',
       tag: 'Trans-Himalayan Overland'
+    },
+    {
+      id: 'kashmir',
+      name: 'Kashmir',
+      url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85',
+      location: 'Gulmarg & Dal Lake, Kashmir Valley',
+      tag: 'Paradise on Earth'
     }
   ];
+
+  // Preload background images so switching is instant with no lag
+  React.useEffect(() => {
+    heroBackgrounds.forEach((bg) => {
+      const img = new Image();
+      img.src = bg.url;
+    });
+  }, []);
 
   const currentBg = heroBackgrounds[activeSlide];
 
   return (
     <section className="relative pt-24 sm:pt-28 lg:pt-32 pb-8 px-3 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
-      {/* Outer ambient blur glow behind the framed hero container (matching reference screenshot aesthetic) */}
+      {/* Outer ambient blur glow behind the framed hero container */}
       <div className="absolute inset-x-12 top-28 bottom-12 bg-gradient-to-r from-teal-500/20 via-emerald-600/15 to-cyan-500/20 rounded-[40px] blur-3xl -z-10 pointer-events-none" />
 
       {/* Main Framed Hero Card Container */}
       <div className="relative min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] rounded-[28px] sm:rounded-[38px] overflow-hidden border border-white/15 shadow-2xl shadow-black/80 flex flex-col justify-between p-6 sm:p-12 lg:p-16 transition-all duration-700">
         
-        {/* Dynamic Background Image with Depth Gradient Overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center transition-all duration-1000 scale-105"
-          style={{ backgroundImage: `url(${currentBg.url})` }}
-        >
-          {/* Subtle cinematic gradient overlays matching reference */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-transparent to-slate-950/50" />
-          <div className="absolute inset-0 bg-teal-950/20 mix-blend-color" />
-        </div>
+        {/* Dynamic Background Images with Smooth Cross-Fade Transitions */}
+        {heroBackgrounds.map((bg, idx) => (
+          <div
+            key={bg.id}
+            className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out ${
+              activeSlide === idx
+                ? 'opacity-100 scale-100 z-0'
+                : 'opacity-0 scale-105 pointer-events-none -z-10'
+            }`}
+            style={{ backgroundImage: `url(${bg.url})` }}
+          >
+            {/* Cinematic gradient overlays matching reference design */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-transparent to-slate-950/50" />
+            <div className="absolute inset-0 bg-teal-950/20 mix-blend-color" />
+          </div>
+        ))}
 
         {/* Top Floating Badge inside Hero */}
         <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 pt-1 sm:pt-2">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full backdrop-blur-xl bg-slate-950/60 border border-teal-400/30 text-teal-300 text-xs sm:text-sm font-medium shadow-lg">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full backdrop-blur-xl bg-slate-950/70 border border-teal-400/30 text-teal-300 text-xs sm:text-sm font-medium shadow-lg transition-all duration-300">
             <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
             <MapPin className="w-4 h-4 text-teal-400" />
-            <span>{currentBg.location}</span>
+            <span className="font-semibold">{currentBg.location}</span>
           </div>
 
-          {/* Quick Slide Indicators */}
-          <div className="flex items-center gap-2 backdrop-blur-xl bg-slate-950/60 px-3 py-1.5 rounded-full border border-white/10 text-xs">
-            <span className="text-slate-400 mr-1 hidden sm:inline">Featured:</span>
+          {/* Quick Region Switcher Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-2 backdrop-blur-xl bg-slate-950/70 p-1.5 rounded-full border border-white/15 text-xs shadow-xl">
+            <span className="text-slate-400 text-[11px] font-semibold px-2 hidden sm:inline">Featured:</span>
             {heroBackgrounds.map((bg, idx) => (
               <button
-                key={idx}
+                key={bg.id}
                 onClick={() => setActiveSlide(idx)}
-                className={`px-2.5 py-1 rounded-full text-xs transition cursor-pointer ${
+                className={`px-3 py-1.5 rounded-full text-xs transition-all duration-300 cursor-pointer font-semibold ${
                   activeSlide === idx
-                    ? 'bg-teal-400 text-slate-950 font-bold'
+                    ? 'bg-teal-400 text-slate-950 font-bold shadow-lg shadow-teal-400/25 scale-105'
                     : 'text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
               >
-                {idx === 0 ? 'Himachal' : idx === 1 ? 'Uttarakhand' : 'Spiti'}
+                {bg.name}
               </button>
             ))}
           </div>

@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, MessageSquare, Send, CheckCircle2, ShieldCheck, Mountain } from 'lucide-react';
 import { saveInquiryToSupabase } from '../lib/supabaseClient';
+import { sendInquiryEmail } from '../lib/emailService';
 
 export default function ContactSection() {
   const [formSent, setFormSent] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormSent(true);
-    saveInquiryToSupabase({
+    const inquiryPayload = {
       name,
       phone,
+      email: email || 'Not provided',
       message: query,
       source: 'contact_page_form'
-    });
+    };
+    saveInquiryToSupabase(inquiryPayload);
+    // Send automated email directly to amitpatel42203@gmail.com
+    sendInquiryEmail(inquiryPayload);
   };
 
   const offices = [
@@ -120,27 +126,37 @@ export default function ContactSection() {
                 <div className="w-16 h-16 rounded-full bg-teal-500/20 text-teal-400 mx-auto flex items-center justify-center">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h3 className="text-2xl font-black text-white font-['Outfit']">Callback Requested!</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  Thank you, <strong className="text-white">{name}</strong>. Our local Himachali travel coordinator will call you back on <strong className="text-white">{phone}</strong> within 15 minutes.
+                <h3 className="text-2xl font-black text-white font-['Outfit']">Callback Sent to Amit Patel!</h3>
+                <p className="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
+                  Thank you, <strong className="text-white">{name}</strong>. Your full query details have been automatically emailed to Amit Patel (<span className="text-teal-300 font-mono">amitpatel42203@gmail.com</span>). Our travel team will call you back on <strong className="text-white">{phone}</strong> within 15 minutes.
                 </p>
-                <button
-                  onClick={() => setFormSent(false)}
-                  className="px-6 py-2.5 rounded-xl bg-slate-800 text-teal-300 text-xs font-bold"
-                >
-                  Send Another Query
-                </button>
+                <div className="flex flex-col sm:flex-row gap-2 justify-center pt-2">
+                  <a
+                    href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi Amit Patel! I am ${name}. I just requested a callback regarding: ${query || 'Tour Package'}.`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" /> WhatsApp Amit Patel
+                  </a>
+                  <button
+                    onClick={() => setFormSent(false)}
+                    className="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs font-bold"
+                  >
+                    Send Another Query
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <span className="text-[11px] font-bold uppercase text-teal-400 tracking-wider">Fast Response</span>
                   <h3 className="text-xl font-black text-white font-['Outfit'] mt-0.5">Request a Quick Callback</h3>
-                  <p className="text-xs text-slate-400 mt-1">Get custom quotes, hotel photos & taxi availability within minutes.</p>
+                  <p className="text-xs text-slate-400 mt-1">Directly delivers to Amit Patel's Gmail & phone.</p>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Your Name</label>
+                  <label className="text-xs font-bold text-slate-300 block mb-1">Your Name *</label>
                   <input
                     type="text"
                     required
@@ -151,16 +167,28 @@ export default function ContactSection() {
                   />
                 </div>
 
-                <div>
-                  <label className="text-xs font-bold text-slate-300 block mb-1">Phone Number (WhatsApp)</label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="+91 98765 00000"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-teal-400"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-bold text-slate-300 block mb-1">Phone Number *</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="+91 98765 00000"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-teal-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-slate-300 block mb-1">Email Address</label>
+                    <input
+                      type="email"
+                      placeholder="name@gmail.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-teal-400"
+                    />
+                  </div>
                 </div>
 
                 <div>

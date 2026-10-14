@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { X, Phone, Mail, MessageSquare, Copy, Check, Clock, MapPin, Send, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
 import { saveInquiryToSupabase } from '../lib/supabaseClient';
+import { sendInquiryEmail } from '../lib/emailService';
 
 export default function InquireModal({ onClose }) {
   const [copiedItem, setCopiedItem] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [emailInput, setEmailInput] = useState('');
   const [message, setMessage] = useState('');
 
   const phoneNumber = '+91 76199 17057';
@@ -22,12 +24,16 @@ export default function InquireModal({ onClose }) {
   const handleCallbackSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    saveInquiryToSupabase({
+    const inquiryPayload = {
       name,
       phone,
+      email: emailInput || 'Not provided',
       message,
       source: 'inquire_modal'
-    });
+    };
+    saveInquiryToSupabase(inquiryPayload);
+    // Send automated email directly to amitpatel42203@gmail.com
+    sendInquiryEmail(inquiryPayload);
   };
 
   return (
@@ -143,16 +149,16 @@ export default function InquireModal({ onClose }) {
                 <div className="w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 mx-auto flex items-center justify-center">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h4 className="text-lg font-bold text-white font-['Outfit']">Inquiry Sent Successfully!</h4>
-                <p className="text-xs text-slate-300 max-w-sm mx-auto">
-                  Thank you, <strong className="text-white">{name}</strong>. We will contact you on <strong className="text-white">{phone}</strong> shortly.
+                <h4 className="text-lg font-bold text-white font-['Outfit']">Inquiry Sent to Amit Patel!</h4>
+                <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
+                  Thank you, <strong className="text-white">{name}</strong>. Your full details have been sent directly to Amit Patel's Gmail (<span className="text-teal-300 font-mono">amitpatel42203@gmail.com</span>). Our travel expert will call you on <strong className="text-white">{phone}</strong> shortly.
                 </p>
                 <div className="pt-2">
                   <a
-                    href={`https://wa.me/91${rawPhone}?text=${encodeURIComponent(`Hi, I am ${name}. I just submitted an inquiry regarding: ${message || 'Himalayan travel package'}`)}`}
+                    href={`https://wa.me/91${rawPhone}?text=${encodeURIComponent(`Hi Amit Patel! I am ${name}. I just submitted an inquiry for: ${message || 'Himalayan travel package'}. Please share details.`)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 text-xs font-bold hover:bg-emerald-400 transition"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 text-xs font-bold hover:bg-emerald-400 transition shadow-lg shadow-emerald-500/20"
                   >
                     <MessageSquare className="w-3.5 h-3.5" /> Continue on WhatsApp
                   </a>
@@ -164,7 +170,7 @@ export default function InquireModal({ onClose }) {
                   <span className="text-xs font-bold uppercase tracking-wider text-teal-400">
                     Send Instant Message / Request Callback
                   </span>
-                  <span className="text-[10px] text-slate-400">Response within 15 mins</span>
+                  <span className="text-[10px] text-slate-400">Direct to Amit's Gmail</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -186,6 +192,14 @@ export default function InquireModal({ onClose }) {
                   />
                 </div>
 
+                <input
+                  type="email"
+                  placeholder="Your Email (Optional, to receive itinerary PDF)"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
+                />
+
                 <textarea
                   rows="2"
                   placeholder="Which destinations are you interested in? (e.g. Manali, Kedarnath, Spiti, Auli, dates...)"
@@ -199,7 +213,7 @@ export default function InquireModal({ onClose }) {
                   className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-teal-500/20 transition cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>Submit Inquiry</span>
+                  <span>Submit Inquiry (Sends to Amit's Gmail)</span>
                 </button>
               </form>
             )}

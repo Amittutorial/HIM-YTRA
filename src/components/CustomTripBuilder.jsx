@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles, Check, Car, Calendar, MapPin, Users, Compass, Send, CheckCircle2, Phone } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { saveCustomTripToSupabase } from '../lib/supabaseClient';
+import { sendInquiryEmail } from '../lib/emailService';
 
 export default function CustomTripBuilder({ onOpenBookingWithCustom }) {
   const [step, setStep] = useState(1);
@@ -52,7 +53,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom }) {
     e.preventDefault();
     setSubmitted(true);
 
-    saveCustomTripToSupabase({
+    const customPayload = {
       selectedRegion,
       selectedSpots,
       travelStyle,
@@ -64,6 +65,16 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom }) {
       estimatedPrice,
       contactName,
       contactPhone
+    };
+
+    saveCustomTripToSupabase(customPayload);
+
+    // Send automated email to amitpatel42203@gmail.com
+    sendInquiryEmail({
+      name: contactName,
+      phone: contactPhone,
+      message: `Custom ${durationDays}D Plan for ${selectedSpots.join(', ')} (${selectedRegion}). Vehicle: ${vehicle}, Pickup: ${pickupCity}, Hotel: ${hotelType}, Est. Budget: ₹${estimatedPrice}/person (${travelersCount} travelers).`,
+      source: 'Custom Trip Wizard'
     });
 
     confetti({
