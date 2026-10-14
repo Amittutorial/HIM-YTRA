@@ -70,10 +70,14 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
 
     saveCustomTripToSupabase(customPayload);
 
-    // Send automated email to amitpatel42203@gmail.com
+    // Send automated email to amitpatel42203@gmail.com with complete details
     sendInquiryEmail({
       name: contactName,
       phone: contactPhone,
+      destination: `${selectedRegion} (${selectedSpots.join(', ')})`,
+      fromCity: pickupCity,
+      travelDate: `${durationDays} Days Itinerary`,
+      travelersCount: `${travelersCount} Persons`,
       message: `Custom ${durationDays}D Plan for ${selectedSpots.join(', ')} (${selectedRegion}). Vehicle: ${vehicle}, Pickup: ${pickupCity}, Hotel: ${hotelType}, Est. Budget: ₹${estimatedPrice}/person (${travelersCount} travelers).`,
       source: 'Custom Trip Wizard'
     });

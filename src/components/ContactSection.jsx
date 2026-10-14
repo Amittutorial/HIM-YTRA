@@ -153,7 +153,7 @@ export default function ContactSection({ onOpenHelpCenter }) {
                 <div>
                   <span className="text-[11px] font-bold uppercase text-teal-400 tracking-wider">Fast Response</span>
                   <h3 className="text-xl font-black text-white font-['Outfit'] mt-0.5">Request a Quick Callback</h3>
-                  <p className="text-xs text-slate-400 mt-1">Directly delivers to Amit Patel's Gmail & phone.</p>
+                  <p className="text-xs text-slate-400 mt-1">Directly delivers to Founder Amit Verma's Gmail & phone.</p>
                 </div>
 
                 <div>

@@ -117,7 +117,7 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
     setTimeout(() => {
       setIsVerifying(false);
       setIsVerified(true);
-      // Send verified update email
+      // Send verified update email with ALL details
       sendBookingEmail({
         bookingId,
         packageTitle: currentPkg.title,
@@ -128,8 +128,13 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
         travelDate,
         adults,
         children,
+        pickupCity,
+        vehicleTier,
+        hotelTier,
         advanceToken,
         finalTotal,
+        couponCode,
+        specialRequests,
         utr: utrNumber.trim()
       });
     }, 1000);

@@ -11,6 +11,10 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
   const [phone, setPhone] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [message, setMessage] = useState('');
+  const [destination, setDestination] = useState('');
+  const [travelersCount, setTravelersCount] = useState('');
+  const [travelDate, setTravelDate] = useState('');
+  const [fromCity, setFromCity] = useState('');
 
   const phoneNumber = '+91 76199 17057';
   const rawPhone = '7619917057';
@@ -29,8 +33,12 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
       name,
       phone,
       email: emailInput || 'Not provided',
-      message,
-      source: 'inquire_modal'
+      destination: destination || 'Himachal Pradesh / Uttarakhand',
+      fromCity: fromCity || 'Delhi NCR / Chandigarh',
+      travelDate: travelDate || 'Flexible / To be planned',
+      travelersCount: travelersCount ? `${travelersCount} Travelers` : '2 Persons',
+      message: message || 'Interested in Himalayan holiday packages & best rates',
+      source: 'Website Inquire Modal'
     };
     saveInquiryToSupabase(inquiryPayload);
     // Send automated email directly to amitpatel42203@gmail.com
@@ -150,13 +158,13 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
                 <div className="w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 mx-auto flex items-center justify-center">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h4 className="text-lg font-bold text-white font-['Outfit']">Inquiry Sent to Amit Patel!</h4>
+                <h4 className="text-lg font-bold text-white font-['Outfit']">Inquiry Sent to Founder Amit Verma!</h4>
                 <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
-                  Thank you, <strong className="text-white">{name}</strong>. Your full details have been sent directly to Amit Patel's Gmail (<span className="text-teal-300 font-mono">amitpatel42203@gmail.com</span>). Our travel expert will call you on <strong className="text-white">{phone}</strong> shortly.
+                  Thank you, <strong className="text-white">{name}</strong>. Your vacation details have been sent directly to Founder Amit Verma's Gmail (<span className="text-teal-300 font-mono">amitpatel42203@gmail.com</span>). Our travel desk will call you on <strong className="text-white">{phone}</strong> within 15 minutes.
                 </p>
                 <div className="pt-2">
                   <a
-                    href={`https://wa.me/91${rawPhone}?text=${encodeURIComponent(`Hi Amit Patel! I am ${name}. I just submitted an inquiry for: ${message || 'Himalayan travel package'}. Please share details.`)}`}
+                    href={`https://wa.me/91${rawPhone}?text=${encodeURIComponent(`Hi Amit Verma! I am ${name}. I just submitted an inquiry for: ${destination || 'Himalayan Vacation'} (${travelersCount || '2'} Persons, Travel Date: ${travelDate || 'Flexible'}). Please share full package details.`)}`}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 text-xs font-bold hover:bg-emerald-400 transition shadow-lg shadow-emerald-500/20"
@@ -169,16 +177,17 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
               <form onSubmit={handleCallbackSubmit} className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-teal-400">
-                    Send Instant Message / Request Callback
+                    Send Instant Vacation Inquiry / Request Callback
                   </span>
-                  <span className="text-[10px] text-slate-400">Direct to Amit's Gmail</span>
+                  <span className="text-[10px] text-slate-400">Direct to Amit Verma's Gmail</span>
                 </div>
 
+                {/* Personal Information */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
                     type="text"
                     required
-                    placeholder="Your Name *"
+                    placeholder="Your Full Name *"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
@@ -193,17 +202,68 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
                   />
                 </div>
 
-                <input
-                  type="email"
-                  placeholder="Your Email (Optional, to receive itinerary PDF)"
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)}
-                  className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input
+                    type="email"
+                    placeholder="Email Address (Optional)"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Pickup / Starting City (e.g. Delhi NCR)"
+                    value={fromCity}
+                    onChange={(e) => setFromCity(e.target.value)}
+                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
+                  />
+                </div>
+
+                {/* Vacation Preferences */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <select
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
+                  >
+                    <option value="">Select Destination</option>
+                    <option value="Manali & Solang Valley (HP)">Manali & Solang Valley</option>
+                    <option value="Shimla & Kufri (HP)">Shimla & Kufri</option>
+                    <option value="Spiti Valley & Chandratal (HP)">Spiti Valley Expedition</option>
+                    <option value="Dharamshala & McLeodganj (HP)">Dharamshala & McLeodganj</option>
+                    <option value="Kasol & Jibhi (HP)">Kasol & Jibhi Valley</option>
+                    <option value="Kedarnath Dham & Badrinath (UK)">Kedarnath & Badrinath Dham</option>
+                    <option value="Rishikesh & Haridwar (UK)">Rishikesh & Haridwar</option>
+                    <option value="Auli Skiing Resort (UK)">Auli Skiing Resort</option>
+                    <option value="Nainital & Jim Corbett (UK)">Nainital & Jim Corbett</option>
+                    <option value="Custom Himalayan Tour">Custom Himalayan Package</option>
+                  </select>
+
+                  <input
+                    type="date"
+                    placeholder="Travel Date"
+                    value={travelDate}
+                    onChange={(e) => setTravelDate(e.target.value)}
+                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
+                  />
+
+                  <select
+                    value={travelersCount}
+                    onChange={(e) => setTravelersCount(e.target.value)}
+                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
+                  >
+                    <option value="">No. of Travelers</option>
+                    <option value="1 Person (Solo)">1 Person (Solo)</option>
+                    <option value="2 Persons (Couple)">2 Persons (Couple)</option>
+                    <option value="3-4 Persons (Family)">3-4 Persons (Family)</option>
+                    <option value="5-8 Persons (Group)">5-8 Persons (Group)</option>
+                    <option value="9+ Persons (Large Group)">9+ Persons (Large Group)</option>
+                  </select>
+                </div>
 
                 <textarea
                   rows="2"
-                  placeholder="Which destinations are you interested in? (e.g. Manali, Kedarnath, Spiti, Auli, dates...)"
+                  placeholder="Special requests: budget, hotel category (3★/4★), cab preference, meals..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"
@@ -214,7 +274,7 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
                   className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-teal-500/20 transition cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>Submit Inquiry (Sends to Amit's Gmail)</span>
+                  <span>Submit Inquiry (Sends All Details to Amit Verma's Gmail)</span>
                 </button>
               </form>
             )}
