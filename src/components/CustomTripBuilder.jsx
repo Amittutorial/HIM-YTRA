@@ -3,8 +3,9 @@ import { Sparkles, Check, Car, Calendar, MapPin, Users, Compass, Send, CheckCirc
 import confetti from 'canvas-confetti';
 import { saveCustomTripToSupabase } from '../lib/supabaseClient';
 import { sendInquiryEmail } from '../lib/emailService';
+import FormFounderBadge from './FormFounderBadge';
 
-export default function CustomTripBuilder({ onOpenBookingWithCustom }) {
+export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpCenter }) {
   const [step, setStep] = useState(1);
   const [selectedRegion, setSelectedRegion] = useState('Himachal Pradesh');
   const [selectedSpots, setSelectedSpots] = useState(['Manali', 'Solang & Atal Tunnel']);
@@ -148,6 +149,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom }) {
                 Customize Another
               </button>
             </div>
+            <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />
           </div>
         ) : (
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -384,6 +386,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom }) {
                 <p className="text-[10px] text-slate-400 text-center leading-tight">
                   🔒 We respect your privacy. No spam. Pure Pahadi travel advice.
                 </p>
+                <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />
               </div>
             </div>
 

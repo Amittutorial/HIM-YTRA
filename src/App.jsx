@@ -17,12 +17,14 @@ import MobileBottomBar from './components/MobileBottomBar';
 import BookingModal from './components/BookingModal';
 import InquireModal from './components/InquireModal';
 import PaymentModal from './components/PaymentModal';
+import HelpCenterModal from './components/HelpCenterModal';
 import { TOUR_PACKAGES } from './data/travelData';
 
 export default function App() {
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [inquireModalOpen, setInquireModalOpen] = useState(false);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [helpCenterOpen, setHelpCenterOpen] = useState(false);
   const [activeBookingPackage, setActiveBookingPackage] = useState(null);
   const [preAppliedCoupon, setPreAppliedCoupon] = useState('');
 
@@ -65,6 +67,7 @@ export default function App() {
         onSelectState={handleSelectState}
         onOpenInquire={() => setInquireModalOpen(true)}
         onOpenPayment={() => setPaymentModalOpen(true)}
+        onOpenHelpCenter={() => setHelpCenterOpen(true)}
       />
 
       {/* Main Content Sections */}
@@ -121,6 +124,7 @@ export default function App() {
         {/* Interactive Custom Trip Wizard */}
         <CustomTripBuilder
           onOpenBookingWithCustom={(plan) => handleOpenBooking(null)}
+          onOpenHelpCenter={() => setHelpCenterOpen(true)}
         />
 
         {/* Safe Mountain Fleet & Drivers */}
@@ -143,7 +147,7 @@ export default function App() {
         <FAQSection />
 
         {/* Contact & Mountain Offices */}
-        <ContactSection />
+        <ContactSection onOpenHelpCenter={() => setHelpCenterOpen(true)} />
       </main>
 
       {/* Footer */}
@@ -151,6 +155,7 @@ export default function App() {
         onSelectState={handleSelectState}
         onOpenBooking={() => handleOpenBooking()}
         onOpenPayment={() => setPaymentModalOpen(true)}
+        onOpenHelpCenter={() => setHelpCenterOpen(true)}
       />
 
       {/* Mobile Sticky Quick Action Bar */}
@@ -164,6 +169,7 @@ export default function App() {
           initialPackage={activeBookingPackage}
           preAppliedCode={preAppliedCoupon}
           onClose={handleCloseBooking}
+          onOpenHelpCenter={() => setHelpCenterOpen(true)}
         />
       )}
 
@@ -171,6 +177,7 @@ export default function App() {
       {inquireModalOpen && (
         <InquireModal
           onClose={() => setInquireModalOpen(false)}
+          onOpenHelpCenter={() => setHelpCenterOpen(true)}
         />
       )}
 
@@ -178,6 +185,14 @@ export default function App() {
       {paymentModalOpen && (
         <PaymentModal
           onClose={() => setPaymentModalOpen(false)}
+          onOpenHelpCenter={() => setHelpCenterOpen(true)}
+        />
+      )}
+
+      {/* 24/7 Mountain Help Center */}
+      {helpCenterOpen && (
+        <HelpCenterModal
+          onClose={() => setHelpCenterOpen(false)}
         />
       )}
     </div>

@@ -4,9 +4,10 @@ import { TOUR_PACKAGES } from '../data/travelData';
 import confetti from 'canvas-confetti';
 import { saveBookingToSupabase } from '../lib/supabaseClient';
 import { sendBookingEmail } from '../lib/emailService';
+import FormFounderBadge from './FormFounderBadge';
 import { Lock, AlertCircle } from 'lucide-react';
 
-export default function BookingModal({ initialPackage, preAppliedCode, onClose }) {
+export default function BookingModal({ initialPackage, preAppliedCode, onClose, onOpenHelpCenter }) {
   const [selectedPkgId, setSelectedPkgId] = useState(initialPackage?.id || TOUR_PACKAGES[0].id);
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
@@ -328,6 +329,9 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose }
                 Close & Done
               </button>
             </div>
+
+            {/* Founder Details & Help Center */}
+            <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />
           </div>
         ) : (
           /* Booking / Reservation Form */
@@ -563,6 +567,9 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose }
                 <span>•</span>
                 <span>GST Tax Invoice Provided</span>
               </div>
+
+              {/* Founder Information & Help Center Link */}
+              <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />
 
             </form>
           </div>

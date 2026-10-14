@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { X, Phone, Mail, MessageSquare, Copy, Check, Clock, MapPin, Send, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
 import { saveInquiryToSupabase } from '../lib/supabaseClient';
 import { sendInquiryEmail } from '../lib/emailService';
+import FormFounderBadge from './FormFounderBadge';
 
-export default function InquireModal({ onClose }) {
+export default function InquireModal({ onClose, onOpenHelpCenter }) {
   const [copiedItem, setCopiedItem] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState('');
@@ -217,6 +218,9 @@ export default function InquireModal({ onClose }) {
                 </button>
               </form>
             )}
+
+            {/* Founder Details & Help Center */}
+            <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />
           </div>
 
           {/* Online Payment / Scan UPI QR Code Block */}

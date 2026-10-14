@@ -1,7 +1,7 @@
 import React from 'react';
-import { Mountain, Phone, Mail, MapPin, Heart, ShieldCheck, Award } from 'lucide-react';
+import { Mountain, Phone, Mail, MapPin, Heart, ShieldCheck, Award, HelpCircle } from 'lucide-react';
 
-export default function Footer({ onSelectState, onOpenBooking, onOpenPayment }) {
+export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, onOpenHelpCenter }) {
   return (
     <footer className="bg-slate-950 border-t border-white/10 pt-16 pb-28 lg:pb-16 text-slate-400 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
@@ -119,20 +119,41 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment }) 
         </div>
 
         {/* Bottom copyright and heartfelt note */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-xs">
-          <div>
-            © {new Date().getFullYear()} HimYatra Travels Private Limited. All Rights Reserved. Made with ❤️ in Himachal.
-          </div>
-          <div className="flex items-center gap-4 text-[11px]">
-            <a href="#about" className="hover:text-white transition">About Us</a>
-            <span>•</span>
-            <a href="#packages" className="hover:text-white transition">All Packages</a>
-            <span>•</span>
-            <a href="#offers" className="hover:text-white transition">Offers & Coupons</a>
-            <span>•</span>
-            <button onClick={() => onOpenBooking(null)} className="text-teal-400 font-bold hover:underline cursor-pointer">
-              Book a Tour
+        <div className="pt-8 space-y-4">
+          {/* Founder Credit Row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-900/60 border border-white/10">
+            <div className="flex items-center gap-3 text-xs">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center text-slate-950 font-black text-sm">A</div>
+              <div>
+                <div className="text-white font-bold">Amit Verma</div>
+                <div className="text-slate-400 text-[11px]">Founder & CEO, HimYatra Travels | +91 76199 17057</div>
+              </div>
+            </div>
+            <button
+              onClick={() => onOpenHelpCenter?.()}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-500/30 text-sky-300 hover:bg-sky-500/20 text-xs font-bold transition cursor-pointer"
+            >
+              <HelpCircle className="w-4 h-4" />
+              24/7 Help Center
             </button>
+          </div>
+
+          {/* Copyright Row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-xs">
+            <div>
+              © {new Date().getFullYear()} HimYatra Travels Private Limited. All Rights Reserved. Made with ❤️ in Himachal.
+            </div>
+            <div className="flex items-center gap-4 text-[11px]">
+              <a href="#about" className="hover:text-white transition">About Us</a>
+              <span>•</span>
+              <a href="#packages" className="hover:text-white transition">All Packages</a>
+              <span>•</span>
+              <a href="#offers" className="hover:text-white transition">Offers & Coupons</a>
+              <span>•</span>
+              <button onClick={() => onOpenBooking(null)} className="text-teal-400 font-bold hover:underline cursor-pointer">
+                Book a Tour
+              </button>
+            </div>
           </div>
         </div>
 

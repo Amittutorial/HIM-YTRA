@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { X, QrCode, Copy, Check, MessageSquare, ShieldCheck, Smartphone, CheckCircle2, Lock, ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
 import { sendBookingEmail } from '../lib/emailService';
+import FormFounderBadge from './FormFounderBadge';
 
-export default function PaymentModal({ initialAmount, bookingRef, packageName, onClose }) {
+export default function PaymentModal({ initialAmount, bookingRef, packageName, onClose, onOpenHelpCenter }) {
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [amount, setAmount] = useState(initialAmount || 5000);
   
@@ -264,6 +265,9 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
             <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
             <span>100% Safe & Direct Bank Transfer via NPCI UPI</span>
           </div>
+
+          {/* Founder Information & Help Center Link */}
+          <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />
 
         </div>
 

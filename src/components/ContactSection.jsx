@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, MessageSquare, Send, CheckCircle2, ShieldCheck, Mountain } from 'lucide-react';
 import { saveInquiryToSupabase } from '../lib/supabaseClient';
 import { sendInquiryEmail } from '../lib/emailService';
+import FormFounderBadge from './FormFounderBadge';
 
-export default function ContactSection() {
+export default function ContactSection({ onOpenHelpCenter }) {
   const [formSent, setFormSent] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -214,6 +215,9 @@ export default function ContactSection() {
                   <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
                   <span>Verified Himachal Tourism Registered Operator</span>
                 </div>
+
+                {/* Founder Details & Help Center */}
+                <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />
               </form>
             )}
           </div>

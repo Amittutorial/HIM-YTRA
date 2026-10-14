@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles } from 'lucide-react';
+import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle } from 'lucide-react';
 
-export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, onOpenPayment }) {
+export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, onOpenPayment, onOpenHelpCenter }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [destDropdownOpen, setDestDropdownOpen] = useState(false);
@@ -38,6 +38,14 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
         <a href="tel:+917619917057" className="hover:text-white transition flex items-center gap-1">
           <Phone className="w-3 h-3" /> 24/7 Helpline: +91 76199 17057
         </a>
+        <span className="text-slate-400">|</span>
+        <button
+          type="button"
+          onClick={() => onOpenHelpCenter?.()}
+          className="hover:text-white text-sky-300 font-bold transition flex items-center gap-1 cursor-pointer bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-400/30"
+        >
+          <HelpCircle className="w-3 h-3" /> Help Center
+        </button>
       </div>
 
       {/* Floating Pill Navigation Bar (matching reference style) */}
@@ -126,6 +134,13 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               </a>
               <a href="#fleet" className="hover:text-teal-400 transition-colors py-1">Vehicles & Cabs</a>
               <a href="#contact" className="hover:text-teal-400 transition-colors py-1">Contact</a>
+              <button
+                type="button"
+                onClick={() => onOpenHelpCenter?.()}
+                className="hidden lg:inline-flex items-center gap-1.5 text-sky-300 hover:text-sky-200 transition-colors py-1 text-xs font-semibold"
+              >
+                <HelpCircle className="w-3.5 h-3.5" /> Help Center
+              </button>
             </div>
 
             {/* Right Action Buttons with distinct gap from nav links */}
@@ -245,6 +260,16 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
             >
               Direct Call: +91 76199 17057
             </a>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenHelpCenter?.();
+              }}
+              className="w-full bg-sky-900/40 border border-sky-500/40 text-sky-300 hover:bg-sky-900/60 font-bold py-3 rounded-2xl text-sm flex items-center justify-center gap-2 transition"
+            >
+              <HelpCircle className="w-4 h-4" />
+              <span>Help Center & FAQs</span>
+            </button>
           </div>
         </div>
       )}
