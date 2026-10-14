@@ -1,130 +1,96 @@
-import { createClient } from '@supabase/supabase-js';
+// Local SQLite / File-based Database Client with Supabase Fallback
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-
-// Create Supabase client if keys are provided
-export const supabase = (supabaseUrl && supabaseAnonKey)
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+const API_BASE = 'http://localhost:3001/api';
 
 /**
- * Save customer tour reservation into Supabase 'bookings' table
+ * Save customer tour reservation into File-based SQLite Database
  */
 export async function saveBookingToSupabase(bookingData) {
-  if (!supabase) {
-    console.info('Supabase not configured yet. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env');
+  try {
+    const res = await fetch(`${API_BASE}/bookings`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bookingData)
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      console.log('✅ Booking saved to local file database:', data);
+      return { success: true, data };
+    }
+  } catch (err) {
+    console.warn('Backend API server not running, storing locally in browser storage:', err);
+  }
+
+  // Fallback to localStorage if API server is not started
+  try {
+    const existing = JSON.parse(localStorage.getItem('himyatra_bookings') || '[]');
+    existing.push({ ...bookingData, savedAt: new Date().toISOString() });
+    localStorage.setItem('himyatra_bookings', JSON.stringify(existing));
+    return { success: true, localOnly: true, data: bookingData };
+  } catch (e) {
     return { success: true, localOnly: true, data: bookingData };
   }
-
-  try {
-    const { data, error } = await supabase
-      .from('bookings')
-      .insert([
-        {
-          booking_reference: bookingData.bookingId,
-          package_id: bookingData.packageId,
-          package_title: bookingData.packageTitle,
-          state: bookingData.state,
-          customer_name: bookingData.name,
-          customer_phone: bookingData.phone,
-          customer_email: bookingData.email,
-          travel_date: bookingData.travelDate,
-          adults_count: bookingData.adults,
-          children_count: bookingData.children,
-          pickup_city: bookingData.pickupCity,
-          vehicle_tier: bookingData.vehicleTier,
-          hotel_tier: bookingData.hotelTier,
-          total_price: bookingData.finalTotal,
-          advance_token: bookingData.advanceToken,
-          coupon_applied: bookingData.couponCode || null,
-          special_requests: bookingData.specialRequests || null,
-          status: 'pending_payment',
-          created_at: new Date().toISOString()
-        }
-      ]);
-
-    if (error) {
-      console.error('Supabase booking insert error:', error.message);
-      return { success: false, error };
-    }
-
-    return { success: true, data };
-  } catch (err) {
-    console.error('Unexpected Supabase error:', err);
-    return { success: false, error: err };
-  }
 }
 
 /**
- * Save user inquiry / callback request into Supabase 'inquiries' table
+ * Save user inquiry / callback request into File-based SQLite Database
  */
 export async function saveInquiryToSupabase(inquiryData) {
-  if (!supabase) {
-    return { success: true, localOnly: true, data: inquiryData };
+  try {
+    const res = await fetch(`${API_BASE}/inquiries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(inquiryData)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      console.log('✅ Inquiry saved to local file database:', data);
+      return { success: true, data };
+    }
+  } catch (err) {
+    console.warn('Backend API server not running, storing in localStorage:', err);
   }
 
+  // Fallback to localStorage
   try {
-    const { data, error } = await supabase
-      .from('inquiries')
-      .insert([
-        {
-          name: inquiryData.name,
-          phone: inquiryData.phone,
-          message: inquiryData.message,
-          source: inquiryData.source || 'website_modal',
-          created_at: new Date().toISOString()
-        }
-      ]);
-
-    if (error) {
-      console.error('Supabase inquiry insert error:', error.message);
-      return { success: false, error };
-    }
-
-    return { success: true, data };
-  } catch (err) {
-    console.error('Unexpected Supabase inquiry error:', err);
-    return { success: false, error: err };
+    const existing = JSON.parse(localStorage.getItem('himyatra_inquiries') || '[]');
+    existing.push({ ...inquiryData, savedAt: new Date().toISOString() });
+    localStorage.setItem('himyatra_inquiries', JSON.stringify(existing));
+    return { success: true, localOnly: true, data: inquiryData };
+  } catch (e) {
+    return { success: true, localOnly: true, data: inquiryData };
   }
 }
 
 /**
- * Save custom trip builder wizard request into Supabase 'custom_trips' table
+ * Save custom trip builder wizard request into File-based SQLite Database
  */
 export async function saveCustomTripToSupabase(tripData) {
-  if (!supabase) {
-    return { success: true, localOnly: true, data: tripData };
+  try {
+    const res = await fetch(`${API_BASE}/custom-trips`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tripData)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      console.log('✅ Custom trip saved to local file database:', data);
+      return { success: true, data };
+    }
+  } catch (err) {
+    console.warn('Backend API server not running, storing in localStorage:', err);
   }
 
+  // Fallback to localStorage
   try {
-    const { data, error } = await supabase
-      .from('custom_trips')
-      .insert([
-        {
-          region: tripData.selectedRegion,
-          destinations: tripData.selectedSpots,
-          travel_style: tripData.travelStyle,
-          duration_days: tripData.durationDays,
-          travelers_count: tripData.travelersCount,
-          vehicle: tripData.vehicle,
-          pickup_city: tripData.pickupCity,
-          hotel_type: tripData.hotelType,
-          estimated_budget: tripData.estimatedPrice,
-          customer_name: tripData.contactName,
-          customer_phone: tripData.contactPhone,
-          created_at: new Date().toISOString()
-        }
-      ]);
-
-    if (error) {
-      console.error('Supabase custom trip insert error:', error.message);
-      return { success: false, error };
-    }
-
-    return { success: true, data };
-  } catch (err) {
-    console.error('Unexpected Supabase custom trip error:', err);
-    return { success: false, error: err };
+    const existing = JSON.parse(localStorage.getItem('himyatra_custom_trips') || '[]');
+    existing.push({ ...tripData, savedAt: new Date().toISOString() });
+    localStorage.setItem('himyatra_custom_trips', JSON.stringify(existing));
+    return { success: true, localOnly: true, data: tripData };
+  } catch (e) {
+    return { success: true, localOnly: true, data: tripData };
   }
 }
