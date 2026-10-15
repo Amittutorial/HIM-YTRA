@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
+import Hero, { REGION_BACKGROUNDS } from './components/Hero';
 import QuickSearch from './components/QuickSearch';
 import TrustStats from './components/TrustStats';
 import DestinationsSection from './components/DestinationsSection';
@@ -24,6 +24,8 @@ export default function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('himyatra-theme') || 'dark';
   });
+
+  const [activeRegion, setActiveRegion] = useState('himachal');
 
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [inquireModalOpen, setInquireModalOpen] = useState(false);
@@ -74,6 +76,8 @@ export default function App() {
   const handleSelectState = (state) => {
     setSelectedState(state);
     setDestTab(state);
+    if (state === 'Himachal Pradesh') setActiveRegion('himachal');
+    else if (state === 'Uttarakhand') setActiveRegion('uttarakhand');
   };
 
   const handleSelectDestination = (destName) => {
@@ -84,12 +88,32 @@ export default function App() {
     handleOpenBooking(null, code);
   };
 
+  const currentRegionObj = REGION_BACKGROUNDS.find((b) => b.id === activeRegion) || REGION_BACKGROUNDS[0];
+  const currentGlobalBg = theme === 'light' ? currentRegionObj.light : currentRegionObj.dark;
+
   return (
-    <div className={`min-h-screen transition-colors duration-500 flex flex-col font-['Plus_Jakarta_Sans',sans-serif] ${
+    <div className={`min-h-screen transition-colors duration-500 flex flex-col font-['Plus_Jakarta_Sans',sans-serif] relative ${
       theme === 'light'
-        ? 'bg-gradient-to-b from-[#f0f9ff] via-[#f8fafc] to-[#eef2f6] text-slate-900 light'
-        : 'bg-[#070b14] text-slate-100 dark'
+        ? 'text-slate-900 light'
+        : 'text-slate-100 dark'
     }`}>
+      {/* Global Dynamic Mountain Wallpaper synced with Featured Region & Dark/Light Mode */}
+      <div className="fixed inset-0 pointer-events-none -z-20 overflow-hidden">
+        <div
+          key={`${activeRegion}-${theme}`}
+          className="absolute inset-0 bg-cover bg-center bg-fixed transition-all duration-1000 ease-in-out transform scale-105 animate-in fade-in"
+          style={{ backgroundImage: `url(${currentGlobalBg})` }}
+        />
+        {/* Subtle Atmospheric Overlay: dark mountain night in dark mode, luminous alpine daylight in light mode */}
+        <div
+          className={`absolute inset-0 transition-colors duration-700 ${
+            theme === 'light'
+              ? 'bg-gradient-to-b from-white/70 via-slate-50/80 to-slate-100/90 backdrop-blur-[2px]'
+              : 'bg-gradient-to-b from-[#070b14]/85 via-[#070b14]/80 to-[#070b14]/92 backdrop-blur-[2px]'
+          }`}
+        />
+      </div>
+
       {/* Navigation */}
       <Navbar
         onOpenBooking={(pkg) => handleOpenBooking(pkg)}
@@ -102,13 +126,25 @@ export default function App() {
       />
 
       {/* Main Content Sections */}
-      <main className="flex-1">
-        {/* Hero Section (framed card matching reference image) */}
+      <main className="flex-1 relative z-10">
+        {/* Hero Section (framed card with matching region background) */}
         <Hero
           onOpenBooking={() => handleOpenBooking()}
           onExploreClick={() => {
             const el = document.getElementById('destinations');
             el?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          theme={theme}
+          activeRegion={activeRegion}
+          onSelectRegion={(reg) => {
+            setActiveRegion(reg);
+            if (reg === 'himachal') {
+              setSelectedState('Himachal Pradesh');
+              setDestTab('Himachal Pradesh');
+            } else if (reg === 'uttarakhand') {
+              setSelectedState('Uttarakhand');
+              setDestTab('Uttarakhand');
+            }
           }}
         />
 
@@ -132,6 +168,8 @@ export default function App() {
           setActiveTab={(tab) => {
             setDestTab(tab);
             setSelectedState(tab);
+            if (tab === 'Himachal Pradesh') setActiveRegion('himachal');
+            else if (tab === 'Uttarakhand') setActiveRegion('uttarakhand');
           }}
           onSelectDestination={handleSelectDestination}
           onOpenBooking={(dest) => {

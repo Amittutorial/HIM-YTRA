@@ -111,6 +111,28 @@ html.light, body.light {
   border-color: rgba(148, 163, 184, 0.25) !important;
 }
 
+/* Light mode tags & highlight pills (fixes dark unreadable badges on white cards) */
+.light .bg-slate-800\/80,
+.light .bg-slate-800,
+.light .bg-slate-800\/70,
+.light .bg-slate-800\/60,
+.light .bg-slate-800\/50 {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+  border-color: #cbd5e1 !important;
+}
+
+.light .bg-slate-800:hover,
+.light .bg-slate-800\/80:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.light .bg-slate-800\/80 span,
+.light .bg-slate-800 span {
+  color: #1e293b !important;
+}
+
 /* Light mode Footer */
 .light footer {
   background-color: #eef2f6 !important;
