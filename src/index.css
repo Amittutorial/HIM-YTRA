@@ -46,7 +46,15 @@ html.light, body.light {
   border-color: rgba(20, 184, 166, 0.3) !important;
 }
 
-/* Light mode text headings */
+/* Light mode text headings - solid dark + white text-shadow readable on any mountain bg */
+.light h1,
+.light h2,
+.light h3,
+.light h4 {
+  color: #0f172a !important;
+  text-shadow: 0 1px 8px rgba(255,255,255,0.95), 0 0px 24px rgba(255,255,255,0.75) !important;
+}
+
 .light h1.text-white,
 .light h2.text-white,
 .light h3.text-white,
@@ -57,13 +65,28 @@ html.light, body.light {
   color: #0f172a !important;
 }
 
+/* Section body text - fully readable against bright mountain bg */
+.light section p,
+.light section label,
+.light section li {
+  color: #1e293b !important;
+  text-shadow: 0 1px 4px rgba(255,255,255,0.85) !important;
+}
+
 .light .text-slate-200,
 .light .text-slate-300 {
-  color: #334155 !important;
+  color: #1e293b !important;
+  text-shadow: 0 1px 4px rgba(255,255,255,0.8) !important;
 }
 
 .light .text-slate-400 {
-  color: #64748b !important;
+  color: #334155 !important;
+  text-shadow: 0 1px 4px rgba(255,255,255,0.8) !important;
+}
+
+/* Gradient clip text - ensure visible with drop-shadow */
+.light .bg-clip-text.text-transparent {
+  filter: drop-shadow(0 1px 4px rgba(255,255,255,0.7)) !important;
 }
 
 /* Retain light text on buttons that have dark or colored background */
@@ -145,6 +168,41 @@ html.light, body.light {
 .light footer .bg-slate-900\/60 {
   background-color: #ffffff !important;
   border-color: #cbd5e1 !important;
+}
+
+/* ============================================================
+   SECTION READABILITY LAYER
+   Give every main section a semi-opaque backdrop so text is
+   always legible regardless of the dynamic mountain wallpaper.
+   Dark mode: dark glass. Light mode: white/blurred frosted.
+   ============================================================ */
+
+/* Dark mode – every section gets a subtle dark glass layer */
+body:not(.light) section {
+  background: rgba(7, 11, 20, 0.60);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Light mode – every section gets a soft white frosted layer */
+body.light section {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Dark mode heading text visibility */
+body:not(.light) h1,
+body:not(.light) h2,
+body:not(.light) h3,
+body:not(.light) h4 {
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8), 0 0px 30px rgba(0,0,0,0.6);
+}
+
+body:not(.light) p,
+body:not(.light) .text-slate-400,
+body:not(.light) .text-slate-300 {
+  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
 }
 
 /* Custom glassmorphism and glow effects */
