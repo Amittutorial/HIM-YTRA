@@ -8,10 +8,10 @@ export const REGION_BACKGROUNDS = [
     stateKey: 'Himachal Pradesh',
     location: 'Solang Valley & Rohtang Pass, Himachal Pradesh',
     tag: 'Snow & Alpine Valleys',
-    // Dark mode: Starry night over snowy Himachal Himalayan peaks
-    dark: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2000&q=85',
-    // Light mode: Sun-drenched brilliant snowy Solang & Rohtang peaks under clear blue skies
-    light: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=2000&q=85'
+    // Dark mode: Starry night over snowy Himachal Himalayan peaks (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Sun-drenched brilliant snowy Solang & Rohtang peaks under clear blue skies (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=2560&q=90'
   },
   {
     id: 'uttarakhand',
@@ -19,10 +19,10 @@ export const REGION_BACKGROUNDS = [
     stateKey: 'Uttarakhand',
     location: 'Kedarnath & Badrinath Peaks, Uttarakhand',
     tag: 'Sacred Devbhoomi',
-    // Dark mode: Mystical twilight & celestial night sky over sacred Garhwal peaks
-    dark: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85',
-    // Light mode: Bright daylight sacred Kedarnath & Badrinath sun-lit snow mountains
-    light: 'https://images.unsplash.com/photo-1612438214708-f428a707dd4e?auto=format&fit=crop&w=2000&q=85'
+    // Dark mode: Mystical twilight & celestial night sky over sacred Garhwal peaks (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Bright daylight sacred Kedarnath & Badrinath sun-lit snow mountains (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1612438214708-f428a707dd4e?auto=format&fit=crop&w=2560&q=90'
   },
   {
     id: 'spiti',
@@ -30,10 +30,10 @@ export const REGION_BACKGROUNDS = [
     stateKey: 'Spiti Valley',
     location: 'Spiti Valley & Chandratal Lake, Himachal Pradesh',
     tag: 'Trans-Himalayan Overland',
-    // Dark mode: Famous Spiti Milky Way galaxy & starry night over cold desert peaks
-    dark: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=85',
-    // Light mode: Radiant daytime turquoise Chandratal Lake & sunlit alpine peaks
-    light: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2000&q=85'
+    // Dark mode: Famous Spiti Milky Way galaxy & starry night over cold desert peaks (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Radiant daytime turquoise Chandratal Lake & sunlit alpine peaks (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2560&q=90'
   },
   {
     id: 'kashmir',
@@ -41,10 +41,10 @@ export const REGION_BACKGROUNDS = [
     stateKey: 'Kashmir',
     location: 'Gulmarg & Dal Lake, Kashmir Valley',
     tag: 'Paradise on Earth',
-    // Dark mode: Winter dusk & blue hour snow slopes of Gulmarg
-    dark: 'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=2000&q=85',
-    // Light mode: Sunlit alpine pines & snow-covered Gulmarg slopes under azure sky
-    light: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=2000&q=85'
+    // Dark mode: Winter dusk & blue hour snow slopes of Gulmarg (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Sunlit alpine pines & snow-covered Gulmarg slopes under azure sky (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=2560&q=90'
   }
 ];
 

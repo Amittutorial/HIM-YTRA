@@ -16,7 +16,7 @@
 
 /* Light Mode Global Theme & Card Overrides */
 html.light, body.light {
-  background-color: #f8fafc !important;
+  background-color: transparent !important;
   color: #0f172a !important;
 }
 

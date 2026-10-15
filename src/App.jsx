@@ -98,7 +98,7 @@ export default function App() {
         : 'text-slate-100 dark'
     }`}>
       {/* Global Dynamic Mountain Wallpaper synced with Featured Region & Dark/Light Mode */}
-      <div className="fixed inset-0 pointer-events-none -z-20 overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div
           key={`${activeRegion}-${theme}`}
           className="absolute inset-0 bg-cover bg-center bg-fixed transition-all duration-1000 ease-in-out transform scale-105 animate-in fade-in"
@@ -108,8 +108,8 @@ export default function App() {
         <div
           className={`absolute inset-0 transition-colors duration-700 ${
             theme === 'light'
-              ? 'bg-gradient-to-b from-white/70 via-slate-50/80 to-slate-100/90 backdrop-blur-[2px]'
-              : 'bg-gradient-to-b from-[#070b14]/85 via-[#070b14]/80 to-[#070b14]/92 backdrop-blur-[2px]'
+              ? 'bg-gradient-to-b from-white/30 via-slate-50/40 to-slate-100/55'
+              : 'bg-gradient-to-b from-[#070b14]/80 via-[#070b14]/70 to-[#070b14]/88'
           }`}
         />
       </div>

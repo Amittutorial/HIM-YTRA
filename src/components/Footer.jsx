@@ -3,7 +3,7 @@ import { Mountain, Phone, Mail, MapPin, Heart, ShieldCheck, Award, HelpCircle } 
 
 export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, onOpenHelpCenter }) {
   return (
-    <footer className="bg-slate-950 border-t border-white/10 pt-16 pb-28 lg:pb-16 text-slate-400 text-xs">
+    <footer className="relative z-10 bg-slate-950 border-t border-white/10 pt-16 pb-28 lg:pb-16 text-slate-400 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         
         {/* Main 4-column footer */}

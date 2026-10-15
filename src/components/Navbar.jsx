@@ -77,8 +77,8 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               : 'bg-slate-950/75 border border-white/15 shadow-black/60 text-slate-100 hover:border-teal-500/30'
           }`}>
             {/* Logo with Mountain Photo */}
-            <a href="#" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-teal-400/70 shadow-lg shadow-teal-500/25 group-hover:scale-105 group-hover:border-teal-300 transition shrink-0 bg-slate-900 relative">
+            <a href="#" className="flex items-center gap-2.5 group shrink-0 mr-2 sm:mr-4 xl:mr-6">
+              <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full overflow-hidden border-2 border-teal-400/70 shadow-lg shadow-teal-500/25 group-hover:scale-105 group-hover:border-teal-300 transition shrink-0 bg-slate-900 relative">
                 <img
                   src="/mountain-logo.jpg"
                   alt="HimYatra Mountains"
@@ -90,36 +90,40 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                 />
               </div>
               <div className="flex flex-col">
-                <span className={`text-xl sm:text-2xl font-black tracking-tight font-['Outfit'] flex items-center gap-1 ${
+                <span className={`text-lg sm:text-xl xl:text-2xl font-black tracking-tight font-['Outfit'] flex items-center gap-1 ${
                   isLight ? 'text-slate-900' : 'text-white'
                 }`}>
                   Him<span className="text-teal-500">Yatra</span>
                 </span>
-                <span className={`text-[10px] -mt-1 tracking-widest uppercase font-semibold ${
+                <span className={`text-[9px] sm:text-[10px] -mt-1 tracking-widest uppercase font-semibold ${
                   isLight ? 'text-teal-700' : 'text-teal-300/80'
                 }`}>Himalayan Journeys</span>
               </div>
             </a>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-200">
-              <a href="#about" className="hover:text-teal-400 transition-colors py-1">About Us</a>
+            <div className={`hidden lg:flex items-center gap-2.5 xl:gap-4.5 text-xs xl:text-sm font-semibold transition-colors ${
+              isLight ? 'text-slate-700' : 'text-slate-200'
+            }`}>
+              <a href="#about" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>About</a>
 
               {/* Destinations Dropdown */}
               <div className="relative" onMouseLeave={() => setDestDropdownOpen(false)}>
                 <button
                   onMouseEnter={() => setDestDropdownOpen(true)}
                   onClick={() => setDestDropdownOpen(!destDropdownOpen)}
-                  className="flex items-center gap-1 hover:text-teal-400 transition-colors py-1"
+                  className={`flex items-center gap-1 transition-colors py-1 cursor-pointer ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}
                 >
                   <span>Destinations</span>
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${destDropdownOpen ? 'rotate-180 text-teal-400' : ''}`} />
                 </button>
 
                 {destDropdownOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-2xl backdrop-blur-2xl bg-slate-950/95 border border-teal-500/30 p-3 shadow-2xl shadow-black/80 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 rounded-2xl backdrop-blur-2xl p-3 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 border ${
+                    isLight ? 'bg-white/95 border-slate-200 shadow-slate-300/60 text-slate-800' : 'bg-slate-950/95 border-teal-500/30 shadow-black/80 text-white'
+                  }`}>
                     <div className="p-2 border-b border-white/10 mb-2">
-                      <p className="text-[11px] font-semibold text-teal-400 uppercase tracking-wider">Explore by State</p>
+                      <p className="text-[11px] font-semibold text-teal-500 uppercase tracking-wider">Explore by State</p>
                     </div>
                     <button
                       onClick={() => {
@@ -128,13 +132,13 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                         const el = document.getElementById('destinations');
                         el?.scrollIntoView({ behavior: 'smooth' });
                       }}
-                      className="w-full text-left p-2.5 rounded-xl hover:bg-teal-500/10 hover:border-teal-500/30 border border-transparent transition flex items-start gap-3 group"
+                      className="w-full text-left p-2.5 rounded-xl hover:bg-teal-500/10 hover:border-teal-500/30 border border-transparent transition flex items-start gap-3 group cursor-pointer"
                     >
-                      <div className="p-1.5 rounded-lg bg-teal-500/20 text-teal-400 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
+                      <div className="p-1.5 rounded-lg bg-teal-500/20 text-teal-500 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
                         <Mountain className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="font-semibold text-white group-hover:text-teal-300">Himachal Pradesh</div>
+                        <div className={`font-semibold ${isLight ? 'text-slate-900 group-hover:text-teal-600' : 'text-white group-hover:text-teal-300'}`}>Himachal Pradesh</div>
                         <div className="text-xs text-slate-400">Manali, Shimla, Spiti, Kasol, Jibhi</div>
                       </div>
                     </button>
@@ -146,13 +150,13 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                         const el = document.getElementById('destinations');
                         el?.scrollIntoView({ behavior: 'smooth' });
                       }}
-                      className="w-full text-left p-2.5 rounded-xl hover:bg-teal-500/10 hover:border-teal-500/30 border border-transparent transition flex items-start gap-3 group mt-1"
+                      className="w-full text-left p-2.5 rounded-xl hover:bg-teal-500/10 hover:border-teal-500/30 border border-transparent transition flex items-start gap-3 group mt-1 cursor-pointer"
                     >
-                      <div className="p-1.5 rounded-lg bg-teal-500/20 text-teal-400 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
+                      <div className="p-1.5 rounded-lg bg-teal-500/20 text-teal-500 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
                         <Compass className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="font-semibold text-white group-hover:text-teal-300">Uttarakhand (Devbhoomi)</div>
+                        <div className={`font-semibold ${isLight ? 'text-slate-900 group-hover:text-teal-600' : 'text-white group-hover:text-teal-300'}`}>Uttarakhand (Devbhoomi)</div>
                         <div className="text-xs text-slate-400">Rishikesh, Kedarnath, Auli, Nainital</div>
                       </div>
                     </button>
@@ -160,30 +164,32 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                 )}
               </div>
 
-              <a href="#packages" className="hover:text-teal-400 transition-colors py-1">Travel Packages</a>
-              <a href="#custom-planner" className="hover:text-teal-400 transition-colors py-1">Custom Trip</a>
-              <a href="#offers" className="hover:text-teal-400 transition-colors py-1 flex items-center gap-1.5">
+              <a href="#packages" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Packages</a>
+              <a href="#custom-planner" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Custom Trip</a>
+              <a href="#offers" className={`transition-colors py-1 flex items-center gap-1.5 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>
                 <span>Offers</span>
                 <span className="text-[10px] bg-teal-500 text-slate-950 font-bold px-1.5 py-0.5 rounded-full">15% OFF</span>
               </a>
-              <a href="#fleet" className="hover:text-teal-400 transition-colors py-1">Vehicles & Cabs</a>
-              <a href="#contact" className="hover:text-teal-400 transition-colors py-1">Contact</a>
+              <a href="#fleet" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Fleet & Cabs</a>
+              <a href="#contact" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Contact</a>
               <button
                 type="button"
                 onClick={() => onOpenHelpCenter?.()}
-                className="hidden lg:inline-flex items-center gap-1.5 text-sky-300 hover:text-sky-200 transition-colors py-1 text-xs font-semibold"
+                className={`hidden xl:inline-flex items-center gap-1.5 transition-colors py-1 text-xs font-semibold cursor-pointer ${
+                  isLight ? 'text-sky-700 hover:text-sky-900' : 'text-sky-300 hover:text-sky-200'
+                }`}
               >
                 <HelpCircle className="w-3.5 h-3.5" /> Help Center
               </button>
             </div>
 
             {/* Right Action Buttons with distinct gap from nav links */}
-            <div className={`flex items-center gap-2 sm:gap-3 pl-3 sm:pl-5 border-l ${isLight ? 'border-slate-300' : 'border-white/10'}`}>
+            <div className={`flex items-center gap-2 sm:gap-2.5 pl-2.5 sm:pl-4 border-l shrink-0 ${isLight ? 'border-slate-300' : 'border-white/10'}`}>
               {/* Dark / Light Mode Toggle Button */}
               <button
                 type="button"
                 onClick={onToggleTheme}
-                className={`p-2 rounded-full border transition-all duration-300 cursor-pointer flex items-center justify-center group ${
+                className={`p-2 rounded-full border transition-all duration-300 cursor-pointer flex items-center justify-center shrink-0 group ${
                   isLight
                     ? 'bg-amber-50 border-amber-300 text-amber-600 hover:bg-amber-100 shadow-sm'
                     : 'bg-slate-900 border-white/20 text-sky-300 hover:bg-slate-800 hover:border-sky-400/40'
@@ -202,7 +208,7 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               <button
                 type="button"
                 onClick={() => onOpenInquire?.()}
-                className={`hidden sm:inline-flex items-center gap-2 text-xs font-bold px-4 py-2.5 rounded-full border transition-all duration-200 cursor-pointer ${
+                className={`hidden xl:inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-full border transition-all duration-200 cursor-pointer shrink-0 ${
                   isLight
                     ? 'border-teal-500/50 bg-teal-50 text-teal-800 hover:bg-teal-600 hover:text-white hover:border-teal-600 shadow-sm'
                     : 'border-teal-400/40 bg-teal-950/60 text-teal-300 hover:bg-teal-500 hover:text-slate-950 hover:border-teal-400 shadow-lg shadow-teal-500/10 hover:shadow-teal-400/25'
@@ -215,7 +221,7 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               {/* Book Now Button */}
               <button
                 onClick={() => onOpenBooking?.(null)}
-                className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-tight shadow-lg hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer ${
+                className={`whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-tight shrink-0 shadow-lg hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer ${
                   isLight
                     ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-teal-600/20'
                     : 'bg-white hover:bg-slate-100 text-slate-950 shadow-white/10 hover:shadow-teal-400/20'
@@ -227,7 +233,7 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               {/* Mobile Menu Toggle Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className={`lg:hidden p-2 rounded-full transition ${
+                className={`lg:hidden p-2 rounded-full transition shrink-0 ${
                   isLight ? 'text-slate-700 hover:bg-slate-100' : 'text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
                 aria-label="Toggle Navigation Menu"
