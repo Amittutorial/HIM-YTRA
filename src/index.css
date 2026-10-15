@@ -11,13 +11,20 @@
     color: #f3f4f6;
     overflow-x: hidden;
     transition: background-color 0.4s ease, color 0.4s ease;
+    /* Dark mode CSS variables */
+    --email-btn-bg: #0f172a;
+    --email-btn-text: #ffffff;
+    --email-btn-border: rgba(255,255,255,0.12);
   }
 }
 
-/* Light Mode Global Theme & Card Overrides */
+/* Light Mode Global Theme, Colors & CSS Variables */
 html.light, body.light {
   background-color: transparent !important;
   color: #0f172a !important;
+  --email-btn-bg: #1e293b;
+  --email-btn-text: #ffffff;
+  --email-btn-border: rgba(15,23,42,0.25);
 }
 
 /* Light mode panels & cards */
@@ -46,13 +53,13 @@ html.light, body.light {
   border-color: rgba(20, 184, 166, 0.3) !important;
 }
 
-/* Light mode text headings - solid dark + white text-shadow readable on any mountain bg */
+/* Light mode text headings - dark navy on white frosted section bg */
 .light h1,
 .light h2,
 .light h3,
 .light h4 {
   color: #0f172a !important;
-  text-shadow: 0 1px 8px rgba(255,255,255,0.95), 0 0px 24px rgba(255,255,255,0.75) !important;
+  text-shadow: none !important;
 }
 
 .light h1.text-white,
@@ -65,28 +72,28 @@ html.light, body.light {
   color: #0f172a !important;
 }
 
-/* Section body text - fully readable against bright mountain bg */
+/* Section body text - dark readable colors */
 .light section p,
 .light section label,
 .light section li {
   color: #1e293b !important;
-  text-shadow: 0 1px 4px rgba(255,255,255,0.85) !important;
+  text-shadow: none !important;
 }
 
 .light .text-slate-200,
 .light .text-slate-300 {
   color: #1e293b !important;
-  text-shadow: 0 1px 4px rgba(255,255,255,0.8) !important;
+  text-shadow: none !important;
 }
 
 .light .text-slate-400 {
-  color: #334155 !important;
-  text-shadow: 0 1px 4px rgba(255,255,255,0.8) !important;
+  color: #475569 !important;
+  text-shadow: none !important;
 }
 
-/* Gradient clip text - ensure visible with drop-shadow */
+/* Gradient clip text headings - keep teal gradient intact in light mode */
 .light .bg-clip-text.text-transparent {
-  filter: drop-shadow(0 1px 4px rgba(255,255,255,0.7)) !important;
+  filter: none !important;
 }
 
 /* Retain light text on buttons that have dark or colored background */
@@ -179,30 +186,16 @@ html.light, body.light {
 
 /* Dark mode – every section gets a subtle dark glass layer */
 body:not(.light) section {
-  background: rgba(7, 11, 20, 0.60);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(7, 11, 20, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
 }
 
 /* Light mode – every section gets a soft white frosted layer */
 body.light section {
-  background: rgba(255, 255, 255, 0.72) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-}
-
-/* Dark mode heading text visibility */
-body:not(.light) h1,
-body:not(.light) h2,
-body:not(.light) h3,
-body:not(.light) h4 {
-  text-shadow: 0 2px 12px rgba(0,0,0,0.8), 0 0px 30px rgba(0,0,0,0.6);
-}
-
-body:not(.light) p,
-body:not(.light) .text-slate-400,
-body:not(.light) .text-slate-300 {
-  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+  background: rgba(255, 255, 255, 0.76) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
 }
 
 /* Custom glassmorphism and glow effects */
