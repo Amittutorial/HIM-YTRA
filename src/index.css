@@ -177,25 +177,84 @@ html.light, body.light {
   border-color: #cbd5e1 !important;
 }
 
-/* ============================================================
-   SECTION READABILITY LAYER
-   Give every main section a semi-opaque backdrop so text is
-   always legible regardless of the dynamic mountain wallpaper.
-   Dark mode: dark glass. Light mode: white/blurred frosted.
-   ============================================================ */
-
-/* Dark mode – every section gets a subtle dark glass layer */
-body:not(.light) section {
-  background: rgba(7, 11, 20, 0.55);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+/* Direct High-Contrast Email Contact Button (Visible in both Light & Dark modes) */
+.email-contact-btn {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2) !important;
+}
+.email-contact-btn span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+.email-contact-btn svg {
+  color: #2dd4bf !important;
+}
+.email-contact-btn:hover {
+  background-color: #1e293b !important;
+  border-color: #2dd4bf !important;
 }
 
-/* Light mode – every section gets a soft white frosted layer */
-body.light section {
-  background: rgba(255, 255, 255, 0.76) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
+/* ============================================================
+   TYPOGRAPHY & CONTRAST FOR BOTH DARK & LIGHT MODES
+   ============================================================ */
+
+/* Hero Section Typography: Always crisp, cinematic white against the mountain frame */
+#hero,
+#hero h1,
+#hero h1 span,
+#hero h2,
+#hero h3,
+#hero p,
+#hero span.text-white,
+#hero span.text-slate-200 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+#hero .bg-clip-text {
+  background-image: linear-gradient(to right, #ffffff, #ccfbf1, #5eead4) !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+/* Light mode section headings (outside hero) - deep navy for maximum legibility */
+.light section:not(#hero) h1,
+.light section:not(#hero) h2,
+.light section:not(#hero) h3,
+.light section:not(#hero) h4 {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+/* Light mode gradient text headings - deep rich emerald-teal, never washed out */
+.light section:not(#hero) .bg-clip-text.text-transparent {
+  background-image: linear-gradient(135deg, #0d9488 0%, #059669 50%, #0284c7 100%) !important;
+  -webkit-background-clip: text !important;
+  color: transparent !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+/* Light mode body text & subtitles - high-contrast slate */
+.light section:not(#hero) p {
+  color: #1e293b !important;
+  text-shadow: none !important;
+}
+
+/* Light mode category & feature badges */
+.light .bg-teal-500\/10,
+.light .bg-teal-500\/20 {
+  background-color: #f0fdfa !important;
+  border-color: #5eead4 !important;
+  color: #0f766e !important;
+}
+.light .bg-teal-500\/10 span,
+.light .bg-teal-500\/20 span {
+  color: #0f766e !important;
+  font-weight: 700 !important;
 }
 
 /* Custom glassmorphism and glow effects */

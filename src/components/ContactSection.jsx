@@ -90,14 +90,9 @@ export default function ContactSection({ onOpenHelpCenter }) {
 
             <a
               href="mailto:amitpatel42203@gmail.com"
-              className="px-5 py-3 rounded-2xl font-semibold text-xs sm:text-sm flex items-center gap-2 border transition"
-              style={{
-                background: 'var(--email-btn-bg, #0f172a)',
-                color: 'var(--email-btn-text, #ffffff)',
-                borderColor: 'var(--email-btn-border, rgba(255,255,255,0.1))'
-              }}
+              className="email-contact-btn px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center gap-2 transition cursor-pointer"
             >
-              <Mail className="w-4 h-4 text-teal-400" />
+              <Mail className="w-4 h-4 text-teal-400 shrink-0" />
               <span>amitpatel42203@gmail.com</span>
             </a>
           </div>

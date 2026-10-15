@@ -108,8 +108,8 @@ export default function App() {
         <div
           className={`absolute inset-0 transition-colors duration-700 ${
             theme === 'light'
-              ? 'bg-gradient-to-b from-white/30 via-slate-50/40 to-slate-100/55'
-              : 'bg-gradient-to-b from-[#070b14]/80 via-[#070b14]/70 to-[#070b14]/88'
+              ? 'bg-gradient-to-b from-white/60 via-slate-50/70 to-slate-100/80'
+              : 'bg-gradient-to-b from-[#070b14]/82 via-[#070b14]/75 to-[#070b14]/90'
           }`}
         />
       </div>

@@ -62,7 +62,7 @@ export default function Hero({ onOpenBooking, onExploreClick, theme = 'dark', ac
   const currentBg = REGION_BACKGROUNDS.find((b) => b.id === activeRegion) || REGION_BACKGROUNDS[0];
 
   return (
-    <section className="relative pt-24 sm:pt-28 lg:pt-32 pb-8 px-3 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
+    <section id="hero" className="relative pt-24 sm:pt-28 lg:pt-32 pb-8 px-3 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
       {/* Outer ambient blur glow behind the framed hero container */}
       <div className={`absolute inset-x-12 top-28 bottom-12 rounded-[40px] blur-3xl -z-10 pointer-events-none transition-colors duration-700 ${
         theme === 'light'
