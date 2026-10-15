@@ -12,8 +12,16 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
           {/* Brand Col (2 cols on lg) */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center text-slate-950 font-bold shadow-md shadow-teal-500/20">
-                <Mountain className="w-5 h-5 stroke-[2.2]" />
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-teal-400/60 shadow-md shadow-teal-500/20 shrink-0 bg-slate-900">
+                <img
+                  src="/mountain-logo.jpg"
+                  alt="HimYatra Mountains"
+                  className="w-full h-full object-cover object-center scale-110"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=256&h=256&q=85';
+                  }}
+                />
               </div>
               <span className="text-2xl font-black text-white font-['Outfit'] tracking-tight">
                 Him<span className="text-teal-400">Yatra</span>

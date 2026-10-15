@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import QuickSearch from './components/QuickSearch';
@@ -21,6 +21,10 @@ import HelpCenterModal from './components/HelpCenterModal';
 import { TOUR_PACKAGES } from './data/travelData';
 
 export default function App() {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('himyatra-theme') || 'dark';
+  });
+
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [inquireModalOpen, setInquireModalOpen] = useState(false);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -33,6 +37,27 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [destTab, setDestTab] = useState('All');
+
+  // Synchronize theme with html and body classes
+  useEffect(() => {
+    localStorage.setItem('himyatra-theme', theme);
+    const root = document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light');
+      root.classList.remove('dark');
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
+    } else {
+      root.classList.add('dark');
+      root.classList.remove('light');
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   const handleOpenBooking = (pkg = null, coupon = '') => {
     setActiveBookingPackage(pkg || TOUR_PACKAGES[0]);
@@ -60,7 +85,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
+    <div className={`min-h-screen transition-colors duration-500 flex flex-col font-['Plus_Jakarta_Sans',sans-serif] ${
+      theme === 'light'
+        ? 'bg-gradient-to-b from-[#f0f9ff] via-[#f8fafc] to-[#eef2f6] text-slate-900 light'
+        : 'bg-[#070b14] text-slate-100 dark'
+    }`}>
       {/* Navigation */}
       <Navbar
         onOpenBooking={(pkg) => handleOpenBooking(pkg)}
@@ -68,6 +97,8 @@ export default function App() {
         onOpenInquire={() => setInquireModalOpen(true)}
         onOpenPayment={() => setPaymentModalOpen(true)}
         onOpenHelpCenter={() => setHelpCenterOpen(true)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Main Content Sections */}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle } from 'lucide-react';
+import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle, Sun, Moon } from 'lucide-react';
 
-export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, onOpenPayment, onOpenHelpCenter }) {
+export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, onOpenPayment, onOpenHelpCenter, theme = 'dark', onToggleTheme }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [destDropdownOpen, setDestDropdownOpen] = useState(false);
@@ -18,31 +18,49 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isLight = theme === 'light';
+
   return (
     <>
       {/* Top Banner Notice */}
-      <div className="bg-gradient-to-r from-teal-900/80 via-slate-900 to-emerald-950/80 text-xs py-2 px-4 text-center border-b border-teal-500/20 text-teal-200/90 font-medium hidden sm:flex items-center justify-center gap-3">
-        <span className="inline-flex items-center gap-1.5 bg-teal-500/20 px-2 py-0.5 rounded-full text-teal-300 border border-teal-400/30">
-          <Sparkles className="w-3 h-3 text-teal-400" /> Season Special
+      <div className={`text-xs py-2 px-4 text-center border-b font-medium hidden sm:flex items-center justify-center gap-3 transition-colors duration-300 ${
+        isLight
+          ? 'bg-gradient-to-r from-teal-50 via-sky-50 to-emerald-50 border-teal-200/80 text-teal-900'
+          : 'bg-gradient-to-r from-teal-900/80 via-slate-900 to-emerald-950/80 border-teal-500/20 text-teal-200/90'
+      }`}>
+        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[11px] ${
+          isLight
+            ? 'bg-teal-100 text-teal-800 border-teal-300'
+            : 'bg-teal-500/20 text-teal-300 border-teal-400/30'
+        }`}>
+          <Sparkles className="w-3 h-3 text-teal-500" /> Season Special
         </span>
-        <span>Summer & Snowfall 2026 Bookings Open | Flat 15% Off code: <strong className="text-white font-semibold">HIMPEAKS15</strong></span>
-        <span className="text-slate-400">|</span>
+        <span>Summer & Snowfall 2026 Bookings Open | Flat 15% Off code: <strong className={isLight ? 'text-slate-900 font-bold' : 'text-white font-semibold'}>HIMPEAKS15</strong></span>
+        <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
         <button
           type="button"
           onClick={() => onOpenPayment?.()}
-          className="hover:text-white text-emerald-300 font-bold transition flex items-center gap-1 cursor-pointer bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-400/30"
+          className={`font-bold transition flex items-center gap-1 cursor-pointer px-2.5 py-0.5 rounded-full border ${
+            isLight
+              ? 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200'
+              : 'bg-emerald-500/10 text-emerald-300 border-emerald-400/30 hover:text-white'
+          }`}
         >
           <span>💳 Scan & Pay via UPI QR</span>
         </button>
-        <span className="text-slate-400">|</span>
-        <a href="tel:+917619917057" className="hover:text-white transition flex items-center gap-1">
+        <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
+        <a href="tel:+917619917057" className={`transition flex items-center gap-1 ${isLight ? 'text-slate-700 hover:text-teal-700' : 'text-slate-300 hover:text-white'}`}>
           <Phone className="w-3 h-3" /> 24/7 Helpline: +91 76199 17057
         </a>
-        <span className="text-slate-400">|</span>
+        <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
         <button
           type="button"
           onClick={() => onOpenHelpCenter?.()}
-          className="hover:text-white text-sky-300 font-bold transition flex items-center gap-1 cursor-pointer bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-400/30"
+          className={`font-bold transition flex items-center gap-1 cursor-pointer px-2.5 py-0.5 rounded-full border ${
+            isLight
+              ? 'bg-sky-100 text-sky-800 border-sky-300 hover:bg-sky-200'
+              : 'bg-sky-500/10 text-sky-300 border-sky-400/30 hover:text-white'
+          }`}
         >
           <HelpCircle className="w-3 h-3" /> Help Center
         </button>
@@ -53,17 +71,33 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
         isScrolled ? 'top-3 px-4 sm:px-8' : 'top-5 sm:top-10 px-4 sm:px-10'
       }`}>
         <div className="max-w-7xl mx-auto">
-          <nav className="backdrop-blur-2xl bg-slate-950/75 border border-white/15 rounded-full px-4 sm:px-7 py-3 flex items-center justify-between shadow-2xl shadow-black/60 transition-all hover:border-teal-500/30">
-            {/* Logo */}
+          <nav className={`backdrop-blur-2xl rounded-full px-4 sm:px-7 py-3 flex items-center justify-between shadow-2xl transition-all duration-300 ${
+            isLight
+              ? 'bg-white/85 border border-slate-200/90 shadow-slate-300/40 text-slate-800 hover:border-teal-400/50'
+              : 'bg-slate-950/75 border border-white/15 shadow-black/60 text-slate-100 hover:border-teal-500/30'
+          }`}>
+            {/* Logo with Mountain Photo */}
             <a href="#" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition">
-                <Mountain className="w-5 h-5 text-slate-950 stroke-[2.2]" />
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-teal-400/70 shadow-lg shadow-teal-500/25 group-hover:scale-105 group-hover:border-teal-300 transition shrink-0 bg-slate-900 relative">
+                <img
+                  src="/mountain-logo.jpg"
+                  alt="HimYatra Mountains"
+                  className="w-full h-full object-cover object-center scale-110 group-hover:scale-125 transition duration-300"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=256&h=256&q=85';
+                  }}
+                />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-white font-['Outfit'] flex items-center gap-1">
-                  Him<span className="text-teal-400">Yatra</span>
+                <span className={`text-xl sm:text-2xl font-black tracking-tight font-['Outfit'] flex items-center gap-1 ${
+                  isLight ? 'text-slate-900' : 'text-white'
+                }`}>
+                  Him<span className="text-teal-500">Yatra</span>
                 </span>
-                <span className="text-[10px] -mt-1 tracking-widest text-teal-300/80 uppercase font-semibold">Himalayan Journeys</span>
+                <span className={`text-[10px] -mt-1 tracking-widest uppercase font-semibold ${
+                  isLight ? 'text-teal-700' : 'text-teal-300/80'
+                }`}>Himalayan Journeys</span>
               </div>
             </a>
 
@@ -144,21 +178,48 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
             </div>
 
             {/* Right Action Buttons with distinct gap from nav links */}
-            <div className="flex items-center gap-3 sm:gap-4 pl-4 sm:pl-6 border-l border-white/10">
+            <div className={`flex items-center gap-2 sm:gap-3 pl-3 sm:pl-5 border-l ${isLight ? 'border-slate-300' : 'border-white/10'}`}>
+              {/* Dark / Light Mode Toggle Button */}
+              <button
+                type="button"
+                onClick={onToggleTheme}
+                className={`p-2 rounded-full border transition-all duration-300 cursor-pointer flex items-center justify-center group ${
+                  isLight
+                    ? 'bg-amber-50 border-amber-300 text-amber-600 hover:bg-amber-100 shadow-sm'
+                    : 'bg-slate-900 border-white/20 text-sky-300 hover:bg-slate-800 hover:border-sky-400/40'
+                }`}
+                title={isLight ? 'Switch to Dark Mode (Mountain Night)' : 'Switch to Light Mode (Mountain Daylight)'}
+                aria-label="Toggle theme"
+              >
+                {isLight ? (
+                  <Sun className="w-4 h-4 text-amber-500 fill-amber-400 group-hover:rotate-45 transition-transform duration-300" />
+                ) : (
+                  <Moon className="w-4 h-4 text-sky-300 fill-sky-400/30 group-hover:-rotate-12 transition-transform duration-300" />
+                )}
+              </button>
+
               {/* Inquire Button */}
               <button
                 type="button"
                 onClick={() => onOpenInquire?.()}
-                className="hidden sm:inline-flex items-center gap-2 text-xs font-bold px-4 py-2.5 rounded-full border border-teal-400/40 bg-teal-950/60 text-teal-300 hover:bg-teal-500 hover:text-slate-950 hover:border-teal-400 shadow-lg shadow-teal-500/10 hover:shadow-teal-400/25 transition-all duration-200 cursor-pointer"
+                className={`hidden sm:inline-flex items-center gap-2 text-xs font-bold px-4 py-2.5 rounded-full border transition-all duration-200 cursor-pointer ${
+                  isLight
+                    ? 'border-teal-500/50 bg-teal-50 text-teal-800 hover:bg-teal-600 hover:text-white hover:border-teal-600 shadow-sm'
+                    : 'border-teal-400/40 bg-teal-950/60 text-teal-300 hover:bg-teal-500 hover:text-slate-950 hover:border-teal-400 shadow-lg shadow-teal-500/10 hover:shadow-teal-400/25'
+                }`}
               >
                 <Phone className="w-3.5 h-3.5 shrink-0" />
                 <span>Inquire</span>
               </button>
 
-              {/* Book Now Button (White Pill matching reference) */}
+              {/* Book Now Button */}
               <button
                 onClick={() => onOpenBooking?.(null)}
-                className="bg-white hover:bg-slate-100 text-slate-950 px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-tight shadow-lg shadow-white/10 hover:shadow-teal-400/20 hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer"
+                className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-tight shadow-lg hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer ${
+                  isLight
+                    ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-teal-600/20'
+                    : 'bg-white hover:bg-slate-100 text-slate-950 shadow-white/10 hover:shadow-teal-400/20'
+                }`}
               >
                 Book Now
               </button>
@@ -166,7 +227,9 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               {/* Mobile Menu Toggle Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 text-slate-300 hover:text-white rounded-full hover:bg-white/10 transition"
+                className={`lg:hidden p-2 rounded-full transition ${
+                  isLight ? 'text-slate-700 hover:bg-slate-100' : 'text-slate-300 hover:text-white hover:bg-white/10'
+                }`}
                 aria-label="Toggle Navigation Menu"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -235,6 +298,27 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
           </div>
 
           <div className="space-y-3 pt-6 border-t border-white/10">
+            {/* Theme Toggle in Mobile Menu */}
+            <button
+              onClick={() => onToggleTheme?.()}
+              className={`w-full py-3 px-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2.5 border transition-all cursor-pointer ${
+                isLight
+                  ? 'bg-amber-100 border-amber-300 text-amber-900 shadow-sm'
+                  : 'bg-slate-900 border-white/10 text-amber-300 hover:bg-slate-800'
+              }`}
+            >
+              {isLight ? (
+                <>
+                  <Moon className="w-4 h-4 text-sky-600 fill-sky-600/30" />
+                  <span>Switch to Dark Mode (Himalayan Night)</span>
+                </>
+              ) : (
+                <>
+                  <Sun className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  <span>Switch to Light Mode (Mountain Daylight)</span>
+                </>
+              )}
+            </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
