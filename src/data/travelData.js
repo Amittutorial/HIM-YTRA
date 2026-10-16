@@ -574,7 +574,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Couples, small families, budget-conscious travelers',
     features: ['High Fuel Efficiency', 'Air Conditioned', 'Experienced Mountain Driver', 'Music System'],
     ratePerKm: '₹14/km (All Incl. Tour Packages Available)',
-    image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80'
   },
   {
     name: 'Toyota Innova Crysta',
@@ -584,7 +584,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Families, elder comfort, long Himalayan drives',
     features: ['Plush Captain Seats', 'Superior Mountain Suspension', 'Rear AC Vents', 'Hill Assist Safety'],
     ratePerKm: '₹22/km (Preferred for Comfort)',
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1512566393827-78dc4c8d8292?auto=format&fit=crop&w=800&q=80'
   },
   {
     name: 'Mahindra Thar / 4x4 Camper',
@@ -594,7 +594,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Spiti Valley, Chandratal, Zanskar, Winter Snow',
     features: ['Low-range 4x4 Drive', 'High Ground Clearance', 'All-Terrain Tires', 'Extreme Weather Ready'],
     ratePerKm: '₹30/km (Off-road Specialist)',
-    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1632107502848-74bbfa62f1ae?auto=format&fit=crop&w=800&q=80'
   },
   {
     name: 'Force Urbania / Tempo Traveller',
@@ -604,7 +604,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Corporate groups, extended families, friend squads',
     features: ['Pushback Recliner Seats', 'LED Screen & Stereo', 'Panoramic Windows', 'Separate Driver Cabin'],
     ratePerKm: '₹28 - ₹34/km',
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80'
   }
 ];
 

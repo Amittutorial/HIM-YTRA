@@ -163,7 +163,7 @@ export default function HelpCenterModal({ onClose, onOpenPayment, onOpenBooking 
                   </button>
 
                   {activeFaq === idx && (
-                    <div className="px-4 pb-4 pt-1 text-xs text-slate-300 leading-relaxed border-t border-white/5 bg-slate-950/40">
+                    <div className="faq-answer-box px-4 pb-4 pt-2 text-xs text-slate-300 leading-relaxed border-t border-white/10 bg-slate-950/40">
                       {topic.answer}
                     </div>
                   )}

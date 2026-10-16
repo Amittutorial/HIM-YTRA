@@ -41,10 +41,10 @@ export const REGION_BACKGROUNDS = [
     stateKey: 'Kashmir',
     location: 'Gulmarg & Dal Lake, Kashmir Valley',
     tag: 'Paradise on Earth',
-    // Dark mode: Winter dusk & blue hour snow slopes of Gulmarg (Ultra HD 4K)
-    dark: 'https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=2560&q=90',
-    // Light mode: Sunlit alpine pines & snow-covered Gulmarg slopes under azure sky (Ultra HD 4K)
-    light: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=2560&q=90'
+    // Dark mode: Kashmir Pir Panjal twilight mountain range (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1624773144987-fe51d68722cf?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Iconic sunlit Dal Lake Shikaras & snow mountain range Srinagar, Kashmir (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=2560&q=90'
   }
 ];
 

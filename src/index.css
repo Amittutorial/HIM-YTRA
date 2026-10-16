@@ -54,21 +54,21 @@ html.light, body.light {
 }
 
 /* Light mode text headings - dark navy on white frosted section bg */
-.light h1,
-.light h2,
-.light h3,
-.light h4 {
+.light h1:not(#hero *),
+.light h2:not(#hero *),
+.light h3:not(#hero *):not(.destination-image-overlay *):not(#destinations .absolute *),
+.light h4:not(#hero *) {
   color: #0f172a !important;
   text-shadow: none !important;
 }
 
-.light h1.text-white,
-.light h2.text-white,
-.light h3.text-white,
-.light h4.text-white,
-.light div.text-white,
-.light p.text-white,
-.light span.text-white {
+.light h1.text-white:not(#hero *),
+.light h2.text-white:not(#hero *),
+.light h3.text-white:not(#hero *):not(.destination-image-overlay *):not(#destinations .absolute *),
+.light h4.text-white:not(#hero *),
+.light div.text-white:not(#hero *):not(.destination-image-overlay *):not(#destinations .absolute *),
+.light p.text-white:not(#hero *):not(.destination-image-overlay *):not(#destinations .absolute *),
+.light span.text-white:not(#hero *):not(.destination-image-overlay *):not(#destinations .absolute *):not(.email-contact-btn *) {
   color: #0f172a !important;
 }
 
@@ -255,6 +255,33 @@ html.light, body.light {
 .light .bg-teal-500\/20 span {
   color: #0f766e !important;
   font-weight: 700 !important;
+}
+
+/* Destination Card Overlays: Text on top of mountain photos MUST ALWAYS be crisp brilliant white */
+.destination-image-overlay,
+.destination-image-overlay h3,
+#destinations .absolute.bottom-4 h3 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95), 0 0 20px rgba(0, 0, 0, 0.8) !important;
+}
+
+.destination-image-overlay p,
+#destinations .absolute.bottom-4 p {
+  color: #5eead4 !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Light mode FAQ & Help Center Accordion Answer Boxes */
+.light .faq-answer-box {
+  background-color: #f8fafc !important;
+  border-top-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+.light .bg-slate-950\/40,
+.light .bg-slate-950\/50 {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
 }
 
 /* Custom glassmorphism and glow effects */

@@ -88,11 +88,11 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
               </div>
 
               {/* Title & Tagline overlay */}
-              <div className="absolute bottom-4 left-4 right-4">
-                <h3 className="text-2xl font-black text-white font-['Outfit'] tracking-tight group-hover:text-teal-300 transition-colors">
+              <div className="absolute bottom-4 left-4 right-4 z-10 destination-image-overlay">
+                <h3 className="text-2xl font-black text-white font-['Outfit'] tracking-tight group-hover:text-teal-300 transition-colors drop-shadow-md">
                   {dest.name}
                 </h3>
-                <p className="text-xs text-teal-200/90 font-medium mt-0.5 line-clamp-1">
+                <p className="text-xs text-teal-300 font-semibold mt-0.5 line-clamp-1 drop-shadow">
                   {dest.tagline}
                 </p>
               </div>
