@@ -115,7 +115,7 @@ export default function App() {
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div
           key={`${activeRegion}-${theme}`}
-          className="absolute inset-0 bg-cover bg-center bg-fixed transition-all duration-1000 ease-in-out transform scale-105 animate-in fade-in"
+          className={`absolute inset-0 bg-cover ${currentRegionObj.bgPosition || 'bg-center'} bg-fixed transition-all duration-1000 ease-in-out transform scale-105 animate-in fade-in`}
           style={{ backgroundImage: `url(${currentGlobalBg})` }}
         />
         {/* Subtle Atmospheric Overlay: dark mountain night in dark mode, luminous alpine daylight in light mode */}

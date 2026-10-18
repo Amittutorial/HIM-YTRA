@@ -52,6 +52,7 @@ export const REGION_BACKGROUNDS = [
     stateKey: 'Uttar Pradesh',
     location: 'Shri Ram Janmabhoomi Teerth & Saryu Ghat, Ayodhya',
     tag: 'Divine Ram Mandir & Saryu Aarti',
+    bgPosition: 'bg-[center_top] sm:bg-[center_12%]',
     // Dark mode: Consecrated Shri Ram Janmabhoomi Mandir illuminated at night (Ultra HD 4K)
     dark: '/destinations/ayodhya-dark.jpg',
     // Light mode: Magnificent carved stone Shri Ram Janmabhoomi Mandir in brilliant daylight (Ultra HD 4K)
@@ -190,7 +191,7 @@ export default function Hero({ onOpenBooking, onExploreClick, theme = 'dark', ac
           return (
             <div
               key={bg.id}
-              className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out ${
+              className={`absolute inset-0 bg-cover ${bg.bgPosition || 'bg-center'} transition-all duration-1000 ease-in-out ${
                 isActive
                   ? 'opacity-100 scale-100 z-0'
                   : 'opacity-0 scale-105 pointer-events-none -z-10'

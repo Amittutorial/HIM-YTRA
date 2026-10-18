@@ -898,7 +898,7 @@ export const TOUR_PACKAGES = [
     title: 'Uttarakhand Romance: Mussoorie, Dhanaulti & Rishikesh Luxury',
     state: 'Uttarakhand',
     category: 'Honeymoon',
-    categories: ["Honeymoon","Family","Bestseller","Offbeat"],
+    categories: ["Honeymoon","Bestseller"],
     type: 'Couples & Leisure',
     duration: '5 Days / 4 Nights',
     days: 5,
@@ -906,7 +906,7 @@ export const TOUR_PACKAGES = [
     rating: 4.88,
     reviewsCount: 245,
     badge: 'Honeymoon Special',
-    image: 'https://images.unsplash.com/photo-1718383538820-524dd564fd06?auto=format&fit=crop&w=1200&q=80',
+    image: '/destinations/mussoorie-honeymoon.jpg',
     originalPrice: 18999,
     discountedPrice: 14299,
     pickupDrop: 'Dehradun / Delhi',
@@ -1185,7 +1185,7 @@ export const TOUR_PACKAGES = [
     title: 'Secret Devbhoomi: Kanatal, Chopta Tungnath & Chakrata Pine Escape',
     state: 'Uttarakhand',
     category: 'Offbeat',
-    categories: ['Offbeat', 'Adventure', 'Honeymoon', 'Bestseller'],
+    categories: ['Offbeat', 'Adventure', 'Bestseller'],
     type: 'Offbeat & Hidden Meadows',
     duration: '5 Days / 4 Nights',
     days: 5,
@@ -1193,7 +1193,7 @@ export const TOUR_PACKAGES = [
     rating: 4.94,
     reviewsCount: 182,
     badge: 'Hidden Gem',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+    image: '/destinations/chopta-tungnath.jpg',
     originalPrice: 16999,
     discountedPrice: 11999,
     pickupDrop: 'Dehradun / Rishikesh',
@@ -1255,7 +1255,7 @@ export const TOUR_PACKAGES = [
     rating: 4.97,
     reviewsCount: 360,
     badge: 'Maha Aarti Special',
-    image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80',
+    image: '/destinations/varanasi-aarti.jpg',
     originalPrice: 12999,
     discountedPrice: 8499,
     pickupDrop: 'Varanasi Airport / Cantt Station',
@@ -1284,7 +1284,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Couples, small families, budget-conscious travelers',
     features: ['High Fuel Efficiency', 'Air Conditioned', 'Experienced Mountain Driver', 'Music System'],
     ratePerKm: '₹14/km (All Incl. Tour Packages Available)',
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80'
+    image: '/destinations/swift-dzire.jpg'
   },
   {
     name: 'Toyota Innova Crysta',
@@ -1294,7 +1294,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Families, elder comfort, long Himalayan drives',
     features: ['Plush Captain Seats', 'Superior Mountain Suspension', 'Rear AC Vents', 'Hill Assist Safety'],
     ratePerKm: '₹22/km (Preferred for Comfort)',
-    image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=800&q=80'
+    image: '/destinations/innova-crysta.jpg'
   },
   {
     name: 'Mahindra Thar / 4x4 Camper',
@@ -1304,7 +1304,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Spiti Valley, Chandratal, Zanskar, Winter Snow',
     features: ['Low-range 4x4 Drive', 'High Ground Clearance', 'All-Terrain Tires', 'Extreme Weather Ready'],
     ratePerKm: '₹30/km (Off-road Specialist)',
-    image: 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=800&q=80'
+    image: '/destinations/mahindra-thar.jpg'
   },
   {
     name: 'Force Urbania / Tempo Traveller',
@@ -1314,7 +1314,7 @@ export const VEHICLE_FLEET = [
     idealFor: 'Corporate groups, extended families, friend squads',
     features: ['Pushback Recliner Seats', 'LED Screen & Stereo', 'Panoramic Windows', 'Separate Driver Cabin'],
     ratePerKm: '₹28 - ₹34/km',
-    image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80'
   }
 ];
 
