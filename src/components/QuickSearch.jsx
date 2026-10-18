@@ -104,6 +104,8 @@ export default function QuickSearch({
               key={tag}
               type="button"
               onClick={() => {
+                setSelectedState('All');
+                setSelectedCategory('All');
                 setSearchTerm(tag.split(' ')[0]);
                 const el = document.getElementById('packages');
                 el?.scrollIntoView({ behavior: 'smooth' });

@@ -1,3 +1,8 @@
+-- ===================================================
+-- HIM YTRA Supabase Database Schema
+-- Complete backend tables, RLS policies, and grants
+-- ===================================================
+
 -- 1. Table for Tour Bookings & Reservations
 CREATE TABLE IF NOT EXISTS public.bookings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -8,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.bookings (
     customer_name TEXT NOT NULL,
     customer_phone TEXT NOT NULL,
     customer_email TEXT,
-    travel_date DATE NOT NULL,
+    travel_date DATE,
     adults_count INT NOT NULL DEFAULT 1,
     children_count INT DEFAULT 0,
     pickup_city TEXT NOT NULL,
@@ -18,6 +23,7 @@ CREATE TABLE IF NOT EXISTS public.bookings (
     advance_token NUMERIC(10, 2) NOT NULL,
     coupon_applied TEXT,
     special_requests TEXT,
+    utr_reference TEXT,
     status TEXT DEFAULT 'pending_payment',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -27,6 +33,11 @@ CREATE TABLE IF NOT EXISTS public.inquiries (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     phone TEXT NOT NULL,
+    email TEXT,
+    destination TEXT,
+    travel_date TEXT,
+    travelers_count TEXT,
+    pickup_city TEXT,
     message TEXT,
     source TEXT DEFAULT 'website',
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -50,23 +61,28 @@ CREATE TABLE IF NOT EXISTS public.custom_trips (
 );
 
 -- ===================================================
--- Enable Row Level Security (RLS) & Public Insert Policy
+-- Grants for anon and authenticated roles
+-- ===================================================
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
+
+-- ===================================================
+-- Enable Row Level Security (RLS) & Policies
 -- ===================================================
 ALTER TABLE public.bookings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.inquiries ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.custom_trips ENABLE ROW LEVEL SECURITY;
 
--- Allow website visitors to insert their own bookings
-CREATE POLICY "Allow public insert on bookings"
-ON public.bookings FOR INSERT
-WITH CHECK (true);
+-- Allow public insert
+CREATE POLICY "Allow public insert on bookings" ON public.bookings FOR INSERT TO anon, authenticated WITH CHECK (true);
+CREATE POLICY "Allow public insert on inquiries" ON public.inquiries FOR INSERT TO anon, authenticated WITH CHECK (true);
+CREATE POLICY "Allow public insert on custom_trips" ON public.custom_trips FOR INSERT TO anon, authenticated WITH CHECK (true);
 
--- Allow website visitors to insert inquiries
-CREATE POLICY "Allow public insert on inquiries"
-ON public.inquiries FOR INSERT
-WITH CHECK (true);
+-- Allow public select
+CREATE POLICY "Allow public select on bookings" ON public.bookings FOR SELECT TO anon, authenticated USING (true);
+CREATE POLICY "Allow public select on inquiries" ON public.inquiries FOR SELECT TO anon, authenticated USING (true);
+CREATE POLICY "Allow public select on custom_trips" ON public.custom_trips FOR SELECT TO anon, authenticated USING (true);
 
--- Allow website visitors to insert custom trip plans
-CREATE POLICY "Allow public insert on custom_trips"
-ON public.custom_trips FOR INSERT
-WITH CHECK (true);
+-- Allow public update on bookings (for UTR payment verification)
+CREATE POLICY "Allow public update on bookings" ON public.bookings FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);

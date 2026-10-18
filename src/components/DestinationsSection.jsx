@@ -71,7 +71,12 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
             key={dest.id}
             onMouseEnter={() => setHoveredCard(dest.id)}
             onMouseLeave={() => setHoveredCard(null)}
-            className="group rounded-3xl overflow-hidden bg-slate-900/70 border border-white/10 hover:border-teal-500/40 transition-all duration-500 hover:-translate-y-1.5 shadow-xl hover:shadow-2xl hover:shadow-teal-500/10 flex flex-col justify-between"
+            onClick={() => {
+              onSelectDestination(dest);
+              const el = document.getElementById('packages');
+              el?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group rounded-3xl overflow-hidden bg-slate-900/70 border border-white/10 hover:border-teal-500/40 transition-all duration-500 hover:-translate-y-1.5 shadow-xl hover:shadow-2xl hover:shadow-teal-500/10 flex flex-col justify-between cursor-pointer"
           >
             {/* Image Header with Badges */}
             <div className="relative h-64 overflow-hidden">
@@ -160,19 +165,24 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => {
-                      onSelectDestination(dest.name.split('&')[0].trim(), dest.state);
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectDestination(dest);
                       const el = document.getElementById('packages');
                       el?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-teal-500/20 text-slate-200 hover:text-teal-300 border border-white/10 transition cursor-pointer"
+                    className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-teal-500/20 text-slate-200 hover:text-teal-300 border border-white/10 transition cursor-pointer text-xs font-semibold flex items-center gap-1.5"
                     title="View packages for this destination"
                   >
-                    <ArrowRight className="w-4 h-4" />
+                    <span>Packages</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
 
                   <button
-                    onClick={() => onOpenBooking?.(dest)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpenBooking?.(dest);
+                    }}
                     className="px-4 py-2 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs shadow-md shadow-teal-500/20 transition cursor-pointer"
                   >
                     Reserve

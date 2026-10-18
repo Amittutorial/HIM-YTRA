@@ -39,6 +39,20 @@ export default function PackagesSection({
     }
   };
 
+  const handleCategoryClick = (catId) => {
+    setSelectedCategory(catId);
+    if (catId !== 'All' && selectedState !== 'All') {
+      const existsInState = TOUR_PACKAGES.some(
+        (p) =>
+          p.state === selectedState &&
+          ((p.categories && p.categories.includes(catId)) || p.category === catId)
+      );
+      if (!existsInState) {
+        setSelectedState('All');
+      }
+    }
+  };
+
   // Filtering
   let filtered = TOUR_PACKAGES.filter((pkg) => {
     // State match
@@ -101,7 +115,7 @@ export default function PackagesSection({
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
+              onClick={() => handleCategoryClick(cat.id)}
               className={`px-4 sm:px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === cat.id
                   ? 'bg-teal-400 text-slate-950 shadow-lg shadow-teal-500/25 scale-[1.02]'
@@ -226,7 +240,8 @@ export default function PackagesSection({
             return (
               <div
                 key={pkg.id}
-                className="group rounded-3xl overflow-hidden bg-slate-900/80 border border-white/10 hover:border-teal-500/40 transition-all duration-300 hover:-translate-y-1.5 shadow-xl hover:shadow-2xl hover:shadow-teal-500/10 flex flex-col justify-between"
+                onClick={() => setSelectedPackageForModal(pkg)}
+                className="group rounded-3xl overflow-hidden bg-slate-900/80 border border-white/10 hover:border-teal-500/40 transition-all duration-300 hover:-translate-y-1.5 shadow-xl hover:shadow-2xl hover:shadow-teal-500/10 flex flex-col justify-between cursor-pointer"
               >
                 {/* Image and Badges */}
                 <div className="relative h-60 overflow-hidden">
@@ -326,14 +341,20 @@ export default function PackagesSection({
                     {/* Dual Action Buttons */}
                     <div className="grid grid-cols-2 gap-2">
                       <button
-                        onClick={() => setSelectedPackageForModal(pkg)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPackageForModal(pkg);
+                        }}
                         className="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-white/10 transition text-center cursor-pointer"
                       >
                         Itinerary & Details
                       </button>
 
                       <button
-                        onClick={() => onOpenBooking(pkg)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenBooking(pkg);
+                        }}
                         className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 font-extrabold text-xs shadow-md shadow-teal-500/20 transition text-center cursor-pointer"
                       >
                         Reserve Now

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Check, ShieldCheck, Calendar, Users, MapPin, Tag, Phone, Mail, User, Sparkles, CheckCircle2, Download, MessageSquare } from 'lucide-react';
 import { TOUR_PACKAGES } from '../data/travelData';
 import confetti from 'canvas-confetti';
-import { saveBookingToSupabase } from '../lib/supabaseClient';
+import { saveBookingToSupabase, updateBookingPaymentToSupabase } from '../lib/supabaseClient';
 import { sendBookingEmail } from '../lib/emailService';
 import FormFounderBadge from './FormFounderBadge';
 import { Lock, AlertCircle } from 'lucide-react';
@@ -117,6 +117,8 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
     setTimeout(() => {
       setIsVerifying(false);
       setIsVerified(true);
+      // Update Supabase booking record with UTR
+      updateBookingPaymentToSupabase(bookingId, utrNumber.trim());
       // Send verified update email with ALL details
       sendBookingEmail({
         bookingId,

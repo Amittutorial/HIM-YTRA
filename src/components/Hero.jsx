@@ -153,13 +153,13 @@ export const REGION_BACKGROUNDS = [
     location: 'Sri Harmandir Sahib (Golden Temple), Amritsar',
     tag: 'Sacred Amrit Sarovar & Golden Sanctum',
     // Dark mode: Radiant Golden Temple illuminated night reflection in holy sarovar (Ultra HD 4K)
-    dark: 'https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=2560&q=90',
+    dark: '/destinations/golden_temple_amritsar.jpg',
     // Light mode: Pure 24K gold temple shining under radiant clear blue sky (Ultra HD 4K)
-    light: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=2560&q=90'
+    light: '/destinations/golden_temple_amritsar.jpg'
   }
 ];
 
-export default function Hero({ onOpenBooking, onExploreClick, theme = 'dark', activeRegion = 'himachal', onSelectRegion }) {
+export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, theme = 'dark', activeRegion = 'himachal', onSelectRegion }) {
   // Preload background images so switching between dark, light and regions is instant
   React.useEffect(() => {
     REGION_BACKGROUNDS.forEach((bg) => {
@@ -305,12 +305,32 @@ export default function Hero({ onOpenBooking, onExploreClick, theme = 'dark', ac
 
         {/* Bottom Bar inside Hero: Quick Tags on Left, Scroll Down Button on Right (Matching Reference) */}
         <div className="relative z-10 flex items-center justify-between pt-4 border-t border-white/10">
-          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs text-slate-300">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-slate-300">
             <span className="text-slate-400 font-medium">Popular Now:</span>
-            <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white">Manali & Solang</span>
-            <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white">Kedarnath Yatra</span>
-            <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white hidden sm:inline-block">Spiti 4x4 Circuit</span>
-            <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-white hidden md:inline-block">Rishikesh & Auli</span>
+            <button
+              onClick={() => onQuickSearch?.('Manali', 'Himachal Pradesh')}
+              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs"
+            >
+              Manali & Solang
+            </button>
+            <button
+              onClick={() => onQuickSearch?.('Kedarnath', 'Uttarakhand')}
+              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs"
+            >
+              Kedarnath Yatra
+            </button>
+            <button
+              onClick={() => onQuickSearch?.('Spiti', 'Himachal Pradesh')}
+              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs hidden sm:inline-block"
+            >
+              Spiti 4x4 Circuit
+            </button>
+            <button
+              onClick={() => onQuickSearch?.('Rishikesh', 'Uttarakhand')}
+              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs hidden md:inline-block"
+            >
+              Rishikesh & Auli
+            </button>
           </div>
 
           {/* Scroll Down Pill/Circle Button (Matching the down arrow button in bottom right of reference screenshot) */}

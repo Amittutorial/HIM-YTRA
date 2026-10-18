@@ -89,13 +89,23 @@ export default function App() {
     else if (state === 'Punjab') setActiveRegion('amritsar');
   };
 
-  const handleSelectDestination = (destName, destState = null) => {
-    setSearchTerm(destName);
-    if (destState) {
-      setSelectedState(destState);
-      setDestTab(destState);
+  const handleSelectDestination = (dest, fallbackState = null) => {
+    if (typeof dest === 'object' && dest !== null) {
+      const state = dest.state;
+      const kw = dest.searchKeyword || (dest.name ? dest.name.split('&')[0].trim() : '');
+      if (state) {
+        handleSelectState(state);
+      }
+      setSelectedCategory('All');
+      setSearchTerm(kw);
+    } else {
+      const destName = dest;
+      setSearchTerm(destName);
+      if (fallbackState) {
+        handleSelectState(fallbackState);
+      }
+      setSelectedCategory('All');
     }
-    setSelectedCategory('All');
   };
 
   const handleApplyOffer = (code) => {
@@ -146,6 +156,13 @@ export default function App() {
           onOpenBooking={() => handleOpenBooking()}
           onExploreClick={() => {
             const el = document.getElementById('destinations');
+            el?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onQuickSearch={(query, state) => {
+            if (state) handleSelectState(state);
+            setSelectedCategory('All');
+            setSearchTerm(query);
+            const el = document.getElementById('packages');
             el?.scrollIntoView({ behavior: 'smooth' });
           }}
           theme={theme}
@@ -227,7 +244,9 @@ export default function App() {
           onSelectDestination={handleSelectDestination}
           onOpenBooking={(dest) => {
             // Find a matching package for this destination or default
-            const match = TOUR_PACKAGES.find(p => p.state === dest.state) || TOUR_PACKAGES[0];
+            const match = (dest?.targetPackageId && TOUR_PACKAGES.find(p => p.id === dest.targetPackageId))
+              || TOUR_PACKAGES.find(p => p.state === dest?.state)
+              || TOUR_PACKAGES[0];
             handleOpenBooking(match);
           }}
         />
