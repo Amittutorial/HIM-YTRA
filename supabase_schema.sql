@@ -1,9 +1,3 @@
--- ===================================================
--- HimYatra Supabase Database Schema
--- Run this script in your Supabase SQL Editor:
--- https://supabase.com/dashboard/project/_/sql
--- ===================================================
-
 -- 1. Table for Tour Bookings & Reservations
 CREATE TABLE IF NOT EXISTS public.bookings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

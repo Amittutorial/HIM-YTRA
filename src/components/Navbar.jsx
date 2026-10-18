@@ -160,6 +160,59 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                         <div className="text-xs text-slate-400">Rishikesh, Kedarnath, Auli, Nainital</div>
                       </div>
                     </button>
+
+                    <button
+                      onClick={() => {
+                        onSelectState?.('Uttar Pradesh');
+                        setDestDropdownOpen(false);
+                        const el = document.getElementById('destinations');
+                        el?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="w-full text-left p-2.5 rounded-xl hover:bg-teal-500/10 hover:border-teal-500/30 border border-transparent transition flex items-start gap-3 group mt-1 cursor-pointer"
+                    >
+                      <div className="p-1.5 rounded-lg bg-teal-500/20 text-teal-500 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className={`font-semibold ${isLight ? 'text-slate-900 group-hover:text-teal-600' : 'text-white group-hover:text-teal-300'}`}>Ayodhya & Kashi (UP)</div>
+                        <div className="text-xs text-slate-400">Ram Mandir, Saryu Aarti, Varanasi</div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        onSelectState?.('Kashmir');
+                        setDestDropdownOpen(false);
+                        const el = document.getElementById('destinations');
+                        el?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="w-full text-left p-2.5 rounded-xl hover:bg-teal-500/10 hover:border-teal-500/30 border border-transparent transition flex items-start gap-3 group mt-1 cursor-pointer"
+                    >
+                      <div className="p-1.5 rounded-lg bg-teal-500/20 text-teal-500 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
+                        <Mountain className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className={`font-semibold ${isLight ? 'text-slate-900 group-hover:text-teal-600' : 'text-white group-hover:text-teal-300'}`}>Kashmir (Paradise)</div>
+                        <div className="text-xs text-slate-400">Srinagar, Gulmarg, Dal Lake, Pahalgam</div>
+                      </div>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        onSelectState?.('Rajasthan');
+                        setDestDropdownOpen(false);
+                        const el = document.getElementById('destinations');
+                        el?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="w-full text-left p-2.5 rounded-xl hover:bg-teal-500/10 hover:border-teal-500/30 border border-transparent transition flex items-start gap-3 group mt-1 cursor-pointer"
+                    >
+                      <div className="p-1.5 rounded-lg bg-teal-500/20 text-teal-500 group-hover:bg-teal-500 group-hover:text-slate-950 transition">
+                        <Compass className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className={`font-semibold ${isLight ? 'text-slate-900 group-hover:text-teal-600' : 'text-white group-hover:text-teal-300'}`}>Rajasthan (Royal Forts)</div>
+                        <div className="text-xs text-slate-400">Jaipur, Amber Fort, Udaipur Lakes</div>
+                      </div>
+                    </button>
                   </div>
                 )}
               </div>

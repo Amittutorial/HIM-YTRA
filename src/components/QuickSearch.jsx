@@ -32,9 +32,18 @@ export default function QuickSearch({
               onChange={(e) => setSelectedState(e.target.value)}
               className="w-full bg-transparent text-white font-medium text-sm focus:outline-none cursor-pointer"
             >
-              <option value="All" className="bg-slate-900 text-white">All Himalayas (Himachal & Uttarakhand)</option>
+              <option value="All" className="bg-slate-900 text-white">All Destinations (27+ Spots)</option>
               <option value="Himachal Pradesh" className="bg-slate-900 text-white">Himachal Pradesh (Manali, Shimla, Spiti)</option>
               <option value="Uttarakhand" className="bg-slate-900 text-white">Uttarakhand (Kedarnath, Rishikesh, Auli)</option>
+              <option value="Uttar Pradesh" className="bg-slate-900 text-white">Ayodhya & Kashi (Ram Mandir, Varanasi)</option>
+              <option value="Kashmir" className="bg-slate-900 text-white">Kashmir (Srinagar, Gulmarg, Pahalgam)</option>
+              <option value="Ladakh" className="bg-slate-900 text-white">Ladakh (Pangong Tso & Nubra)</option>
+              <option value="Rajasthan" className="bg-slate-900 text-white">Rajasthan (Jaipur & Udaipur)</option>
+              <option value="Kerala" className="bg-slate-900 text-white">Kerala (Munnar & Alleppey)</option>
+              <option value="Goa" className="bg-slate-900 text-white">Goa (Golden Beaches & Coast)</option>
+              <option value="Sikkim" className="bg-slate-900 text-white">Sikkim (Gangtok & Kanchenjunga)</option>
+              <option value="Meghalaya" className="bg-slate-900 text-white">Meghalaya (Cherrapunji & Dawki)</option>
+              <option value="Punjab" className="bg-slate-900 text-white">Punjab (Amritsar Golden Temple)</option>
             </select>
           </div>
 
@@ -52,7 +61,7 @@ export default function QuickSearch({
               <option value="Bestseller" className="bg-slate-900 text-white">Popular Bestsellers</option>
               <option value="Honeymoon" className="bg-slate-900 text-white">Romantic Honeymoon</option>
               <option value="Family" className="bg-slate-900 text-white">Family Holiday</option>
-              <option value="Spiritual" className="bg-slate-900 text-white">Spiritual Pilgrimage (Devbhoomi)</option>
+              <option value="Spiritual" className="bg-slate-900 text-white">Spiritual Pilgrimage (Ayodhya & Devbhoomi)</option>
               <option value="Adventure" className="bg-slate-900 text-white">Adventure & High Altitude Treks</option>
               <option value="Offbeat" className="bg-slate-900 text-white">Offbeat & Quiet Valleys</option>
             </select>
@@ -65,7 +74,7 @@ export default function QuickSearch({
             </label>
             <input
               type="text"
-              placeholder="e.g. Manali, Kedarnath, Spiti, Auli..."
+              placeholder="e.g. Ayodhya, Manali, Kedarnath, Spiti..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-transparent text-white placeholder-slate-500 font-medium text-sm focus:outline-none"
@@ -90,7 +99,7 @@ export default function QuickSearch({
           <span className="text-slate-400 flex items-center gap-1">
             <Filter className="w-3 h-3 text-teal-400" /> Quick tags:
           </span>
-          {['Manali & Atal Tunnel', 'Kedarnath Dham', 'Spiti 4x4', 'Auli Skiing', 'Jibhi Treehouses', 'Rishikesh Rafting', 'Nainital Lake'].map((tag) => (
+          {['Ayodhya Ram Mandir', 'Gulmarg Gondola', 'Manali & Atal Tunnel', 'Kedarnath Dham', 'Jaipur Forts', 'Alleppey Houseboat', 'Goa Beaches', 'Kashi Vishwanath', 'Spiti 4x4', 'Auli Skiing', 'Tsomgo Lake'].map((tag) => (
             <button
               key={tag}
               type="button"

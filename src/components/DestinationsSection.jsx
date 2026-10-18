@@ -7,6 +7,10 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
 
   const filteredDestinations = activeTab === 'All'
     ? DESTINATIONS
+    : activeTab === 'Sikkim'
+    ? DESTINATIONS.filter(d => d.state === 'Sikkim')
+    : activeTab === 'Meghalaya'
+    ? DESTINATIONS.filter(d => d.state === 'Meghalaya')
     : DESTINATIONS.filter(d => d.state === activeTab);
 
   return (
@@ -16,32 +20,45 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
         <div className="space-y-3">
           <div className="inline-flex items-center gap-2 text-teal-400 font-semibold text-xs tracking-wider uppercase bg-teal-500/10 px-3.5 py-1.5 rounded-full border border-teal-500/20">
             <Compass className="w-3.5 h-3.5" />
-            <span>Iconic Mountain Escapes</span>
+            <span>Iconic Travel Escapes</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white font-['Outfit'] tracking-tight">
-            Popular Destinations in <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-300">
-              Himachal & Uttarakhand
+            Explore Featured Destinations <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-300 to-cyan-300">
+              Across India & The Himalayas
             </span>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base max-w-xl">
-            From snow passes and high-altitude Buddhist monasteries to sacred Jyotirlingas and emerald lakes — pick your dream Himalayan territory.
+            From sacred Ram Janmabhoomi in Ayodhya and holy Ganga ghats to snow-clad Kashmir valleys, high-altitude Ladakh, royal Rajasthan forts, and Kerala backwaters.
           </p>
         </div>
 
         {/* State Filter Tabs */}
-        <div className="flex items-center gap-2 p-1.5 bg-slate-900/90 rounded-2xl border border-white/10 backdrop-blur-xl self-start md:self-auto">
-          {['All', 'Himachal Pradesh', 'Uttarakhand'].map((tab) => (
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-1.5 bg-slate-900/90 rounded-2xl border border-white/10 backdrop-blur-xl self-start md:self-auto max-w-full">
+          {[
+            { id: 'All', label: 'All Spots (27+)' },
+            { id: 'Himachal Pradesh', label: '🏔️ Himachal' },
+            { id: 'Uttarakhand', label: '🕉️ Uttarakhand' },
+            { id: 'Uttar Pradesh', label: '🚩 Ayodhya & UP' },
+            { id: 'Kashmir', label: '❄️ Kashmir' },
+            { id: 'Ladakh', label: '⛺ Ladakh' },
+            { id: 'Punjab', label: '🪔 Amritsar' },
+            { id: 'Meghalaya', label: '🌿 Meghalaya' },
+            { id: 'Rajasthan', label: '🏰 Rajasthan' },
+            { id: 'Kerala', label: '🌴 Kerala' },
+            { id: 'Goa', label: '🏖️ Goa' },
+            { id: 'Sikkim', label: '🪷 Sikkim' }
+          ].map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                activeTab === tab
-                  ? 'bg-teal-400 text-slate-950 shadow-lg shadow-teal-500/20'
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'bg-teal-400 text-slate-950 shadow-lg shadow-teal-500/20 scale-105'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
-              {tab === 'All' ? 'All (16+ Spots)' : tab === 'Himachal Pradesh' ? '🏔️ Himachal' : '🕉️ Uttarakhand'}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -144,7 +161,7 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => {
-                      onSelectDestination(dest.name.split('&')[0].trim());
+                      onSelectDestination(dest.name.split('&')[0].trim(), dest.state);
                       const el = document.getElementById('packages');
                       el?.scrollIntoView({ behavior: 'smooth' });
                     }}

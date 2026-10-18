@@ -271,7 +271,30 @@ html.light, body.light {
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95) !important;
 }
 
-/* Light mode FAQ & Help Center Accordion Answer Boxes */
+/* Light mode FAQ & Help Center Accordions */
+.light .faq-question-btn,
+.light button.faq-question-btn,
+.light .faq-question-text,
+.light #help-center-modal .faq-question-btn,
+.light #help-center-modal .faq-question-text {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+.light .faq-question-btn:hover,
+.light .faq-question-btn:hover .faq-question-text,
+.light #help-center-modal .faq-question-btn:hover .faq-question-text {
+  color: #0d9488 !important;
+}
+
+.dark .faq-question-text {
+  color: #ffffff !important;
+}
+
+.dark .faq-question-btn:hover .faq-question-text {
+  color: #5eead4 !important;
+}
+
 .light .faq-answer-box {
   background-color: #f8fafc !important;
   border-top-color: #e2e8f0 !important;

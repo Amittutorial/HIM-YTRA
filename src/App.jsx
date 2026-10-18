@@ -78,10 +78,24 @@ export default function App() {
     setDestTab(state);
     if (state === 'Himachal Pradesh') setActiveRegion('himachal');
     else if (state === 'Uttarakhand') setActiveRegion('uttarakhand');
+    else if (state === 'Uttar Pradesh') setActiveRegion('ayodhya');
+    else if (state === 'Kashmir') setActiveRegion('kashmir');
+    else if (state === 'Ladakh') setActiveRegion('ladakh');
+    else if (state === 'Rajasthan') setActiveRegion('rajasthan');
+    else if (state === 'Kerala') setActiveRegion('kerala');
+    else if (state === 'Goa') setActiveRegion('goa');
+    else if (state === 'Sikkim') setActiveRegion('sikkim');
+    else if (state === 'Meghalaya') setActiveRegion('meghalaya');
+    else if (state === 'Punjab') setActiveRegion('amritsar');
   };
 
-  const handleSelectDestination = (destName) => {
+  const handleSelectDestination = (destName, destState = null) => {
     setSearchTerm(destName);
+    if (destState) {
+      setSelectedState(destState);
+      setDestTab(destState);
+    }
+    setSelectedCategory('All');
   };
 
   const handleApplyOffer = (code) => {
@@ -138,12 +152,41 @@ export default function App() {
           activeRegion={activeRegion}
           onSelectRegion={(reg) => {
             setActiveRegion(reg);
-            if (reg === 'himachal') {
+            setSelectedCategory('All');
+            setSearchTerm('');
+            if (reg === 'himachal' || reg === 'spiti') {
               setSelectedState('Himachal Pradesh');
               setDestTab('Himachal Pradesh');
-            } else if (reg === 'uttarakhand') {
+            } else if (reg === 'uttarakhand' || reg === 'rishikesh') {
               setSelectedState('Uttarakhand');
               setDestTab('Uttarakhand');
+            } else if (reg === 'ayodhya' || reg === 'varanasi') {
+              setSelectedState('Uttar Pradesh');
+              setDestTab('Uttar Pradesh');
+            } else if (reg === 'kashmir') {
+              setSelectedState('Kashmir');
+              setDestTab('Kashmir');
+            } else if (reg === 'ladakh') {
+              setSelectedState('Ladakh');
+              setDestTab('Ladakh');
+            } else if (reg === 'rajasthan') {
+              setSelectedState('Rajasthan');
+              setDestTab('Rajasthan');
+            } else if (reg === 'kerala') {
+              setSelectedState('Kerala');
+              setDestTab('Kerala');
+            } else if (reg === 'goa') {
+              setSelectedState('Goa');
+              setDestTab('Goa');
+            } else if (reg === 'sikkim') {
+              setSelectedState('Sikkim');
+              setDestTab('Sikkim');
+            } else if (reg === 'meghalaya') {
+              setSelectedState('Meghalaya');
+              setDestTab('Meghalaya');
+            } else if (reg === 'amritsar') {
+              setSelectedState('Punjab');
+              setDestTab('Punjab');
             }
           }}
         />
@@ -162,14 +205,24 @@ export default function App() {
         {/* Why Choose HimYatra & Trust Credibility */}
         <TrustStats />
 
-        {/* Destinations: Himachal Pradesh & Uttarakhand */}
+        {/* Destinations: Himachal, Uttarakhand, Ayodhya & More */}
         <DestinationsSection
           activeTab={destTab}
           setActiveTab={(tab) => {
             setDestTab(tab);
             setSelectedState(tab);
+            setSelectedCategory('All');
             if (tab === 'Himachal Pradesh') setActiveRegion('himachal');
             else if (tab === 'Uttarakhand') setActiveRegion('uttarakhand');
+            else if (tab === 'Uttar Pradesh') setActiveRegion('ayodhya');
+            else if (tab === 'Kashmir') setActiveRegion('kashmir');
+            else if (tab === 'Ladakh') setActiveRegion('ladakh');
+            else if (tab === 'Rajasthan') setActiveRegion('rajasthan');
+            else if (tab === 'Kerala') setActiveRegion('kerala');
+            else if (tab === 'Goa') setActiveRegion('goa');
+            else if (tab === 'Sikkim') setActiveRegion('sikkim');
+            else if (tab === 'Meghalaya') setActiveRegion('meghalaya');
+            else if (tab === 'Punjab') setActiveRegion('amritsar');
           }}
           onSelectDestination={handleSelectDestination}
           onOpenBooking={(dest) => {
@@ -262,6 +315,7 @@ export default function App() {
       {helpCenterOpen && (
         <HelpCenterModal
           onClose={() => setHelpCenterOpen(false)}
+          theme={theme}
         />
       )}
     </div>

@@ -25,6 +25,20 @@ export default function PackagesSection({
     { id: 'Offbeat', label: '🌲 Offbeat Serenity' }
   ];
 
+  const handleRegionClick = (regionId) => {
+    setSelectedState(regionId);
+    if (regionId !== 'All' && selectedCategory !== 'All') {
+      const exists = TOUR_PACKAGES.some(
+        (p) =>
+          p.state === regionId &&
+          ((p.categories && p.categories.includes(selectedCategory)) || p.category === selectedCategory)
+      );
+      if (!exists) {
+        setSelectedCategory('All');
+      }
+    }
+  };
+
   // Filtering
   let filtered = TOUR_PACKAGES.filter((pkg) => {
     // State match
@@ -32,16 +46,20 @@ export default function PackagesSection({
       return false;
     }
     // Category match
-    if (selectedCategory !== 'All' && pkg.category !== selectedCategory) {
-      return false;
+    if (selectedCategory !== 'All') {
+      const matchCat =
+        (pkg.categories && pkg.categories.includes(selectedCategory)) ||
+        pkg.category === selectedCategory;
+      if (!matchCat) return false;
     }
     // Search match
     if (searchTerm.trim() !== '') {
       const q = searchTerm.toLowerCase();
       const matchTitle = pkg.title.toLowerCase().includes(q);
-      const matchRoute = pkg.route.toLowerCase().includes(q);
+      const matchRoute = pkg.route?.toLowerCase().includes(q);
       const matchState = pkg.state.toLowerCase().includes(q);
-      if (!matchTitle && !matchRoute && !matchState) {
+      const matchCat = pkg.categories?.some((c) => c.toLowerCase().includes(q));
+      if (!matchTitle && !matchRoute && !matchState && !matchCat) {
         return false;
       }
     }
@@ -97,21 +115,34 @@ export default function PackagesSection({
 
         {/* Secondary Filter Bar: State switch, Active filters, and Sort selector */}
         <div className="p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-xl flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="text-slate-400 font-medium flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs">
+            <span className="text-slate-400 font-medium flex items-center gap-1 mr-1">
               <Filter className="w-3.5 h-3.5 text-teal-400" /> Filter Region:
             </span>
-            {['All', 'Himachal Pradesh', 'Uttarakhand'].map((st) => (
+            {[
+              { id: 'All', label: 'All Regions' },
+              { id: 'Himachal Pradesh', label: 'Himachal' },
+              { id: 'Uttarakhand', label: 'Uttarakhand' },
+              { id: 'Uttar Pradesh', label: 'Ayodhya & UP' },
+              { id: 'Kashmir', label: 'Kashmir' },
+              { id: 'Ladakh', label: 'Ladakh' },
+              { id: 'Meghalaya', label: 'Meghalaya' },
+              { id: 'Punjab', label: 'Amritsar' },
+              { id: 'Rajasthan', label: 'Rajasthan' },
+              { id: 'Kerala', label: 'Kerala' },
+              { id: 'Goa', label: 'Goa' },
+              { id: 'Sikkim', label: 'Sikkim' }
+            ].map((st) => (
               <button
-                key={st}
-                onClick={() => setSelectedState(st)}
-                className={`px-3 py-1.5 rounded-xl font-semibold transition cursor-pointer ${
-                  selectedState === st
-                    ? 'bg-white/15 text-white border border-teal-400/40'
+                key={st.id}
+                onClick={() => handleRegionClick(st.id)}
+                className={`px-3 py-1.5 rounded-xl font-semibold transition cursor-pointer whitespace-nowrap ${
+                  selectedState === st.id
+                    ? 'bg-teal-400 text-slate-950 font-bold shadow-md shadow-teal-500/20'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                 }`}
               >
-                {st === 'All' ? 'Both States' : st}
+                {st.label}
               </button>
             ))}
 
@@ -155,18 +186,38 @@ export default function PackagesSection({
 
       {/* Packages Grid */}
       {filtered.length === 0 ? (
-        <div className="p-12 text-center rounded-3xl bg-slate-900/40 border border-white/10 space-y-4">
-          <p className="text-slate-300 text-lg">No tour packages match your current search criteria.</p>
-          <button
-            onClick={() => {
-              setSelectedCategory('All');
-              setSelectedState('All');
-              setSearchTerm('');
-            }}
-            className="px-6 py-2.5 rounded-xl bg-teal-400 text-slate-950 font-bold text-sm"
-          >
-            Show All Tour Packages
-          </button>
+        <div className="p-8 sm:p-12 text-center rounded-3xl bg-slate-900/60 border border-white/10 space-y-5">
+          <div className="w-14 h-14 mx-auto rounded-full bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+            <Filter className="w-7 h-7" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white mb-2">No tour packages match this filter combination</h3>
+            <p className="text-slate-400 text-sm max-w-md mx-auto">
+              {selectedCategory !== 'All' && selectedState !== 'All'
+                ? `There are currently no "${selectedCategory}" packages in "${selectedState}". Try viewing all packages in this region or reset filters.`
+                : 'Try adjusting your search criteria or explore our featured packages below.'}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            {selectedState !== 'All' && selectedCategory !== 'All' && (
+              <button
+                onClick={() => setSelectedCategory('All')}
+                className="px-5 py-2.5 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs sm:text-sm cursor-pointer transition shadow-lg shadow-teal-500/20"
+              >
+                View All {selectedState} Packages
+              </button>
+            )}
+            <button
+              onClick={() => {
+                setSelectedCategory('All');
+                setSelectedState('All');
+                setSearchTerm('');
+              }}
+              className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs sm:text-sm border border-white/10 cursor-pointer transition"
+            >
+              Reset All Filters
+            </button>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">

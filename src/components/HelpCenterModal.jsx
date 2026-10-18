@@ -50,7 +50,7 @@ export default function HelpCenterModal({ onClose, onOpenPayment, onOpenBooking 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
       <div className="relative w-full max-w-3xl bg-slate-900 border border-teal-500/30 rounded-3xl overflow-hidden shadow-2xl shadow-black/95 my-6 flex flex-col max-h-[90vh]">
-        
+
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -107,7 +107,7 @@ export default function HelpCenterModal({ onClose, onOpenPayment, onOpenBooking 
 
         {/* Modal Body / FAQs */}
         <div className="p-6 sm:p-8 space-y-6 overflow-y-auto flex-1">
-          
+
           {/* Quick Action Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div className="p-4 rounded-2xl bg-slate-950/60 border border-white/10 space-y-1.5">
@@ -156,9 +156,8 @@ export default function HelpCenterModal({ onClose, onOpenPayment, onOpenBooking 
                       <span>{topic.title}</span>
                     </div>
                     <ChevronDown
-                      className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${
-                        activeFaq === idx ? 'rotate-180 text-teal-400' : ''
-                      }`}
+                      className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${activeFaq === idx ? 'rotate-180 text-teal-400' : ''
+                        }`}
                     />
                   </button>
 

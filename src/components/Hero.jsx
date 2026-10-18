@@ -19,8 +19,8 @@ export const REGION_BACKGROUNDS = [
     stateKey: 'Uttarakhand',
     location: 'Kedarnath & Badrinath Peaks, Uttarakhand',
     tag: 'Sacred Devbhoomi',
-    // Dark mode: Mystical twilight & celestial night sky over sacred Garhwal peaks (Ultra HD 4K)
-    dark: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=90',
+    // Dark mode: Starlit celestial night sky over sacred Garhwal Himalayan peaks (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2560&q=90',
     // Light mode: Bright daylight sacred Kedarnath & Badrinath sun-lit snow mountains (Ultra HD 4K)
     light: 'https://images.unsplash.com/photo-1612438214708-f428a707dd4e?auto=format&fit=crop&w=2560&q=90'
   },
@@ -31,7 +31,7 @@ export const REGION_BACKGROUNDS = [
     location: 'Spiti Valley & Chandratal Lake, Himachal Pradesh',
     tag: 'Trans-Himalayan Overland',
     // Dark mode: Famous Spiti Milky Way galaxy & starry night over cold desert peaks (Ultra HD 4K)
-    dark: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2560&q=90',
+    dark: 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?auto=format&fit=crop&w=2560&q=90',
     // Light mode: Radiant daytime turquoise Chandratal Lake & sunlit alpine peaks (Ultra HD 4K)
     light: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2560&q=90'
   },
@@ -45,6 +45,116 @@ export const REGION_BACKGROUNDS = [
     dark: 'https://images.unsplash.com/photo-1624773144987-fe51d68722cf?auto=format&fit=crop&w=2560&q=90',
     // Light mode: Iconic sunlit Dal Lake Shikaras & snow mountain range Srinagar, Kashmir (Ultra HD 4K)
     light: 'https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'ayodhya',
+    name: 'Ayodhya',
+    stateKey: 'Uttar Pradesh',
+    location: 'Shri Ram Janmabhoomi Teerth & Saryu Ghat, Ayodhya',
+    tag: 'Divine Ram Mandir & Saryu Aarti',
+    // Dark mode: Consecrated Shri Ram Janmabhoomi Mandir illuminated at night (Ultra HD 4K)
+    dark: '/destinations/ayodhya-dark.jpg',
+    // Light mode: Magnificent carved stone Shri Ram Janmabhoomi Mandir in brilliant daylight (Ultra HD 4K)
+    light: '/destinations/ayodhya-light.jpg'
+  },
+  {
+    id: 'varanasi',
+    name: 'Varanasi',
+    stateKey: 'Uttar Pradesh',
+    location: 'Kashi Vishwanath & Dashashwamedh Ghat, Varanasi',
+    tag: 'Eternal Spiritual Capital & Maha Ganga Aarti',
+    // Dark mode: World-famous evening Ganga Aarti at Dashashwamedh Ghat with brass fire lamps (Ultra HD 4K)
+    dark: '/destinations/varanasi-dark.jpg',
+    // Light mode: Sunrise golden hour over historic holy river Ganga stone ghats & boats (Ultra HD 4K)
+    light: '/destinations/varanasi-light.jpg'
+  },
+  {
+    id: 'ladakh',
+    name: 'Ladakh',
+    stateKey: 'Ladakh',
+    location: 'Pangong Tso & Nubra Valley, Ladakh',
+    tag: 'High Mountain Passes & Turquoise Lakes',
+    // Dark mode: Celestial starry night over Pangong Tso Lake cold desert (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1685555845405-1503f76a5462?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Iconic Pangong Tso azure turquoise lake & arid mountain passes (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1652204597589-962156b9483d?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'rishikesh',
+    name: 'Rishikesh',
+    stateKey: 'Uttarakhand',
+    location: 'Laxman Jhula & Triveni Ghat, Rishikesh, Uttarakhand',
+    tag: 'World Yoga Capital & Divine Ganga',
+    // Dark mode: Lord Shiva statue on River Ganga at Rishikesh illuminated at twilight (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1687735175748-a19b5adb7591?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Iconic Laxman Jhula suspension bridge spanning emerald River Ganga (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1718383538820-524dd564fd06?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'rajasthan',
+    name: 'Rajasthan',
+    stateKey: 'Rajasthan',
+    location: 'Amber Fort & Hawa Mahal, Jaipur, Rajasthan',
+    tag: 'Royal Palaces, Forts & Desert Royalty',
+    // Dark mode: Grand Amber Fort illuminated golden under starlit desert sky (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Pink sandstone Hawa Mahal palace facade in bright daylight (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'goa',
+    name: 'Goa',
+    stateKey: 'Goa',
+    location: 'Palolem Beach & Arabian Sea Coastline, Goa',
+    tag: 'Golden Sands & Azure Arabian Sea',
+    // Dark mode: Twilight ocean waves and glowing coast (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Tropical palm-fringed golden beach and clear turquoise water (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'kerala',
+    name: 'Kerala',
+    stateKey: 'Kerala',
+    location: 'Alleppey Backwaters & Munnar Hills, Kerala',
+    tag: 'God’s Own Country & Verdant Backwaters',
+    // Dark mode: Peaceful evening traditional houseboat at dusk with lanterns (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Sunlit rolling emerald green Munnar tea plantations (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'sikkim',
+    name: 'Sikkim',
+    stateKey: 'Sikkim',
+    location: 'Mount Kanchenjunga & Tsomgo Lake, Sikkim',
+    tag: 'Eastern Himalayan Kingdom & Monasteries',
+    // Dark mode: Majestic Kanchenjunga peaks under starry night sky (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Sacred Sikkim alpine lake and Buddhist prayer flags (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'meghalaya',
+    name: 'Meghalaya',
+    stateKey: 'Meghalaya',
+    location: 'Living Root Bridges & Dawki River, Meghalaya',
+    tag: 'Abode of Clouds & Crystal Waters',
+    // Dark mode: Double Decker Living Root Bridge of Nongriat, Meghalaya (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1625654325562-762dcec9e6f2?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Crystal-clear turquoise water of Dawki River with floating boats (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1521437620269-f477f5437820?auto=format&fit=crop&w=2560&q=90'
+  },
+  {
+    id: 'amritsar',
+    name: 'Amritsar',
+    stateKey: 'Punjab',
+    location: 'Sri Harmandir Sahib (Golden Temple), Amritsar',
+    tag: 'Sacred Amrit Sarovar & Golden Sanctum',
+    // Dark mode: Radiant Golden Temple illuminated night reflection in holy sarovar (Ultra HD 4K)
+    dark: 'https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=2560&q=90',
+    // Light mode: Pure 24K gold temple shining under radiant clear blue sky (Ultra HD 4K)
+    light: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=2560&q=90'
   }
 ];
 
@@ -114,15 +224,18 @@ export default function Hero({ onOpenBooking, onExploreClick, theme = 'dark', ac
           </div>
 
           {/* Quick Region Switcher Buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-2 backdrop-blur-xl bg-slate-950/70 p-1.5 rounded-full border border-white/15 text-xs shadow-xl">
-            <span className="text-slate-400 text-[11px] font-semibold px-2 hidden sm:inline">Featured:</span>
+          <div className="flex items-center gap-1.5 sm:gap-2 backdrop-blur-2xl bg-slate-950/80 p-1.5 rounded-2xl sm:rounded-full border border-white/20 text-xs shadow-2xl max-w-full overflow-x-auto scrollbar-none py-1.5 px-2.5">
+            <div className="flex items-center gap-1.5 text-teal-300 text-[11px] font-bold px-2.5 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-teal-400" />
+              <span>Featured:</span>
+            </div>
             {REGION_BACKGROUNDS.map((bg) => (
               <button
                 key={bg.id}
                 onClick={() => onSelectRegion?.(bg.id)}
-                className={`px-3 py-1.5 rounded-full text-xs transition-all duration-300 cursor-pointer font-semibold ${
+                className={`px-3 py-1.5 rounded-full text-xs transition-all duration-300 cursor-pointer font-bold whitespace-nowrap shrink-0 ${
                   activeRegion === bg.id
-                    ? 'bg-teal-400 text-slate-950 font-bold shadow-lg shadow-teal-400/25 scale-105'
+                    ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-lg shadow-teal-400/40 scale-105 ring-2 ring-teal-200/50'
                     : 'text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
               >
