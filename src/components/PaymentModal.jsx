@@ -14,7 +14,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
   const [verificationError, setVerificationError] = useState('');
 
   const upiId = 'amitpatel42203@okhdfcbank';
-  const payeeName = 'Amit Patel';
+  const payeeName = 'Amit Verma';
   const bankName = 'Central Bank of India 3744';
   const whatsappNumber = '917619917057';
 

@@ -1,7 +1,3 @@
--- ===================================================
--- HIM YTRA Supabase Database Schema
--- Complete backend tables, RLS policies, and grants
--- ===================================================
 
 -- 1. Table for Tour Bookings & Reservations
 CREATE TABLE IF NOT EXISTS public.bookings (
@@ -42,7 +38,7 @@ CREATE TABLE IF NOT EXISTS public.inquiries (
     source TEXT DEFAULT 'website',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
-
+--_______________________________________________________________________
 -- 3. Table for Custom Trip Builder Wizard
 CREATE TABLE IF NOT EXISTS public.custom_trips (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
