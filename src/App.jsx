@@ -18,9 +18,11 @@ import BookingModal from './components/BookingModal';
 import InquireModal from './components/InquireModal';
 import PaymentModal from './components/PaymentModal';
 import HelpCenterModal from './components/HelpCenterModal';
+import AuthModal from './components/AuthModal';
 import { TOUR_PACKAGES } from './data/travelData';
 
 export default function App() {
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('himyatra-theme') || 'dark';
   });
@@ -145,6 +147,7 @@ export default function App() {
         onOpenInquire={() => setInquireModalOpen(true)}
         onOpenPayment={() => setPaymentModalOpen(true)}
         onOpenHelpCenter={() => setHelpCenterOpen(true)}
+        onOpenAuth={() => setAuthModalOpen(true)}
         theme={theme}
         onToggleTheme={toggleTheme}
       />
@@ -337,6 +340,14 @@ export default function App() {
           theme={theme}
         />
       )}
+
+      {/* Customer Travel Portal & OTP Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onOpenBooking={(pkg) => handleOpenBooking(pkg)}
+        onOpenPayment={() => setPaymentModalOpen(true)}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Sparkles, Check, Car, Calendar, MapPin, Users, Compass, Send, CheckCircle2, Phone } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { saveCustomTripToSupabase } from '../lib/supabaseClient';
+import { saveCustomTripToSupabase, getCurrentUser } from '../lib/supabaseClient';
 import { sendInquiryEmail } from '../lib/emailService';
 import FormFounderBadge from './FormFounderBadge';
 
@@ -15,9 +15,10 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
   const [pickupCity, setPickupCity] = useState('Delhi NCR');
   const [vehicle, setVehicle] = useState('Toyota Innova Crysta');
   const [hotelType, setHotelType] = useState('3-Star Deluxe Valley View');
+  const loggedInUser = getCurrentUser();
   const [submitted, setSubmitted] = useState(false);
-  const [contactName, setContactName] = useState('');
-  const [contactPhone, setContactPhone] = useState('');
+  const [contactName, setContactName] = useState(loggedInUser?.full_name || loggedInUser?.username || '');
+  const [contactPhone, setContactPhone] = useState(loggedInUser?.phone || '');
 
   const himachalSpots = ['Manali', 'Solang & Atal Tunnel', 'Shimla & Kufri', 'Spiti Valley', 'Kasol & Parvati', 'Jibhi & Tirthan', 'Dharamshala', 'Dalhousie'];
   const uttarakhandSpots = ['Rishikesh', 'Kedarnath Dham', 'Badrinath Dham', 'Auli Ski Slopes', 'Mussoorie', 'Nainital Lake', 'Jim Corbett Safari', 'Chopta Tungnath'];
@@ -65,7 +66,8 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
       hotelType,
       estimatedPrice,
       contactName,
-      contactPhone
+      contactPhone,
+      customer_username: loggedInUser?.username || null
     };
 
     saveCustomTripToSupabase(customPayload);

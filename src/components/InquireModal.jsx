@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { X, Phone, Mail, MessageSquare, Copy, Check, Clock, MapPin, Send, CheckCircle2, Sparkles, ShieldCheck } from 'lucide-react';
-import { saveInquiryToSupabase } from '../lib/supabaseClient';
+import { saveInquiryToSupabase, getCurrentUser } from '../lib/supabaseClient';
 import { sendInquiryEmail } from '../lib/emailService';
 import FormFounderBadge from './FormFounderBadge';
 
 export default function InquireModal({ onClose, onOpenHelpCenter }) {
+  const loggedInUser = getCurrentUser();
   const [copiedItem, setCopiedItem] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [emailInput, setEmailInput] = useState('');
+  const [name, setName] = useState(loggedInUser?.full_name || loggedInUser?.username || '');
+  const [phone, setPhone] = useState(loggedInUser?.phone || '');
+  const [emailInput, setEmailInput] = useState(loggedInUser?.email || '');
   const [message, setMessage] = useState('');
   const [destination, setDestination] = useState('');
   const [travelersCount, setTravelersCount] = useState('');
@@ -33,6 +34,7 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
       name,
       phone,
       email: emailInput || 'Not provided',
+      customer_username: loggedInUser?.username || null,
       destination: destination || 'Himachal Pradesh / Uttarakhand',
       fromCity: fromCity || 'Delhi NCR / Chandigarh',
       travelDate: travelDate || 'Flexible / To be planned',

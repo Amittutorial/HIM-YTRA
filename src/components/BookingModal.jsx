@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Check, ShieldCheck, Calendar, Users, MapPin, Tag, Phone, Mail, User, Sparkles, CheckCircle2, Download, MessageSquare } from 'lucide-react';
 import { TOUR_PACKAGES } from '../data/travelData';
 import confetti from 'canvas-confetti';
-import { saveBookingToSupabase, updateBookingPaymentToSupabase } from '../lib/supabaseClient';
+import { saveBookingToSupabase, updateBookingPaymentToSupabase, getCurrentUser } from '../lib/supabaseClient';
 import { sendBookingEmail } from '../lib/emailService';
 import FormFounderBadge from './FormFounderBadge';
 import { Lock, AlertCircle } from 'lucide-react';
@@ -19,10 +19,12 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
   const [appliedDiscount, setAppliedDiscount] = useState(preAppliedCode ? 15 : 0);
   const [couponMessage, setCouponMessage] = useState(preAppliedCode ? '15% Discount Applied!' : '');
 
+  const loggedInUser = getCurrentUser();
+
   // Traveler info
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(loggedInUser?.full_name || loggedInUser?.username || '');
+  const [phone, setPhone] = useState(loggedInUser?.phone || '');
+  const [email, setEmail] = useState(loggedInUser?.email || '');
   const [specialRequests, setSpecialRequests] = useState('');
 
   // Booking state
@@ -82,6 +84,7 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
       name,
       phone,
       email,
+      customer_username: loggedInUser?.username || null,
       travelDate,
       adults,
       children,

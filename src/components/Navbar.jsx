@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle, Sun, Moon } from 'lucide-react';
+import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle, Sun, Moon, User } from 'lucide-react';
+import { getCurrentUser } from '../lib/supabaseClient';
 
-export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, onOpenPayment, onOpenHelpCenter, theme = 'dark', onToggleTheme }) {
+export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, onOpenPayment, onOpenHelpCenter, onOpenAuth, theme = 'dark', onToggleTheme }) {
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [destDropdownOpen, setDestDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleAuth = (e) => setCurrentUser(e.detail);
+    window.addEventListener('himyatra-auth-changed', handleAuth);
+    return () => window.removeEventListener('himyatra-auth-changed', handleAuth);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,6 +71,23 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
           }`}
         >
           <HelpCircle className="w-3 h-3" /> Help Center
+        </button>
+        <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
+        <button
+          type="button"
+          onClick={() => onOpenAuth?.()}
+          className={`font-bold transition flex items-center gap-1.5 cursor-pointer px-3 py-0.5 rounded-full border ${
+            currentUser
+              ? isLight
+                ? 'bg-teal-100 text-teal-900 border-teal-400 font-extrabold'
+                : 'bg-teal-500/20 text-teal-300 border-teal-400/40 font-extrabold'
+              : isLight
+                ? 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200'
+                : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+          }`}
+        >
+          <User className="w-3 h-3 text-teal-500" />
+          <span>{currentUser ? `@${currentUser.username} (${currentUser.total_bookings || 0} Bookings)` : 'Customer Login / My Trips'}</span>
         </button>
       </div>
 
@@ -271,6 +296,39 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                 <span>Inquire</span>
               </button>
 
+              {/* Customer Account / Sign In Pill */}
+              <button
+                type="button"
+                onClick={() => onOpenAuth?.()}
+                className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 sm:px-3.5 py-2 rounded-full border transition-all duration-200 cursor-pointer shrink-0 ${
+                  currentUser
+                    ? isLight
+                      ? 'border-teal-500 bg-teal-50 text-teal-900 hover:bg-teal-100 shadow-sm'
+                      : 'border-teal-400/50 bg-teal-950/80 text-teal-200 hover:bg-teal-900/90 shadow-md shadow-teal-500/20'
+                    : isLight
+                      ? 'border-slate-300 bg-white text-slate-700 hover:text-teal-700 hover:border-teal-400 shadow-sm'
+                      : 'border-white/15 bg-white/5 text-slate-200 hover:text-white hover:border-white/30'
+                }`}
+                title={currentUser ? `Logged in as @${currentUser.username} (${currentUser.total_bookings || 0} Bookings)` : 'Customer Login / My Trips'}
+              >
+                {currentUser ? (
+                  <>
+                    <span className="w-5 h-5 rounded-full bg-teal-400 text-slate-950 text-[10px] font-black flex items-center justify-center shrink-0">
+                      {currentUser.username.slice(0, 2).toUpperCase()}
+                    </span>
+                    <span className="max-w-[75px] sm:max-w-[100px] truncate">@{currentUser.username}</span>
+                    <span className="text-[10px] bg-teal-500/20 text-teal-300 border border-teal-400/30 px-1.5 py-0.5 rounded-full font-black">
+                      {currentUser.total_bookings || 0}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <User className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                    <span>Login</span>
+                  </>
+                )}
+              </button>
+
               {/* Book Now Button */}
               <button
                 onClick={() => onOpenBooking?.(null)}
@@ -357,6 +415,20 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
           </div>
 
           <div className="space-y-3 pt-6 border-t border-white/10">
+            {/* Customer Account in Mobile Menu */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAuth?.();
+              }}
+              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-teal-500/20 to-emerald-500/20 border border-teal-500/40 text-teal-300 font-bold text-sm flex items-center justify-center gap-2.5 transition shadow-lg shadow-teal-500/10"
+            >
+              <User className="w-4 h-4 text-teal-400" />
+              <span>
+                {currentUser ? `Account: @${currentUser.username} (${currentUser.total_bookings || 0} Bookings)` : 'Customer Login / My Trips'}
+              </span>
+            </button>
+
             {/* Theme Toggle in Mobile Menu */}
             <button
               onClick={() => onToggleTheme?.()}
