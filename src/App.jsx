@@ -305,6 +305,7 @@ export default function App() {
       {/* Mobile Sticky Quick Action Bar */}
       <MobileBottomBar
         onOpenBooking={() => handleOpenBooking()}
+        onOpenAuth={() => setAuthModalOpen(true)}
       />
 
       {/* Booking Checkout Modal */}

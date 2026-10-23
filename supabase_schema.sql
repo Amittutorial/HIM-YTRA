@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS public.user_profiles (
     total_bookings INT DEFAULT 0,
     total_inquiries INT DEFAULT 0,
     total_spent NUMERIC(12, 2) DEFAULT 0,
+    password_hash TEXT,
+    password_salt TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     last_login TIMESTAMPTZ DEFAULT NOW()
 );

@@ -10,6 +10,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
  */
 export function getCurrentUser() {
   try {
+    if (typeof localStorage === 'undefined') return null;
     const raw = localStorage.getItem('himyatra_auth_user');
     return raw ? JSON.parse(raw) : null;
   } catch (_) {
@@ -22,14 +23,263 @@ export function getCurrentUser() {
  */
 export function logoutUser() {
   try {
-    localStorage.removeItem('himyatra_auth_user');
-    window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: null }));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('himyatra_auth_user');
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: null }));
+    }
   } catch (_) {}
 }
 
 /**
- * Generate and dispatch a REAL 6-digit OTP code to the customer's Gmail
+ * Cryptographic SHA-256 password hashing with unique salt
  */
+export async function hashPassword(password, salt) {
+  const enc = new TextEncoder();
+  const data = enc.encode(password + ':' + salt);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Log in returning customer using their Username/Email and Password
+ */
+export async function loginWithPassword(identifier, password) {
+  const cleanId = identifier?.trim().toLowerCase();
+  if (!cleanId) {
+    throw new Error('Please enter your username or email address.');
+  }
+  if (!password) {
+    throw new Error('Please enter your password.');
+  }
+
+  // Look up user by username OR email
+  const { data: users, error } = await supabase
+    .from('user_profiles')
+    .select('*')
+    .or(`username.eq.${cleanId},email.eq.${cleanId}`)
+    .limit(1);
+
+  if (error || !users || users.length === 0) {
+    throw new Error('No account found with this username or email. Please create a new account.');
+  }
+
+  const user = users[0];
+
+  if (!user.password_hash || !user.password_salt) {
+    throw new Error('This account was created via Gmail OTP and has no password yet. Please log in with Gmail OTP, then set a password in your account dashboard.');
+  }
+
+  // Verify password hash
+  const computedHash = await hashPassword(password, user.password_salt);
+  if (computedHash !== user.password_hash) {
+    throw new Error('Incorrect password. Please verify and try again, or use Gmail OTP login.');
+  }
+
+  // Fetch live booking count
+  try {
+    const { count: bookingCount } = await supabase
+      .from('bookings')
+      .select('*', { count: 'exact', head: true })
+      .or(`customer_username.eq.${user.username},customer_email.eq.${user.email}`);
+
+    if (typeof bookingCount === 'number') {
+      user.total_bookings = bookingCount;
+    }
+  } catch (_) {}
+
+  // Update last login
+  await supabase
+    .from('user_profiles')
+    .update({ last_login: new Date().toISOString() })
+    .eq('id', user.id);
+
+  // Strip sensitive hashes before storing in local session
+  const safeProfile = {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    full_name: user.full_name || user.username,
+    phone: user.phone || '',
+    total_bookings: user.total_bookings || 0,
+    total_inquiries: user.total_inquiries || 0,
+    created_at: user.created_at
+  };
+
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('himyatra_auth_user', JSON.stringify(safeProfile));
+  }
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: safeProfile }));
+  }
+
+  return { success: true, user: safeProfile };
+}
+
+/**
+ * Register new user with Username, Gmail, and Password - sends OTP to verify Gmail
+ */
+export async function registerWithPasswordAndOtp(email, username, password) {
+  const cleanEmail = email?.trim().toLowerCase();
+  const cleanUsername = username?.trim().toLowerCase().replace(/\s+/g, '_');
+
+  if (!cleanEmail || !cleanEmail.includes('@')) {
+    throw new Error('Please enter a valid Gmail / Email address.');
+  }
+  if (!cleanUsername || cleanUsername.length < 3) {
+    throw new Error('Username must be at least 3 characters long.');
+  }
+  if (!/^[a-z0-9_]+$/.test(cleanUsername)) {
+    throw new Error('Username can only contain lowercase letters, numbers, and underscores.');
+  }
+  if (!password || password.length < 6) {
+    throw new Error('Password must be at least 6 characters long.');
+  }
+
+  // Check if username already exists in Supabase
+  const { data: existingUser } = await supabase
+    .from('user_profiles')
+    .select('username, email')
+    .or(`username.eq.${cleanUsername},email.eq.${cleanEmail}`)
+    .limit(1);
+
+  if (existingUser && existingUser.length > 0) {
+    if (existingUser[0].username === cleanUsername) {
+      throw new Error(`Username @${cleanUsername} is already taken. Please choose another username.`);
+    }
+    if (existingUser[0].email === cleanEmail) {
+      throw new Error(`An account with email ${cleanEmail} already exists. Please log in.`);
+    }
+  }
+
+  // Generate salt and hash
+  const salt = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+  const passwordHash = await hashPassword(password, salt);
+
+  // Send real OTP to verify Gmail
+  const otpRes = await sendEmailOtp(cleanEmail, cleanUsername);
+
+  return {
+    success: true,
+    email: cleanEmail,
+    username: cleanUsername,
+    passwordHash,
+    salt,
+    otpCode: otpRes.otpCode
+  };
+}
+
+/**
+ * Confirm OTP for registration and create account in Supabase
+ */
+export async function confirmRegistrationOtp(email, enteredOtp, username, passwordHash, salt) {
+  const cleanEmail = email?.trim().toLowerCase();
+  const cleanOtp = enteredOtp?.trim();
+  const cleanUsername = username?.trim().toLowerCase().replace(/\s+/g, '_');
+
+  let isValid = false;
+
+  // Verify against Supabase auth_otps table
+  try {
+    const { data } = await supabase
+      .from('auth_otps')
+      .select('*')
+      .eq('email', cleanEmail)
+      .eq('otp_code', cleanOtp)
+      .eq('verified', false)
+      .gt('expires_at', new Date().toISOString())
+      .order('created_at', { ascending: false })
+      .limit(1);
+
+    if (data && data.length > 0) {
+      isValid = true;
+      await supabase.from('auth_otps').update({ verified: true }).eq('id', data[0].id);
+    }
+  } catch (_) {}
+
+  // Local session fallback
+  if (!isValid && typeof sessionStorage !== 'undefined') {
+    try {
+      const local = JSON.parse(sessionStorage.getItem('himyatra_pending_otp') || '{}');
+      if (local.email === cleanEmail && local.code === cleanOtp && Date.now() < local.expiresAt) {
+        isValid = true;
+        sessionStorage.removeItem('himyatra_pending_otp');
+      }
+    } catch (_) {}
+  }
+
+  if (!isValid) {
+    throw new Error('Invalid or expired OTP code. Please check your Gmail or request a new code.');
+  }
+
+  // Insert verified user with password hash into user_profiles
+  const { data: newUser, error: insertErr } = await supabase
+    .from('user_profiles')
+    .insert([{
+      username: cleanUsername,
+      email: cleanEmail,
+      full_name: cleanUsername.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+      password_hash: passwordHash,
+      password_salt: salt,
+      total_bookings: 0,
+      total_inquiries: 0,
+      total_spent: 0,
+      last_login: new Date().toISOString()
+    }])
+    .select();
+
+  if (insertErr) {
+    console.error('Registration profile error:', insertErr);
+    throw new Error(insertErr.message || 'Failed to create user account.');
+  }
+
+  const profile = newUser[0];
+  const safeProfile = {
+    id: profile.id,
+    username: profile.username,
+    email: profile.email,
+    full_name: profile.full_name,
+    total_bookings: 0,
+    total_inquiries: 0,
+    created_at: profile.created_at
+  };
+
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('himyatra_auth_user', JSON.stringify(safeProfile));
+  }
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: safeProfile }));
+  }
+
+  return { success: true, user: safeProfile };
+}
+
+/**
+ * Set / update password for currently authenticated user
+ */
+export async function setPasswordForCurrentUser(username, newPassword) {
+  if (!newPassword || newPassword.length < 6) {
+    throw new Error('Password must be at least 6 characters long.');
+  }
+  const salt = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+  const passwordHash = await hashPassword(newPassword, salt);
+
+  const { error } = await supabase
+    .from('user_profiles')
+    .update({
+      password_hash: passwordHash,
+      password_salt: salt
+    })
+    .eq('username', username);
+
+  if (error) {
+    throw new Error('Could not update password. Please try again.');
+  }
+
+  return { success: true };
+}
 export async function sendEmailOtp(email, username) {
   const cleanEmail = email.trim().toLowerCase();
   const cleanUsername = username ? username.trim().toLowerCase().replace(/\s+/g, '_') : cleanEmail.split('@')[0];

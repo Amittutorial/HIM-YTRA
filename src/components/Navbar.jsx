@@ -300,7 +300,7 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               <button
                 type="button"
                 onClick={() => onOpenAuth?.()}
-                className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 sm:px-3.5 py-2 rounded-full border transition-all duration-200 cursor-pointer shrink-0 ${
+                className={`inline-flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border transition-all duration-200 cursor-pointer shrink-0 ${
                   currentUser
                     ? isLight
                       ? 'border-teal-500 bg-teal-50 text-teal-900 hover:bg-teal-100 shadow-sm'
@@ -313,11 +313,11 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               >
                 {currentUser ? (
                   <>
-                    <span className="w-5 h-5 rounded-full bg-teal-400 text-slate-950 text-[10px] font-black flex items-center justify-center shrink-0">
+                    <span className="w-4 sm:w-5 h-4 sm:h-5 rounded-full bg-teal-400 text-slate-950 text-[9px] sm:text-[10px] font-black flex items-center justify-center shrink-0">
                       {currentUser.username.slice(0, 2).toUpperCase()}
                     </span>
-                    <span className="max-w-[75px] sm:max-w-[100px] truncate">@{currentUser.username}</span>
-                    <span className="text-[10px] bg-teal-500/20 text-teal-300 border border-teal-400/30 px-1.5 py-0.5 rounded-full font-black">
+                    <span className="max-w-[60px] sm:max-w-[100px] truncate">@{currentUser.username}</span>
+                    <span className="text-[9px] sm:text-[10px] bg-teal-500/20 text-teal-300 border border-teal-400/30 px-1.5 py-0.2 rounded-full font-black">
                       {currentUser.total_bookings || 0}
                     </span>
                   </>
@@ -329,10 +329,10 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                 )}
               </button>
 
-              {/* Book Now Button */}
+              {/* Book Now Button (Shown on tablets, laptops and desktops; mobile uses sticky bottom bar) */}
               <button
                 onClick={() => onOpenBooking?.(null)}
-                className={`whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-tight shrink-0 shadow-lg hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer ${
+                className={`hidden sm:inline-flex whitespace-nowrap px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold tracking-tight shrink-0 shadow-lg hover:scale-[1.03] active:scale-[0.98] transition-all cursor-pointer ${
                   isLight
                     ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-teal-600/20'
                     : 'bg-white hover:bg-slate-100 text-slate-950 shadow-white/10 hover:shadow-teal-400/20'
