@@ -16,6 +16,31 @@ export default function ReviewsSection() {
         <p className="text-slate-400 text-sm sm:text-base">
           Read genuine experiences from travelers across Mumbai, Bengaluru, Delhi, Kolkata, and Gujarat who trusted HimYatra with their precious Himalayan holidays.
         </p>
+
+        {/* Google Reviews Trust Badge & Link */}
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="https://www.google.com/search?q=HimYatra+Tours+and+Travels+Himachal+Uttarakhand+reviews"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900 border border-white/20 hover:border-amber-400/50 text-white text-xs font-bold transition shadow-lg hover:scale-102"
+          >
+            <div className="flex items-center gap-1">
+              <span className="text-blue-400 font-black">G</span>
+              <span className="text-red-400 font-black">o</span>
+              <span className="text-amber-400 font-black">o</span>
+              <span className="text-blue-400 font-black">g</span>
+              <span className="text-green-400 font-black">l</span>
+              <span className="text-red-400 font-black">e</span>
+            </div>
+            <span className="text-slate-300">Reviews</span>
+            <div className="flex items-center gap-1 text-amber-400">
+              <Star className="w-3.5 h-3.5 fill-amber-400" />
+              <span>4.9 / 5.0</span>
+            </div>
+            <span className="text-slate-400 font-normal">(2,400+ Indian Travelers)</span>
+          </a>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

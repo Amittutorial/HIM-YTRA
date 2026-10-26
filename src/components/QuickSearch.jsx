@@ -1,5 +1,5 @@
-import React from 'react';
-import { Search, MapPin, Calendar, Users, Sparkles, Filter } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, MapPin, Calendar, Users, Sparkles, Filter, Mic } from 'lucide-react';
 
 export default function QuickSearch({ 
   selectedState, 
@@ -10,6 +10,7 @@ export default function QuickSearch({
   setSearchTerm,
   onSearchSubmit
 }) {
+  const [listening, setListening] = useState(false);
   const handleFormSubmit = (e) => {
     e.preventDefault();
     onSearchSubmit?.();
@@ -67,18 +68,81 @@ export default function QuickSearch({
             </select>
           </div>
 
-          {/* Search Keywords */}
+          {/* Search Keywords with Hindi Voice Search */}
           <div className="p-3 bg-slate-950/60 rounded-2xl border border-white/10 hover:border-teal-500/40 transition">
-            <label className="text-[11px] font-semibold text-teal-400 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <Search className="w-3.5 h-3.5" /> Search Destination
-            </label>
-            <input
-              type="text"
-              placeholder="e.g. Ayodhya, Manali, Kedarnath, Spiti..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-transparent text-white placeholder-slate-500 font-medium text-sm focus:outline-none"
-            />
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-[11px] font-semibold text-teal-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Search className="w-3.5 h-3.5" /> Search Destination
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+                  if (!SpeechRec) {
+                    alert('Voice search is supported on Chrome, Edge, and Android browsers.');
+                    return;
+                  }
+                  try {
+                    const recognition = new SpeechRec();
+                    recognition.lang = 'hi-IN'; // Hindi & Indian English
+                    recognition.start();
+                    setListening(true);
+
+                    recognition.onresult = (event) => {
+                      const transcript = event.results[0][0].transcript;
+                      setSearchTerm(transcript);
+                      setListening(false);
+                    };
+
+                    recognition.onerror = () => {
+                      setListening(false);
+                    };
+
+                    recognition.onend = () => {
+                      setListening(false);
+                    };
+                  } catch (err) {
+                    setListening(false);
+                  }
+                }}
+                className={`text-[11px] px-2 py-0.5 rounded-full flex items-center gap-1 transition cursor-pointer ${
+                  listening
+                    ? 'bg-red-500 text-white animate-pulse'
+                    : 'bg-teal-500/20 text-teal-300 hover:bg-teal-500/30'
+                }`}
+                title="Hindi / English Voice Search (बोलकर खोजें)"
+              >
+                {listening ? (
+                  <>
+                    <Mic className="w-3 h-3 text-white animate-ping" />
+                    <span>Listening... बोलें</span>
+                  </>
+                ) : (
+                  <>
+                    <Mic className="w-3 h-3" />
+                    <span>बोलकर खोजें (Voice)</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="e.g. Manali, Kedarnath, Spiti, मनाली..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-transparent text-white placeholder-slate-500 font-medium text-sm focus:outline-none"
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm('')}
+                  className="text-slate-400 hover:text-white text-xs px-1"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Action Button */}

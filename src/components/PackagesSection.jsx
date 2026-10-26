@@ -10,7 +10,8 @@ export default function PackagesSection({
   setSelectedCategory, 
   searchTerm, 
   setSearchTerm,
-  onOpenBooking 
+  onOpenBooking,
+  onViewPackage
 }) {
   const [selectedPackageForModal, setSelectedPackageForModal] = useState(null);
   const [sortBy, setSortBy] = useState('featured');
@@ -343,7 +344,11 @@ export default function PackagesSection({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSelectedPackageForModal(pkg);
+                          if (onViewPackage) {
+                            onViewPackage(pkg);
+                          } else {
+                            setSelectedPackageForModal(pkg);
+                          }
                         }}
                         className="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-white/10 transition text-center cursor-pointer"
                       >

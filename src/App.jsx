@@ -19,7 +19,15 @@ import InquireModal from './components/InquireModal';
 import PaymentModal from './components/PaymentModal';
 import HelpCenterModal from './components/HelpCenterModal';
 import AuthModal from './components/AuthModal';
-import { TOUR_PACKAGES } from './data/travelData';
+import CabRentalCalculator from './components/CabRentalCalculator';
+import CharDhamSection from './components/CharDhamSection';
+import RoadWeatherAlerts from './components/RoadWeatherAlerts';
+import FindMyTripQuizModal from './components/FindMyTripQuizModal';
+import LiveTripTrackingModal from './components/LiveTripTrackingModal';
+import PackageCompareModal from './components/PackageCompareModal';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
+import PackageModal from './components/PackageModal';
+import { TOUR_PACKAGES, DESTINATIONS } from './data/travelData';
 
 export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -35,6 +43,14 @@ export default function App() {
   const [helpCenterOpen, setHelpCenterOpen] = useState(false);
   const [activeBookingPackage, setActiveBookingPackage] = useState(null);
   const [preAppliedCoupon, setPreAppliedCoupon] = useState('');
+
+  // Modals & Enhanced Features State
+  const [lang, setLang] = useState(() => localStorage.getItem('himyatra-lang') || 'en');
+  const [quizModalOpen, setQuizModalOpen] = useState(false);
+  const [trackingModalOpen, setTrackingModalOpen] = useState(false);
+  const [trackingTripId, setTrackingTripId] = useState('HY-TRIP-8821');
+  const [compareModalOpen, setCompareModalOpen] = useState(false);
+  const [viewingPackage, setViewingPackage] = useState(null);
 
   // Global filters
   const [selectedState, setSelectedState] = useState('All');
@@ -59,8 +75,91 @@ export default function App() {
     }
   }, [theme]);
 
+  // Handle Deep-linking & URL Query Parameters for SEO & Social Sharing
+  useEffect(() => {
+    const handleUrlParams = () => {
+      const params = new URLSearchParams(window.location.search);
+      
+      const pkgId = params.get('pkg');
+      if (pkgId) {
+        const match = TOUR_PACKAGES.find(p => p.id === pkgId);
+        if (match) {
+          setViewingPackage(match);
+          document.title = `${match.title} (${match.duration}) — HimYatra Packages`;
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with HimYatra.`);
+        }
+      }
+
+      const destId = params.get('dest');
+      if (destId) {
+        const matchDest = DESTINATIONS.find(d => d.id === destId || d.searchKeyword?.toLowerCase() === destId.toLowerCase());
+        if (matchDest) {
+          handleSelectDestination(matchDest);
+          document.title = `${matchDest.name} Tours & Sightseeing — HimYatra`;
+          const el = document.getElementById('destinations');
+          setTimeout(() => el?.scrollIntoView({ behavior: 'smooth' }), 300);
+        }
+      }
+
+      const trackId = params.get('track');
+      if (trackId) {
+        setTrackingTripId(trackId);
+        setTrackingModalOpen(true);
+      }
+
+      if (params.get('quiz') === 'true') {
+        setQuizModalOpen(true);
+      }
+
+      if (params.get('compare') === 'true') {
+        setCompareModalOpen(true);
+      }
+
+      const section = params.get('section');
+      if (section) {
+        const target = document.getElementById(section);
+        if (target) {
+          setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 300);
+        }
+      }
+    };
+
+    handleUrlParams();
+    window.addEventListener('popstate', handleUrlParams);
+    return () => window.removeEventListener('popstate', handleUrlParams);
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  const toggleLanguage = () => {
+    setLang((prev) => {
+      const next = prev === 'en' ? 'hi' : 'en';
+      localStorage.setItem('himyatra-lang', next);
+      return next;
+    });
+  };
+
+  const handleOpenPackageDetails = (pkg) => {
+    setViewingPackage(pkg);
+    if (pkg) {
+      const newUrl = `${window.location.pathname}?pkg=${encodeURIComponent(pkg.id)}`;
+      window.history.pushState({ pkgId: pkg.id }, '', newUrl);
+      document.title = `${pkg.title} (${pkg.duration}) — HimYatra Packages`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with HimYatra.`);
+    }
+  };
+
+  const handleClosePackageDetails = () => {
+    setViewingPackage(null);
+    const currentParams = new URLSearchParams(window.location.search);
+    if (currentParams.has('pkg')) {
+      window.history.pushState({}, '', window.location.pathname);
+      document.title = 'HimYatra — Premium Himachal & Uttarakhand Tours, Cabs & Char Dham Yatra';
+    }
   };
 
   const handleOpenBooking = (pkg = null, coupon = '') => {
@@ -148,8 +247,13 @@ export default function App() {
         onOpenPayment={() => setPaymentModalOpen(true)}
         onOpenHelpCenter={() => setHelpCenterOpen(true)}
         onOpenAuth={() => setAuthModalOpen(true)}
+        onOpenTripQuiz={() => setQuizModalOpen(true)}
+        onOpenLiveTracking={() => setTrackingModalOpen(true)}
+        onOpenCompare={() => setCompareModalOpen(true)}
         theme={theme}
         onToggleTheme={toggleTheme}
+        lang={lang}
+        onToggleLang={toggleLanguage}
       />
 
       {/* Main Content Sections */}
@@ -263,6 +367,20 @@ export default function App() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           onOpenBooking={(pkg) => handleOpenBooking(pkg)}
+          onViewPackage={handleOpenPackageDetails}
+        />
+
+        {/* Sacred Char Dham Yatra & Devbhoomi Circuits */}
+        <CharDhamSection
+          onOpenBooking={(circuit) => {
+            const match = TOUR_PACKAGES.find(p => p.id === 'pkg-chardham-complete') || TOUR_PACKAGES[0];
+            handleOpenBooking(match);
+          }}
+        />
+
+        {/* Fixed Route Cab Rental Calculator & Pahadi Drivers */}
+        <CabRentalCalculator
+          onOpenBooking={() => handleOpenBooking(null)}
         />
 
         {/* Interactive Custom Trip Wizard */}
@@ -275,6 +393,9 @@ export default function App() {
         <FleetSection
           onOpenBooking={(veh) => handleOpenBooking(null)}
         />
+
+        {/* Live Mountain Road & Weather Status Updates */}
+        <RoadWeatherAlerts />
 
         {/* Seasonal Offers & Promo Codes */}
         <SeasonalDeals
@@ -304,6 +425,7 @@ export default function App() {
 
       {/* Mobile Sticky Quick Action Bar */}
       <MobileBottomBar
+        theme={theme}
         onOpenBooking={() => handleOpenBooking()}
         onOpenAuth={() => setAuthModalOpen(true)}
       />
@@ -349,6 +471,54 @@ export default function App() {
         onOpenBooking={(pkg) => handleOpenBooking(pkg)}
         onOpenPayment={() => setPaymentModalOpen(true)}
       />
+
+      {/* Package Itinerary & Full Details Modal (with Shareable URL ?pkg=...) */}
+      {viewingPackage && (
+        <PackageModal
+          pkg={viewingPackage}
+          onClose={handleClosePackageDetails}
+          onBookNow={(pkg) => {
+            handleClosePackageDetails();
+            handleOpenBooking(pkg);
+          }}
+        />
+      )}
+
+      {/* 5-Question Personalized Himalayan Trip Quiz Modal */}
+      {quizModalOpen && (
+        <FindMyTripQuizModal
+          isOpen={quizModalOpen}
+          onClose={() => setQuizModalOpen(false)}
+          onSelectPackage={(pkg) => {
+            setQuizModalOpen(false);
+            handleOpenPackageDetails(pkg);
+          }}
+        />
+      )}
+
+      {/* Live Driver & Route Trip Tracking Modal (?track=...) */}
+      {trackingModalOpen && (
+        <LiveTripTrackingModal
+          isOpen={trackingModalOpen}
+          onClose={() => setTrackingModalOpen(false)}
+          tripId={trackingTripId}
+        />
+      )}
+
+      {/* Side-by-Side Package Comparison Modal (up to 3 packages) */}
+      {compareModalOpen && (
+        <PackageCompareModal
+          isOpen={compareModalOpen}
+          onClose={() => setCompareModalOpen(false)}
+          onBookPackage={(pkg) => {
+            setCompareModalOpen(false);
+            handleOpenBooking(pkg);
+          }}
+        />
+      )}
+
+      {/* Floating 24/7 WhatsApp Quick Desk with active package context */}
+      <FloatingWhatsApp activePackage={viewingPackage || activeBookingPackage} />
     </div>
   );
 }

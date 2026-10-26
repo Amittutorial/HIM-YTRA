@@ -40,21 +40,58 @@ html.light, body.light {
 }
 
 /* Light mode panels & cards */
-.light .backdrop-blur-xl,
-.light .backdrop-blur-2xl,
-.light .bg-slate-900\/90,
-.light .bg-slate-950\/90,
-.light .bg-slate-900\/80,
-.light .bg-slate-950\/80,
-.light .bg-slate-900\/70,
-.light .bg-slate-950\/70,
-.light .bg-slate-900\/60,
-.light .bg-slate-950\/60,
-.light .bg-slate-900,
-.light .bg-slate-950 {
+.light .backdrop-blur-xl:not(#hero *):not(#hero),
+.light .backdrop-blur-2xl:not(#hero *):not(#hero),
+.light .bg-slate-900\/90:not(#hero *):not(#hero),
+.light .bg-slate-950\/90:not(#hero *):not(#hero),
+.light .bg-slate-900\/80:not(#hero *):not(#hero),
+.light .bg-slate-950\/80:not(#hero *):not(#hero),
+.light .bg-slate-900\/70:not(#hero *):not(#hero),
+.light .bg-slate-950\/70:not(#hero *):not(#hero),
+.light .bg-slate-900\/60:not(#hero *):not(#hero),
+.light .bg-slate-950\/60:not(#hero *):not(#hero),
+.light .bg-slate-900:not(#hero *):not(#hero),
+.light .bg-slate-950:not(#hero *):not(#hero) {
   background-color: rgba(255, 255, 255, 0.95) !important;
   border-color: rgba(148, 163, 184, 0.25) !important;
   box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03) !important;
+}
+
+/* Hero Section: Elements inside #hero ALWAYS maintain dark glass styling for 100% legibility over mountain photos */
+#hero .bg-slate-950\/70,
+#hero .bg-slate-950\/80,
+#hero .bg-slate-950\/85,
+#hero .bg-slate-950\/90,
+#hero .bg-slate-900\/80,
+#hero .bg-slate-950\/30,
+#hero .bg-slate-950\/40,
+#hero .bg-slate-950\/50,
+#hero .bg-slate-950\/60 {
+  background-color: rgba(7, 11, 20, 0.82) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #f1f5f9 !important;
+}
+
+#hero .text-teal-300 {
+  color: #5eead4 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+#hero .text-white,
+#hero a.text-white,
+#hero button.text-white {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+#hero p {
+  color: rgba(241, 245, 249, 0.95) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Mobile sticky bottom bar: support iOS notch & home indicator */
+#mobile-bottom-bar {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0.5rem));
 }
 
 /* Light mode gradient cards */

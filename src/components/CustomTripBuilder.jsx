@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Check, Car, Calendar, MapPin, Users, Compass, Send, CheckCircle2, Phone } from 'lucide-react';
+import { Sparkles, Check, Car, Calendar, MapPin, Users, Compass, Send, CheckCircle2, Phone, MessageSquare, Share2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { saveCustomTripToSupabase, getCurrentUser } from '../lib/supabaseClient';
 import { sendInquiryEmail } from '../lib/emailService';
@@ -19,6 +19,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
   const [submitted, setSubmitted] = useState(false);
   const [contactName, setContactName] = useState(loggedInUser?.full_name || loggedInUser?.username || '');
   const [contactPhone, setContactPhone] = useState(loggedInUser?.phone || '');
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const himachalSpots = ['Manali', 'Solang & Atal Tunnel', 'Shimla & Kufri', 'Spiti Valley', 'Kasol & Parvati', 'Jibhi & Tirthan', 'Dharamshala', 'Dalhousie'];
   const uttarakhandSpots = ['Rishikesh', 'Kedarnath Dham', 'Badrinath Dham', 'Auli Ski Slopes', 'Mussoorie', 'Nainital Lake', 'Jim Corbett Safari', 'Chopta Tungnath'];
@@ -386,6 +387,40 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
                   >
                     <Send className="w-4 h-4" />
                     <span>Get Detailed Custom Quote</span>
+                  </button>
+
+                  {/* Send on WhatsApp Button */}
+                  <a
+                    href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I want a custom quote:
+📍 Region: ${selectedRegion}
+🏔️ Spots: ${selectedSpots.join(', ')}
+⏱️ Duration: ${durationDays} Days
+👥 Travelers: ${travelersCount} Guests
+🚗 Vehicle: ${vehicle}
+🏨 Hotel: ${hotelType}
+🛫 Pickup: ${pickupCity}
+💰 Est Budget: ₹${estimatedPrice}/person`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <MessageSquare className="w-4 h-4 fill-slate-950/20" />
+                    <span>Send on WhatsApp</span>
+                  </a>
+
+                  {/* Shareable custom itinerary link for family */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const shareUrl = `${window.location.origin}/?customPlan=true&reg=${encodeURIComponent(selectedRegion)}&spots=${encodeURIComponent(selectedSpots.join(','))}&days=${durationDays}&guests=${travelersCount}`;
+                      navigator.clipboard?.writeText(shareUrl);
+                      setLinkCopied(true);
+                      setTimeout(() => setLinkCopied(false), 3000);
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/10 text-xs font-semibold transition flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Share2 className="w-3.5 h-3.5 text-teal-400" />
+                    <span>{linkCopied ? '✓ Custom Plan Link Copied!' : 'Share Itinerary Link with Family'}</span>
                   </button>
                 </form>
 

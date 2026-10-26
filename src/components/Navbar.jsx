@@ -2,7 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle, Sun, Moon, User } from 'lucide-react';
 import { getCurrentUser } from '../lib/supabaseClient';
 
-export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, onOpenPayment, onOpenHelpCenter, onOpenAuth, theme = 'dark', onToggleTheme }) {
+export default function Navbar({ 
+  onOpenBooking, 
+  onSelectState, 
+  onOpenInquire, 
+  onOpenPayment, 
+  onOpenHelpCenter, 
+  onOpenAuth, 
+  onOpenTripQuiz, 
+  onOpenLiveTracking, 
+  onOpenCompare, 
+  theme = 'dark', 
+  onToggleTheme, 
+  lang = 'en', 
+  onToggleLang 
+}) {
   const [currentUser, setCurrentUser] = useState(getCurrentUser());
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -43,7 +57,7 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
   return (
     <>
       {/* Top Banner Notice */}
-      <div className={`text-xs py-2 px-4 text-center border-b font-medium hidden sm:flex items-center justify-center gap-3 transition-colors duration-300 ${
+      <div className={`text-xs py-2 px-4 text-center border-b font-medium hidden sm:flex items-center justify-center gap-2.5 transition-colors duration-300 ${
         isLight
           ? 'bg-gradient-to-r from-teal-50 via-sky-50 to-emerald-50 border-teal-200/80 text-teal-900'
           : 'bg-gradient-to-r from-teal-900/80 via-slate-900 to-emerald-950/80 border-teal-500/20 text-teal-200/90'
@@ -55,35 +69,27 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
         }`}>
           <Sparkles className="w-3 h-3 text-teal-500" /> Season Special
         </span>
-        <span>Summer & Snowfall 2026 Bookings Open | Flat 15% Off code: <strong className={isLight ? 'text-slate-900 font-bold' : 'text-white font-semibold'}>HIMPEAKS15</strong></span>
+        <span>Summer & Snowfall 2026 Bookings Open | Flat 15% Off: <strong className={isLight ? 'text-slate-900 font-bold' : 'text-white font-semibold'}>HIMPEAKS15</strong></span>
         <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
         <button
           type="button"
-          onClick={() => onOpenPayment?.()}
-          className={`font-bold transition flex items-center gap-1 cursor-pointer px-2.5 py-0.5 rounded-full border ${
-            isLight
-              ? 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200'
-              : 'bg-emerald-500/10 text-emerald-300 border-emerald-400/30 hover:text-white'
-          }`}
+          onClick={() => onOpenTripQuiz?.()}
+          className="font-bold text-amber-400 hover:text-amber-300 transition flex items-center gap-1 cursor-pointer"
         >
-          <span>💳 Scan & Pay via UPI QR</span>
+          <span>✨ Find My Trip Quiz</span>
+        </button>
+        <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
+        <button
+          type="button"
+          onClick={() => onOpenLiveTracking?.()}
+          className="font-bold text-teal-300 hover:text-teal-200 transition flex items-center gap-1 cursor-pointer"
+        >
+          <span>📍 Live Tracking</span>
         </button>
         <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
         <a href="tel:+917619917057" className={`transition flex items-center gap-1 ${isLight ? 'text-slate-700 hover:text-teal-700' : 'text-slate-300 hover:text-white'}`}>
-          <Phone className="w-3 h-3" /> 24/7 Helpline: +91 76199 17057
+          <Phone className="w-3 h-3" /> +91 76199 17057
         </a>
-        <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
-        <button
-          type="button"
-          onClick={() => onOpenHelpCenter?.()}
-          className={`font-bold transition flex items-center gap-1 cursor-pointer px-2.5 py-0.5 rounded-full border ${
-            isLight
-              ? 'bg-sky-100 text-sky-800 border-sky-300 hover:bg-sky-200'
-              : 'bg-sky-500/10 text-sky-300 border-sky-400/30 hover:text-white'
-          }`}
-        >
-          <HelpCircle className="w-3 h-3" /> Help Center
-        </button>
         <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
         <button
           type="button"
@@ -139,10 +145,10 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
             </a>
 
             {/* Desktop Navigation Links */}
-            <div className={`hidden lg:flex items-center gap-2.5 xl:gap-4.5 text-xs xl:text-sm font-semibold transition-colors ${
+            <div className={`hidden lg:flex items-center gap-2 xl:gap-3.5 2xl:gap-4.5 text-xs xl:text-sm font-semibold transition-colors ${
               isLight ? 'text-slate-700' : 'text-slate-200'
             }`}>
-              <a href="#about" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>About</a>
+              <a href="#about" className={`hidden xl:inline-block transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>About</a>
 
               {/* Destinations Dropdown */}
               <div className="relative" onMouseLeave={() => setDestDropdownOpen(false)}>
@@ -255,26 +261,36 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               </div>
 
               <a href="#packages" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Packages</a>
+              <a href="#chardham" className={`transition-colors py-1 font-bold ${isLight ? 'text-amber-700 hover:text-amber-800' : 'text-amber-300 hover:text-amber-200'}`}>Char Dham</a>
+              <a href="#cabs" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Cabs & Fares</a>
+              <a href="#weather-alerts" className={`hidden 2xl:inline-block transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Road Status</a>
               <a href="#custom-planner" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Custom Trip</a>
-              <a href="#offers" className={`transition-colors py-1 flex items-center gap-1.5 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>
-                <span>Offers</span>
-                <span className="text-[10px] bg-teal-500 text-slate-950 font-bold px-1.5 py-0.5 rounded-full">15% OFF</span>
-              </a>
-              <a href="#fleet" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Fleet & Cabs</a>
-              <a href="#contact" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Contact</a>
               <button
                 type="button"
-                onClick={() => onOpenHelpCenter?.()}
-                className={`hidden xl:inline-flex items-center gap-1.5 transition-colors py-1 text-xs font-semibold cursor-pointer ${
-                  isLight ? 'text-sky-700 hover:text-sky-900' : 'text-sky-300 hover:text-sky-200'
-                }`}
+                onClick={() => onOpenCompare?.()}
+                className={`transition-colors py-1 text-teal-300 font-semibold cursor-pointer hidden xl:inline-block hover:text-white`}
               >
-                <HelpCircle className="w-3.5 h-3.5" /> Help Center
+                Compare (3)
               </button>
+              <a href="#contact" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Contact</a>
             </div>
 
             {/* Right Action Buttons with distinct gap from nav links */}
             <div className={`flex items-center gap-2 sm:gap-2.5 pl-2.5 sm:pl-4 border-l shrink-0 ${isLight ? 'border-slate-300' : 'border-white/10'}`}>
+              {/* Hindi / English Language Toggle */}
+              <button
+                type="button"
+                onClick={onToggleLang}
+                className={`px-2.5 py-1.5 rounded-full text-xs font-bold border transition cursor-pointer flex items-center gap-1 shrink-0 ${
+                  isLight
+                    ? 'bg-teal-50 border-teal-300 text-teal-900 hover:bg-teal-100 shadow-sm'
+                    : 'bg-teal-950/80 border-teal-500/40 text-teal-300 hover:bg-teal-900/80 shadow-md'
+                }`}
+                title="Change Language (English / हिंदी)"
+              >
+                <span>{lang === 'hi' ? 'EN' : 'हिंदी'}</span>
+              </button>
+
               {/* Dark / Light Mode Toggle Button */}
               <button
                 type="button"
@@ -308,11 +324,11 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
                 <span>Inquire</span>
               </button>
 
-              {/* Customer Account / Sign In Pill */}
+              {/* Customer Account / Sign In Pill (Hidden on mobile < sm; mobile users use sticky bottom bar & drawer) */}
               <button
                 type="button"
                 onClick={() => onOpenAuth?.()}
-                className={`inline-flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border transition-all duration-200 cursor-pointer shrink-0 ${
+                className={`hidden sm:inline-flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-bold px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-full border transition-all duration-200 cursor-pointer shrink-0 ${
                   currentUser
                     ? isLight
                       ? 'border-teal-500 bg-teal-50 text-teal-900 hover:bg-teal-100 shadow-sm'
@@ -401,15 +417,56 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              🔥 Special Offers & Discounts
+              🏷️ Seasonal Deals & Offers
+            </a>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenTripQuiz?.();
+              }}
+              className="w-full text-left text-lg font-bold text-amber-300 hover:text-amber-200 py-2 border-b border-white/5 flex items-center gap-2 cursor-pointer"
+            >
+              <span>✨ Find My Trip Quiz</span>
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenLiveTracking?.();
+              }}
+              className="w-full text-left text-lg font-bold text-teal-300 hover:text-teal-200 py-2 border-b border-white/5 flex items-center gap-2 cursor-pointer"
+            >
+              <span>📍 Live Trip Tracking</span>
+            </button>
+            <a
+              href="#chardham"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-lg font-bold text-amber-400 hover:text-amber-300 py-2 border-b border-white/5"
+            >
+              🕉️ Char Dham Yatra 2026
             </a>
             <a
-              href="#fleet"
+              href="#cabs"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              🚗 Mountain Fleet & Cabs
+              🚗 Cab Rentals & Fixed Fares
             </a>
+            <a
+              href="#weather-alerts"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
+            >
+              🌦️ Road & Weather Updates
+            </a>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenCompare?.();
+              }}
+              className="w-full text-left text-lg font-semibold text-teal-300 hover:text-white py-2 border-b border-white/5 cursor-pointer"
+            >
+              ⚖️ Compare 3 Packages
+            </button>
             <a
               href="#reviews"
               onClick={() => setMobileMenuOpen(false)}

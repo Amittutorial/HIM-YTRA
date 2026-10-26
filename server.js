@@ -131,6 +131,37 @@ app.post('/api/custom-trips', (req, res) => {
   }
 });
 
+// Save Road Weather Alert Subscription
+app.post('/api/road-alerts', (req, res) => {
+  try {
+    const { phone, routeInterest } = req.body;
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS road_weather_subscribers (
+        id TEXT PRIMARY KEY,
+        phone TEXT NOT NULL,
+        route_interest TEXT NOT NULL,
+        created_at TEXT DEFAULT (datetime('now'))
+      );
+    `);
+    const stmt = db.prepare(`
+      INSERT INTO road_weather_subscribers (id, phone, route_interest, created_at)
+      VALUES (@id, @phone, @route_interest, datetime('now'))
+    `);
+
+    const id = uuidv4();
+    stmt.run({
+      id,
+      phone,
+      route_interest: routeInterest || 'All Routes'
+    });
+
+    res.json({ success: true, id });
+  } catch (err) {
+    console.error('Database alert subscriber error:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Get recent bookings (helper to verify)
 app.get('/api/bookings', (req, res) => {
   try {

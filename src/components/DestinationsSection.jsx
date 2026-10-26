@@ -92,14 +92,17 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
 
-              {/* State Pill */}
-              <div className="absolute top-4 left-4 flex items-center gap-2">
-                <span className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md border ${
+              {/* State & Trip Length Pill */}
+              <div className="absolute top-4 left-4 flex flex-wrap items-center gap-1.5">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-bold backdrop-blur-md border ${
                   dest.state === 'Himachal Pradesh'
                     ? 'bg-sky-950/80 text-sky-300 border-sky-400/30'
                     : 'bg-amber-950/80 text-amber-300 border-amber-400/30'
                 }`}>
                   {dest.state}
+                </span>
+                <span className="px-2.5 py-1 rounded-full text-[11px] font-bold backdrop-blur-md bg-teal-950/80 text-teal-300 border border-teal-400/30">
+                  ⏱️ {dest.tripLength || '5 Days / 4 Nights'}
                 </span>
               </div>
 
@@ -156,10 +159,15 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
               {/* Footer Price & Action */}
               <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-[10px] uppercase text-slate-400 font-semibold">Packages From</div>
-                  <div className="text-xl font-extrabold text-white font-['Outfit']">
+                  <div className="text-[11px] uppercase text-teal-400 font-bold tracking-wide">
+                    Starting ₹{dest.startingPrice.toLocaleString('en-IN')} per person
+                  </div>
+                  <div className="text-xl font-extrabold text-white font-['Outfit'] flex items-baseline gap-1">
                     ₹{dest.startingPrice.toLocaleString('en-IN')}
-                    <span className="text-xs text-slate-400 font-normal"> / person</span>
+                    <span className="text-xs text-slate-400 font-normal">/ person</span>
+                    <span className="text-[10px] text-teal-300 font-bold bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded-full ml-1">
+                      {dest.tripLength || '5D/4N'}
+                    </span>
                   </div>
                 </div>
 

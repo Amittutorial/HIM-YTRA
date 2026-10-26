@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, MapPin, Compass, ShieldCheck, Star, Sparkles, ChevronRight, Play } from 'lucide-react';
+import { ArrowDown, MapPin, Compass, ShieldCheck, Star, Sparkles, ChevronRight, Play, MessageSquare } from 'lucide-react';
 
 export const REGION_BACKGROUNDS = [
   {
@@ -217,24 +217,24 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
         })}
 
         {/* Top Floating Badge inside Hero */}
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4 pt-1 sm:pt-2">
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full backdrop-blur-xl bg-slate-950/70 border border-teal-400/30 text-teal-300 text-xs sm:text-sm font-medium shadow-lg transition-all duration-300">
-            <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping" />
-            <MapPin className="w-4 h-4 text-teal-400" />
-            <span className="font-semibold">{currentBg.location}</span>
+        <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-4 pt-1 sm:pt-2">
+          <div className="inline-flex items-center justify-center sm:justify-start gap-2 sm:gap-2.5 px-3.5 sm:px-4 py-2 rounded-full backdrop-blur-xl bg-slate-950/80 border border-teal-400/40 text-teal-300 text-xs sm:text-sm font-medium shadow-lg transition-all duration-300 w-full sm:w-auto">
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping shrink-0" />
+            <MapPin className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-teal-400 shrink-0" />
+            <span className="font-semibold truncate">{currentBg.location}</span>
           </div>
 
           {/* Quick Region Switcher Buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-2 backdrop-blur-2xl bg-slate-950/80 p-1.5 rounded-2xl sm:rounded-full border border-white/20 text-xs shadow-2xl max-w-full overflow-x-auto scrollbar-none py-1.5 px-2.5">
-            <div className="flex items-center gap-1.5 text-teal-300 text-[11px] font-bold px-2.5 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 shrink-0">
-              <Sparkles className="w-3.5 h-3.5 text-teal-400" />
+          <div className="flex items-center gap-1.5 sm:gap-2 backdrop-blur-2xl bg-slate-950/85 p-1 sm:p-1.5 rounded-full border border-white/20 text-xs shadow-2xl w-full sm:w-auto max-w-full overflow-x-auto scrollbar-none py-1 sm:py-1.5 px-2 sm:px-2.5">
+            <div className="flex items-center gap-1 text-teal-300 text-[10px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-1 rounded-full bg-teal-500/20 border border-teal-500/30 shrink-0">
+              <Sparkles className="w-3 h-3 text-teal-400" />
               <span>Featured:</span>
             </div>
             {REGION_BACKGROUNDS.map((bg) => (
               <button
                 key={bg.id}
                 onClick={() => onSelectRegion?.(bg.id)}
-                className={`px-3 py-1.5 rounded-full text-xs transition-all duration-300 cursor-pointer font-bold whitespace-nowrap shrink-0 ${
+                className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs transition-all duration-300 cursor-pointer font-bold whitespace-nowrap shrink-0 ${
                   activeRegion === bg.id
                     ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-lg shadow-teal-400/40 scale-105 ring-2 ring-teal-200/50'
                     : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -246,17 +246,17 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
           </div>
         </div>
 
-        {/* Hero Middle Content: Headline on Left, Atmospheric Subtitle on Right (Pixel-matched to Reference) */}
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end my-auto py-10 sm:py-16">
+        {/* Hero Middle Content: Headline on Left, Atmospheric Subtitle on Right */}
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end my-auto py-6 sm:py-12 lg:py-16">
           
-          {/* Left Column: Bold Typography matching reference "Unforgettable Travel Moments by Voyare" */}
-          <div className="lg:col-span-7 space-y-4">
+          {/* Left Column: Bold Typography matching reference */}
+          <div className="lg:col-span-7 space-y-3 sm:space-y-4">
             <div className="inline-flex items-center gap-2 text-teal-300 font-semibold text-xs sm:text-sm tracking-wider uppercase bg-teal-500/10 px-3.5 py-1.5 rounded-full border border-teal-500/20 backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-teal-400" />
+              <Sparkles className="w-3.5 h-3.5 text-teal-400 shrink-0" />
               <span>Premium Mountain Experiences</span>
             </div>
 
-            <h1 className="text-[clamp(1.85rem,7vw,4.5rem)] font-extrabold tracking-tight text-white font-['Outfit'] leading-[1.08]">
+            <h1 className="text-[clamp(1.75rem,6.5vw,4.5rem)] font-extrabold tracking-tight text-white font-['Outfit'] leading-[1.08]">
               Unforgettable <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-teal-100 to-teal-400">
                 Himalayan Journeys
@@ -265,81 +265,91 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
             </h1>
 
             {/* Quick trust metrics */}
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-3 text-xs sm:text-sm text-slate-200">
-              <div className="flex items-center gap-1.5 bg-slate-950/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-4 pt-2 text-[11px] sm:text-xs text-slate-200">
+              <div className="flex items-center gap-1.5 bg-slate-950/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />
                 <span className="font-bold text-white">4.9 / 5</span>
                 <span className="text-slate-400">(2,400+ Indian Travelers)</span>
               </div>
-              <div className="flex items-center gap-1.5 bg-slate-950/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-                <ShieldCheck className="w-4 h-4 text-teal-400" />
+              <div className="flex items-center gap-1.5 bg-slate-950/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                <ShieldCheck className="w-3.5 h-3.5 text-teal-400 shrink-0" />
                 <span>100% Local Pahadi Drivers & Guides</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Atmospheric copy matching the reference screenshot */}
-          <div className="lg:col-span-5 space-y-6 lg:pl-6">
-            <p className="text-base sm:text-lg lg:text-xl text-slate-200/90 leading-relaxed font-light backdrop-blur-sm bg-slate-950/30 p-4 sm:p-5 rounded-2xl border border-white/10">
-              We take you beyond the ordinary, to mystical Himalayan peaks where cedar forests whisper, rivers roar, and every mountain pass turns into a story to tell.
+          {/* Right Column: Atmospheric Subtitle & Call-to-Actions */}
+          <div className="lg:col-span-5 space-y-3 sm:space-y-4">
+            <p className="text-xs sm:text-base lg:text-lg text-slate-200/90 leading-relaxed font-light backdrop-blur-md bg-slate-950/40 p-3 sm:p-5 rounded-2xl border border-white/10 shadow-lg">
+              Himalayan holiday packages, fixed-route cab rentals, sacred Char Dham circuits, and mountain adventures across Himachal Pradesh and Uttarakhand.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <button
                 onClick={() => onOpenBooking?.(null)}
-                className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold px-7 py-3.5 rounded-full text-sm sm:text-base flex items-center gap-2 shadow-xl shadow-teal-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+                className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base flex items-center gap-2 shadow-xl shadow-teal-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
               >
-                <span>Plan Your Journey</span>
+                <span>Plan My Trip</span>
                 <ChevronRight className="w-4 h-4 stroke-[2.5]" />
               </button>
 
               <a
-                href="#packages"
-                className="backdrop-blur-md bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-full text-sm sm:text-base border border-white/20 hover:border-white/40 transition flex items-center gap-2"
+                href="https://wa.me/917619917057?text=Hi%20HimYatra!%20I%20want%20to%20plan%20a%20trip%20to%20Himachal/Uttarakhand."
+                target="_blank"
+                rel="noreferrer"
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base flex items-center gap-2 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
               >
-                <span>View Packages</span>
+                <MessageSquare className="w-4 h-4 text-slate-950 fill-slate-950/20" />
+                <span>WhatsApp Us</span>
+              </a>
+
+              <a
+                href="#packages"
+                className="backdrop-blur-md bg-white/10 hover:bg-white/20 text-white font-semibold px-4 sm:px-5 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base border border-white/20 hover:border-white/40 transition flex items-center gap-1.5"
+              >
+                <span>Packages</span>
               </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar inside Hero: Quick Tags on Left, Scroll Down Button on Right (Matching Reference) */}
-        <div className="relative z-10 flex items-center justify-between pt-4 border-t border-white/10">
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-slate-300">
-            <span className="text-slate-400 font-medium">Popular Now:</span>
+        {/* Bottom Bar inside Hero: Quick Tags on Left, Scroll Down Button on Right */}
+        <div className="relative z-10 flex items-center justify-between gap-3 pt-3 sm:pt-4 border-t border-white/15">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 text-xs text-slate-300">
+            <span className="text-slate-400 font-medium text-[11px] sm:text-xs">Popular Now:</span>
             <button
               onClick={() => onQuickSearch?.('Manali', 'Himachal Pradesh')}
-              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs"
+              className="px-2.5 sm:px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-[11px] sm:text-xs"
             >
               Manali & Solang
             </button>
             <button
               onClick={() => onQuickSearch?.('Kedarnath', 'Uttarakhand')}
-              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs"
+              className="px-2.5 sm:px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-[11px] sm:text-xs"
             >
               Kedarnath Yatra
             </button>
             <button
               onClick={() => onQuickSearch?.('Spiti', 'Himachal Pradesh')}
-              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs hidden sm:inline-block"
+              className="px-2.5 sm:px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-[11px] sm:text-xs hidden sm:inline-block"
             >
               Spiti 4x4 Circuit
             </button>
             <button
               onClick={() => onQuickSearch?.('Rishikesh', 'Uttarakhand')}
-              className="px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-xs hidden md:inline-block"
+              className="px-2.5 sm:px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-[11px] sm:text-xs hidden md:inline-block"
             >
               Rishikesh & Auli
             </button>
           </div>
 
-          {/* Scroll Down Pill/Circle Button (Matching the down arrow button in bottom right of reference screenshot) */}
+          {/* Scroll Down Pill/Circle Button */}
           <a
             href="#quick-search"
             aria-label="Scroll Down to Explore"
-            className="w-12 h-12 rounded-full backdrop-blur-xl bg-slate-950/70 border border-white/20 flex items-center justify-center text-white hover:bg-teal-500 hover:text-slate-950 hover:border-teal-400 transition-all duration-300 shadow-xl group hover:scale-110 active:scale-95"
+            className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full backdrop-blur-xl bg-slate-950/80 border border-white/20 flex items-center justify-center text-white hover:bg-teal-500 hover:text-slate-950 hover:border-teal-400 transition-all duration-300 shadow-xl group hover:scale-110 active:scale-95"
           >
-            <ArrowDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform stroke-[2]" />
+            <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-y-0.5 transition-transform stroke-[2]" />
           </a>
         </div>
 
