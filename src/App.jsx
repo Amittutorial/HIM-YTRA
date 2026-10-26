@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { createTranslator } from './lib/translations';
 import Navbar from './components/Navbar';
 import Hero, { REGION_BACKGROUNDS } from './components/Hero';
 import QuickSearch from './components/QuickSearch';
@@ -46,6 +47,7 @@ export default function App() {
 
   // Modals & Enhanced Features State
   const [lang, setLang] = useState(() => localStorage.getItem('himyatra-lang') || 'en');
+  const t = useMemo(() => createTranslator(lang), [lang]);
   const [quizModalOpen, setQuizModalOpen] = useState(false);
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
   const [trackingTripId, setTrackingTripId] = useState('HY-TRIP-8821');
@@ -260,6 +262,8 @@ export default function App() {
       <main className="flex-1 relative z-10">
         {/* Hero Section (framed card with matching region background) */}
         <Hero
+          lang={lang}
+          t={t}
           onOpenBooking={() => handleOpenBooking()}
           onExploreClick={() => {
             const el = document.getElementById('destinations');
@@ -324,10 +328,12 @@ export default function App() {
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           onSearchSubmit={() => {}}
+          lang={lang}
+          t={t}
         />
 
         {/* Why Choose HimYatra & Trust Credibility */}
-        <TrustStats />
+        <TrustStats lang={lang} t={t} />
 
         {/* Destinations: Himachal, Uttarakhand, Ayodhya & More */}
         <DestinationsSection
@@ -368,6 +374,8 @@ export default function App() {
           setSearchTerm={setSearchTerm}
           onOpenBooking={(pkg) => handleOpenBooking(pkg)}
           onViewPackage={handleOpenPackageDetails}
+          lang={lang}
+          t={t}
         />
 
         {/* Sacred Char Dham Yatra & Devbhoomi Circuits */}
@@ -395,7 +403,7 @@ export default function App() {
         />
 
         {/* Live Mountain Road & Weather Status Updates */}
-        <RoadWeatherAlerts />
+        <RoadWeatherAlerts lang={lang} t={t} />
 
         {/* Seasonal Offers & Promo Codes */}
         <SeasonalDeals
@@ -406,10 +414,10 @@ export default function App() {
         <MountainGuide />
 
         {/* Real Traveler Reviews */}
-        <ReviewsSection />
+        <ReviewsSection lang={lang} t={t} />
 
         {/* FAQs */}
-        <FAQSection />
+        <FAQSection lang={lang} t={t} />
 
         {/* Contact & Mountain Offices */}
         <ContactSection onOpenHelpCenter={() => setHelpCenterOpen(true)} />
@@ -481,6 +489,8 @@ export default function App() {
             handleClosePackageDetails();
             handleOpenBooking(pkg);
           }}
+          lang={lang}
+          t={t}
         />
       )}
 
@@ -493,6 +503,8 @@ export default function App() {
             setQuizModalOpen(false);
             handleOpenPackageDetails(pkg);
           }}
+          lang={lang}
+          t={t}
         />
       )}
 
@@ -502,6 +514,8 @@ export default function App() {
           isOpen={trackingModalOpen}
           onClose={() => setTrackingModalOpen(false)}
           tripId={trackingTripId}
+          lang={lang}
+          t={t}
         />
       )}
 
@@ -514,6 +528,8 @@ export default function App() {
             setCompareModalOpen(false);
             handleOpenBooking(pkg);
           }}
+          lang={lang}
+          t={t}
         />
       )}
 

@@ -260,19 +260,19 @@ export default function Navbar({
                 )}
               </div>
 
-              <a href="#packages" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Packages</a>
-              <a href="#chardham" className={`transition-colors py-1 font-bold ${isLight ? 'text-amber-700 hover:text-amber-800' : 'text-amber-300 hover:text-amber-200'}`}>Char Dham</a>
-              <a href="#cabs" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Cabs & Fares</a>
-              <a href="#weather-alerts" className={`hidden 2xl:inline-block transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Road Status</a>
-              <a href="#custom-planner" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Custom Trip</a>
+              <a href="#packages" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>{lang === 'hi' ? 'पैकेज' : 'Packages'}</a>
+              <a href="#chardham" className={`transition-colors py-1 font-bold ${isLight ? 'text-amber-700 hover:text-amber-800' : 'text-amber-300 hover:text-amber-200'}`}>{lang === 'hi' ? 'चार धाम' : 'Char Dham'}</a>
+              <a href="#cabs" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>{lang === 'hi' ? 'कैब और किराया' : 'Cabs & Fares'}</a>
+              <a href="#weather-alerts" className={`hidden 2xl:inline-block transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>{lang === 'hi' ? 'सड़क स्थिति' : 'Road Status'}</a>
+              <a href="#custom-planner" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>{lang === 'hi' ? 'अपनी यात्रा' : 'Custom Trip'}</a>
               <button
                 type="button"
                 onClick={() => onOpenCompare?.()}
                 className={`transition-colors py-1 text-teal-300 font-semibold cursor-pointer hidden xl:inline-block hover:text-white`}
               >
-                Compare (3)
+                {lang === 'hi' ? 'तुलना (3)' : 'Compare (3)'}
               </button>
-              <a href="#contact" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>Contact</a>
+              <a href="#contact" className={`transition-colors py-1 ${isLight ? 'hover:text-teal-700' : 'hover:text-teal-400'}`}>{lang === 'hi' ? 'संपर्क' : 'Contact'}</a>
             </div>
 
             {/* Right Action Buttons with distinct gap from nav links */}
@@ -366,7 +366,7 @@ export default function Navbar({
                     : 'bg-white hover:bg-slate-100 text-slate-950 shadow-white/10 hover:shadow-teal-400/20'
                 }`}
               >
-                Book Now
+                {lang === 'hi' ? 'अभी बुक करें' : 'Book Now'}
               </button>
 
               {/* Mobile Menu Toggle Button */}
@@ -389,35 +389,35 @@ export default function Navbar({
         <div className="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-3xl pt-28 px-6 pb-12 flex flex-col justify-between lg:hidden animate-in fade-in duration-200 overflow-y-auto">
           <div className="space-y-4">
             <div className="text-xs font-semibold uppercase tracking-wider text-teal-400 border-b border-white/10 pb-2">
-              Menu Navigation
+              {lang === 'hi' ? 'मेनू नेविगेशन' : 'Menu Navigation'}
             </div>
             <a
               href="#destinations"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              🏔️ Destinations (Himachal & Uttarakhand)
+              {lang === 'hi' ? '🏔️ गंतव्य (हिमाचल और उत्तराखंड)' : '🏔️ Destinations (Himachal & Uttarakhand)'}
             </a>
             <a
               href="#packages"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              🎒 Tour Packages
+              {lang === 'hi' ? '🎒 टूर पैकेज' : '🎒 Tour Packages'}
             </a>
             <a
               href="#custom-planner"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              ✨ Customize Your Yatra
+              {lang === 'hi' ? '✨ अपनी यात्रा बनाएं' : '✨ Customize Your Yatra'}
             </a>
             <a
               href="#offers"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              🏷️ Seasonal Deals & Offers
+              {lang === 'hi' ? '🏷️ सीज़नल डील और ऑफ़र' : '🏷️ Seasonal Deals & Offers'}
             </a>
             <button
               onClick={() => {
@@ -426,7 +426,7 @@ export default function Navbar({
               }}
               className="w-full text-left text-lg font-bold text-amber-300 hover:text-amber-200 py-2 border-b border-white/5 flex items-center gap-2 cursor-pointer"
             >
-              <span>✨ Find My Trip Quiz</span>
+              <span>{lang === 'hi' ? '✨ मेरी यात्रा खोजें क्विज़' : '✨ Find My Trip Quiz'}</span>
             </button>
             <button
               onClick={() => {
@@ -435,28 +435,28 @@ export default function Navbar({
               }}
               className="w-full text-left text-lg font-bold text-teal-300 hover:text-teal-200 py-2 border-b border-white/5 flex items-center gap-2 cursor-pointer"
             >
-              <span>📍 Live Trip Tracking</span>
+              <span>{lang === 'hi' ? '📍 लाइव ट्रिप ट्रैकिंग' : '📍 Live Trip Tracking'}</span>
             </button>
             <a
               href="#chardham"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-bold text-amber-400 hover:text-amber-300 py-2 border-b border-white/5"
             >
-              🕉️ Char Dham Yatra 2026
+              {lang === 'hi' ? '🕉️ चार धाम यात्रा 2026' : '🕉️ Char Dham Yatra 2026'}
             </a>
             <a
               href="#cabs"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              🚗 Cab Rentals & Fixed Fares
+              {lang === 'hi' ? '🚗 कैब किराया और निश्चित दर' : '🚗 Cab Rentals & Fixed Fares'}
             </a>
             <a
               href="#weather-alerts"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              🌦️ Road & Weather Updates
+              {lang === 'hi' ? '🌦️ सड़क और मौसम अपडेट' : '🌦️ Road & Weather Updates'}
             </a>
             <button
               onClick={() => {
@@ -465,21 +465,21 @@ export default function Navbar({
               }}
               className="w-full text-left text-lg font-semibold text-teal-300 hover:text-white py-2 border-b border-white/5 cursor-pointer"
             >
-              ⚖️ Compare 3 Packages
+              {lang === 'hi' ? '⚖️ 3 पैकेज तुलना' : '⚖️ Compare 3 Packages'}
             </button>
             <a
               href="#reviews"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              ⭐ Traveler Reviews
+              {lang === 'hi' ? '⭐ यात्री समीक्षा' : '⭐ Traveler Reviews'}
             </a>
             <a
               href="#contact"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              📞 Contact & Offices
+              {lang === 'hi' ? '📞 संपर्क और कार्यालय' : '📞 Contact & Offices'}
             </a>
           </div>
 
@@ -496,6 +496,19 @@ export default function Navbar({
               <span>
                 {currentUser ? `Account: @${currentUser.username} (${currentUser.total_bookings || 0} Bookings)` : 'Customer Login / My Trips'}
               </span>
+            </button>
+
+            {/* Language Toggle in Mobile Menu */}
+            <button
+              onClick={() => onToggleLang?.()}
+              className={`w-full py-3 px-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2.5 border transition-all cursor-pointer ${
+                isLight
+                  ? 'bg-teal-100 border-teal-300 text-teal-900 shadow-sm'
+                  : 'bg-teal-950/80 border-teal-500/40 text-teal-300 hover:bg-teal-900/80'
+              }`}
+            >
+              <span className="text-base">🌐</span>
+              <span>{lang === 'hi' ? 'Switch to English (EN)' : 'हिंदी में बदलें (Hindi)'}</span>
             </button>
 
             {/* Theme Toggle in Mobile Menu */}
@@ -536,7 +549,7 @@ export default function Navbar({
               }}
               className="w-full bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold py-3.5 rounded-2xl text-base shadow-lg shadow-teal-500/20 text-center transition"
             >
-              Book Your Journey Now
+              {lang === 'hi' ? 'अभी यात्रा बुक करें' : 'Book Your Journey Now'}
             </button>
             <a
               href="tel:+917619917057"
@@ -552,7 +565,7 @@ export default function Navbar({
               className="w-full bg-sky-900/40 border border-sky-500/40 text-sky-300 hover:bg-sky-900/60 font-bold py-3 rounded-2xl text-sm flex items-center justify-center gap-2 transition"
             >
               <HelpCircle className="w-4 h-4" />
-              <span>Help Center & FAQs</span>
+              <span>{lang === 'hi' ? 'सहायता केंद्र और FAQ' : 'Help Center & FAQs'}</span>
             </button>
           </div>
         </div>

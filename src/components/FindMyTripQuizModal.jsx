@@ -3,7 +3,7 @@ import { X, Sparkles, Check, ArrowRight, ArrowLeft, RefreshCw, MessageSquare, St
 import { TOUR_PACKAGES } from '../data/travelData';
 import confetti from 'canvas-confetti';
 
-export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage }) {
+export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage, lang = 'en', t = (k) => k }) {
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState({
     budget: '',
@@ -146,9 +146,9 @@ export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage }
             <div>
               <div className="flex items-center justify-between text-xs font-bold text-teal-400 mb-2">
                 <span className="flex items-center gap-1.5 uppercase tracking-wider">
-                  <Sparkles className="w-3.5 h-3.5" /> Find My Himalayan Trip (Question {step} of 5)
+                  <Sparkles className="w-3.5 h-3.5" /> {lang === 'hi' ? 'मेरी हिमालय यात्रा खोजें' : 'Find My Himalayan Trip'} ({lang === 'hi' ? 'प्रश्न' : 'Question'} {step} {lang === 'hi' ? 'में से' : 'of'} 5)
                 </span>
-                <span>{step * 20}% Completed</span>
+                <span>{step * 20}% {lang === 'hi' ? 'पूरा हुआ' : 'Completed'}</span>
               </div>
               <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
                 <div
@@ -164,7 +164,7 @@ export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage }
                 {currentQ.question}
               </h3>
               <p className="text-xs text-slate-400">
-                Choose the option that best fits your travel expectations.
+                {lang === 'hi' ? 'वह विकल्प चुनें जो आपकी यात्रा अपेक्षाओं से सबसे अच्छा मेल खाता हो।' : 'Choose the option that best fits your travel expectations.'}
               </p>
             </div>
 
@@ -206,10 +206,10 @@ export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage }
           <div className="space-y-6 animate-in fade-in">
             <div className="text-center space-y-2">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                🎉 Perfect Match Found
+                {lang === 'hi' ? '🎉 सही मिलान मिला' : '🎉 Perfect Match Found'}
               </span>
               <h3 className="text-2xl sm:text-3xl font-black font-['Outfit']">
-                Top 3 Recommended Himalayan Packages
+                {lang === 'hi' ? 'शीर्ष 3 अनुशंसित हिमालय पैकेज' : 'Top 3 Recommended Himalayan Packages'}
               </h3>
               <p className="text-xs text-slate-300 max-w-xl mx-auto">
                 Based on your budget, travel group, and adventure preferences, here are the top 3 verified itineraries customized for you.
@@ -258,7 +258,7 @@ export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage }
                         }}
                         className="flex-1 py-2 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs transition cursor-pointer"
                       >
-                        Book Now
+                        {lang === 'hi' ? 'अभी बुक करें' : 'Book Now'}
                       </button>
                       <a
                         href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I matched with "${pkg.title}" (₹${pkg.price}/person) in the Trip Quiz. Please share itinerary!`)}`}
@@ -281,7 +281,7 @@ export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage }
                 onClick={handleReset}
                 className="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 transition cursor-pointer"
               >
-                <RefreshCw className="w-3.5 h-3.5" /> Retake Trip Quiz
+                <RefreshCw className="w-3.5 h-3.5" /> {lang === 'hi' ? 'क्विज़ दोबारा लें' : 'Retake Trip Quiz'}
               </button>
             </div>
           </div>

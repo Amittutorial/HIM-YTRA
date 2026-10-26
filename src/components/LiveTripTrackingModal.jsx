@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Navigation, Phone, ShieldCheck, Share2, Car, CheckCircle2, Clock, MapPin, AlertCircle, Sparkles } from 'lucide-react';
 
-export default function LiveTripTrackingModal({ isOpen, onClose, tripId = 'HY-TRIP-8821' }) {
+export default function LiveTripTrackingModal({ isOpen, onClose, tripId = 'HY-TRIP-8821', lang = 'en', t = (k) => k }) {
   const [copied, setCopied] = useState(false);
   const [currentTripId, setCurrentTripId] = useState(tripId || 'HY-TRIP-8821');
   const [searchInput, setSearchInput] = useState('');
@@ -63,7 +63,7 @@ export default function LiveTripTrackingModal({ isOpen, onClose, tripId = 'HY-TR
           <div>
             <span className="text-[11px] font-bold uppercase text-teal-400 bg-teal-500/10 px-3 py-0.5 rounded-full border border-teal-500/20 inline-flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>Live Himalayan Trip Tracking</span>
+              <span>{lang === 'hi' ? 'लाइव हिमालय ट्रिप ट्रैकिंग' : 'Live Himalayan Trip Tracking'}</span>
             </span>
             <h3 className="text-xl sm:text-2xl font-black font-['Outfit'] mt-1">
               Trip #{currentTripId}
@@ -76,7 +76,7 @@ export default function LiveTripTrackingModal({ isOpen, onClose, tripId = 'HY-TR
             className="self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-400/40 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
-            <span>{copied ? '✓ Link Copied!' : 'Share Live Tracking Link'}</span>
+            <span>{copied ? (lang === 'hi' ? '✓ लिंक कॉपी हो गया!' : '✓ Link Copied!') : (lang === 'hi' ? 'लाइव ट्रैकिंग लिंक साझा करें' : 'Share Live Tracking Link')}</span>
           </button>
         </div>
 

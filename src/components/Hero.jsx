@@ -159,7 +159,7 @@ export const REGION_BACKGROUNDS = [
   }
 ];
 
-export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, theme = 'dark', activeRegion = 'himachal', onSelectRegion }) {
+export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, theme = 'dark', activeRegion = 'himachal', onSelectRegion, lang = 'en', t = (k) => k }) {
   // Preload background images so switching between dark, light and regions is instant
   React.useEffect(() => {
     REGION_BACKGROUNDS.forEach((bg) => {
@@ -281,7 +281,9 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
           {/* Right Column: Atmospheric Subtitle & Call-to-Actions */}
           <div className="lg:col-span-5 space-y-3 sm:space-y-4">
             <p className="text-xs sm:text-base lg:text-lg text-slate-200/90 leading-relaxed font-light backdrop-blur-md bg-slate-950/40 p-3 sm:p-5 rounded-2xl border border-white/10 shadow-lg">
-              Himalayan holiday packages, fixed-route cab rentals, sacred Char Dham circuits, and mountain adventures across Himachal Pradesh and Uttarakhand.
+              {lang === 'hi'
+                ? 'हिमाचल प्रदेश और उत्तराखंड में हिमालय की छुट्टी पैकेज, निश्चित रूट कैब, पवित्र चार धाम यात्रा और पहाड़ी साहसिक यात्राएं।'
+                : 'Himalayan holiday packages, fixed-route cab rentals, sacred Char Dham circuits, and mountain adventures across Himachal Pradesh and Uttarakhand.'}
             </p>
 
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
@@ -289,7 +291,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
                 onClick={() => onOpenBooking?.(null)}
                 className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base flex items-center gap-2 shadow-xl shadow-teal-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
               >
-                <span>Plan My Trip</span>
+                <span>{lang === 'hi' ? 'यात्रा प्लान करें' : 'Plan My Trip'}</span>
                 <ChevronRight className="w-4 h-4 stroke-[2.5]" />
               </button>
 
@@ -300,14 +302,14 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
                 className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base flex items-center gap-2 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4 text-slate-950 fill-slate-950/20" />
-                <span>WhatsApp Us</span>
+                <span>{lang === 'hi' ? 'व्हाट्सएप करें' : 'WhatsApp Us'}</span>
               </a>
 
               <a
                 href="#packages"
                 className="backdrop-blur-md bg-white/10 hover:bg-white/20 text-white font-semibold px-4 sm:px-5 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base border border-white/20 hover:border-white/40 transition flex items-center gap-1.5"
               >
-                <span>Packages</span>
+                <span>{lang === 'hi' ? 'पैकेज' : 'Packages'}</span>
               </a>
             </div>
           </div>
@@ -316,7 +318,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
         {/* Bottom Bar inside Hero: Quick Tags on Left, Scroll Down Button on Right */}
         <div className="relative z-10 flex items-center justify-between gap-3 pt-3 sm:pt-4 border-t border-white/15">
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 text-xs text-slate-300">
-            <span className="text-slate-400 font-medium text-[11px] sm:text-xs">Popular Now:</span>
+            <span className="text-slate-400 font-medium text-[11px] sm:text-xs">{lang === 'hi' ? 'लोकप्रिय:' : 'Popular Now:'}</span>
             <button
               onClick={() => onQuickSearch?.('Manali', 'Himachal Pradesh')}
               className="px-2.5 sm:px-3 py-1 rounded-full bg-white/10 hover:bg-teal-500/20 hover:text-teal-300 backdrop-blur-md border border-white/10 text-white transition cursor-pointer text-[11px] sm:text-xs"

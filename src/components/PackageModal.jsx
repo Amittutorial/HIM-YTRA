@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, Check, Calendar, MapPin, Car, Hotel, Utensils, Shield, Star, Sparkles, ChevronDown, ChevronUp, Share2, PhoneCall, Printer, Download, HeartPulse, AlertTriangle, MessageSquare, ShieldCheck, Clock } from 'lucide-react';
 
-export default function PackageModal({ pkg, onClose, onBookNow }) {
+export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t = (k) => k }) {
   const [activeTab, setActiveTab] = useState('itinerary');
   const [expandedDay, setExpandedDay] = useState(0);
 
@@ -96,7 +96,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              Day-by-Day Plan ({pkg.days} Days)
+              Day-by-Day Plan ({pkg.days} {lang === 'hi' ? 'दिन' : 'Days'})
             </button>
             <button
               onClick={() => setActiveTab('inclusions')}
@@ -106,7 +106,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              Inclusions & Exclusions
+              {lang === 'hi' ? 'शामिल और गैर-शामिल' : 'Inclusions & Exclusions'}
             </button>
             <button
               onClick={() => setActiveTab('safety')}
@@ -116,7 +116,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              Altitude & Safety
+              {lang === 'hi' ? 'ऊंचाई और सुरक्षा' : 'Altitude & Safety'}
             </button>
             <button
               onClick={() => setActiveTab('policy')}
@@ -126,7 +126,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
                   : 'border-transparent text-slate-400 hover:text-slate-200'
               }`}
             >
-              Pickup & Cancellation
+              {lang === 'hi' ? 'पिकअप और रद्दीकरण' : 'Pickup & Cancellation'}
             </button>
           </div>
 
@@ -137,7 +137,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
             title="Download or Print Itinerary as PDF"
           >
             <Printer className="w-3.5 h-3.5 text-teal-400" />
-            <span>Print / PDF Itinerary</span>
+            <span>{lang === 'hi' ? 'प्रिंट / PDF यात्रा कार्यक्रम' : 'Print / PDF Itinerary'}</span>
           </button>
         </div>
 
@@ -150,7 +150,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
               <div className="p-3.5 rounded-2xl bg-slate-950/80 border border-teal-500/20 text-xs">
                 <div className="text-[11px] font-bold uppercase text-teal-400 tracking-wider mb-2 flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5" />
-                  <span>Route Stops & Highlights Timeline</span>
+                  <span>{lang === 'hi' ? 'रूट स्टॉप और हाइलाइट टाइमलाइन' : 'Route Stops & Highlights Timeline'}</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   {pkg.itinerary.map((d, i) => (
@@ -259,7 +259,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase text-amber-400 flex items-center gap-1.5">
                     <HeartPulse className="w-4 h-4 text-amber-400" />
-                    <span>Altitude & Acclimatization Profile</span>
+                    <span>{lang === 'hi' ? 'ऊंचाई और अभ्यास प्रोफ़ाइल' : 'Altitude & Acclimatization Profile'}</span>
                   </span>
                   <span className="text-xs bg-teal-500/20 text-teal-300 px-3 py-1 rounded-full border border-teal-400/30 font-bold">
                     Max Elevation: {pkg.title.includes('Kedarnath') || pkg.title.includes('Dham') ? '3,583 m (11,755 ft)' : pkg.title.includes('Spiti') ? '4,300 m (14,100 ft)' : '2,050 m (6,725 ft)'}
@@ -272,21 +272,21 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300">
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-white/10 space-y-1">
-                  <strong className="text-white block">💧 Acclimatization Tips</strong>
+                  <strong className="text-white block">{lang === 'hi' ? '💧 अभ्यास सुझाव' : '💧 Acclimatization Tips'}</strong>
                   <p className="text-slate-400 leading-relaxed">
-                    Drink plenty of water and warm fluids. Avoid rapid ascents and carry ginger or camphor for high passes.
+                    {lang === 'hi' ? 'खूब पानी और गरम तरल पीएं। तेज चढ़ाई से बचें और उंचे दर्रों के लिए अदरक या कपूर साथ रखें।' : 'Drink plenty of water and warm fluids. Avoid rapid ascents and carry ginger or camphor for high passes.'}
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-white/10 space-y-1">
-                  <strong className="text-white block">🛌 Recommended Rest Day</strong>
+                  <strong className="text-white block">{lang === 'hi' ? '🛌 अनुशंसित आराम दिवस' : '🛌 Recommended Rest Day'}</strong>
                   <p className="text-slate-400 leading-relaxed">
-                    First evening is always kept light for acclimatization. Enjoy hot tea and scenic terrace views without exhaustion.
+                    {lang === 'hi' ? 'पहली शाम हमेशा अभ्यास के लिए हल्की रखी जाती है। गरम चाय और सुंदर छत दृश्यों का आनंद लें।' : 'First evening is always kept light for acclimatization. Enjoy hot tea and scenic terrace views without exhaustion.'}
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-slate-950/60 border border-white/10 space-y-1">
-                  <strong className="text-white block">🫁 Emergency Oxygen</strong>
+                  <strong className="text-white block">{lang === 'hi' ? '🫁 आपातकालीन ऑक्सीजन' : '🫁 Emergency Oxygen'}</strong>
                   <p className="text-slate-400 leading-relaxed">
-                    Portable oxygen canisters and complete first aid kits are standard in all HimYatra cabs.
+                    {lang === 'hi' ? 'पोर्टेबल ऑक्सीजन कैन और संपूर्ण प्राथमिक चिकित्सा किट सभी हिमयात्रा कैब में स्टैंडर्ड हैं।' : 'Portable oxygen canisters and complete first aid kits are standard in all HimYatra cabs.'}
                   </p>
                 </div>
               </div>
@@ -351,7 +351,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
               className="px-4 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 fill-slate-950/20" />
-              <span>WhatsApp Us</span>
+              <span>{lang === 'hi' ? 'व्हाट्सएप करें' : 'WhatsApp Us'}</span>
             </a>
 
             <a
@@ -370,7 +370,7 @@ export default function PackageModal({ pkg, onClose, onBookNow }) {
               }}
               className="flex-1 sm:flex-initial px-6 sm:px-8 py-3.5 rounded-2xl bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-300 hover:to-emerald-300 text-slate-950 font-extrabold text-sm shadow-xl shadow-teal-500/25 transition cursor-pointer"
             >
-              Book / Reserve Now
+              {lang === 'hi' ? 'अभी बुक / आरक्षित करें' : 'Book / Reserve Now'}
             </button>
           </div>
         </div>
