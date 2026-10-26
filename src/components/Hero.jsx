@@ -182,7 +182,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
       }`} />
 
       {/* Main Framed Hero Card Container */}
-      <div className="relative min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] rounded-[28px] sm:rounded-[38px] overflow-hidden border border-white/20 shadow-2xl shadow-black/80 flex flex-col justify-between p-6 sm:p-12 lg:p-16 transition-all duration-700">
+      <div className="relative min-h-[560px] sm:min-h-[640px] lg:min-h-[720px] rounded-[24px] sm:rounded-[38px] overflow-hidden border border-white/20 shadow-2xl shadow-black/80 flex flex-col justify-between p-4 sm:p-12 lg:p-16 transition-all duration-700">
         
         {/* Dynamic Background Images with Smooth Cross-Fade Transitions */}
         {REGION_BACKGROUNDS.map((bg) => {
@@ -256,7 +256,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               <span>Premium Mountain Experiences</span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white font-['Outfit'] leading-[1.08]">
+            <h1 className="text-[clamp(1.85rem,7vw,4.5rem)] font-extrabold tracking-tight text-white font-['Outfit'] leading-[1.08]">
               Unforgettable <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-teal-100 to-teal-400">
                 Himalayan Journeys

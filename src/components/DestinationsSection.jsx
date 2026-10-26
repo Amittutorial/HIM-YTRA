@@ -34,7 +34,7 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
         </div>
 
         {/* State Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 p-1.5 bg-slate-900/90 rounded-2xl border border-white/10 backdrop-blur-xl self-start md:self-auto max-w-full">
+        <div className="flex flex-nowrap sm:flex-wrap items-center gap-1.5 sm:gap-2 p-1.5 bg-slate-900/90 rounded-2xl border border-white/10 backdrop-blur-xl self-start md:self-auto max-w-full overflow-x-auto scrollbar-none">
           {[
             { id: 'All', label: 'All Spots (27+)' },
             { id: 'Himachal Pradesh', label: '🏔️ Himachal' },

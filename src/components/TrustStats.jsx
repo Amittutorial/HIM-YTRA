@@ -57,18 +57,18 @@ export default function TrustStats() {
           return (
             <div 
               key={i} 
-              className="p-6 rounded-3xl backdrop-blur-xl bg-slate-900/60 border border-white/10 hover:border-teal-500/30 transition-all hover:-translate-y-1 group"
+              className="p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl backdrop-blur-xl bg-slate-900/60 border border-white/10 hover:border-teal-500/30 transition-all hover:-translate-y-1 group"
             >
-              <div className="w-12 h-12 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-4 group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-slate-950 transition duration-300">
-                <Icon className="w-6 h-6" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-3 sm:mb-4 group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-slate-950 transition duration-300">
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-['Outfit'] mb-1">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight font-['Outfit'] mb-1">
                 {stat.value}
               </div>
-              <div className="text-sm font-semibold text-slate-200">
+              <div className="text-xs sm:text-sm font-semibold text-slate-200">
                 {stat.label}
               </div>
-              <div className="text-xs text-slate-400 mt-0.5">
+              <div className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
                 {stat.sublabel}
               </div>
             </div>

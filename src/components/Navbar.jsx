@@ -26,6 +26,18 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Keyboard navigation: Close mobile drawer on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setDestDropdownOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const isLight = theme === 'light';
 
   return (
@@ -358,7 +370,7 @@ export default function Navbar({ onOpenBooking, onSelectState, onOpenInquire, on
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-3xl pt-28 px-6 pb-12 flex flex-col justify-between lg:hidden animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-3xl pt-28 px-6 pb-12 flex flex-col justify-between lg:hidden animate-in fade-in duration-200 overflow-y-auto">
           <div className="space-y-4">
             <div className="text-xs font-semibold uppercase tracking-wider text-teal-400 border-b border-white/10 pb-2">
               Menu Navigation

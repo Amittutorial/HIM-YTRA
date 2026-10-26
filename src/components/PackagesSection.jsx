@@ -128,8 +128,8 @@ export default function PackagesSection({
         </div>
 
         {/* Secondary Filter Bar: State switch, Active filters, and Sort selector */}
-        <div className="p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-xl flex flex-wrap items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-900/70 border border-white/10 backdrop-blur-xl flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-nowrap sm:flex-wrap items-center gap-1.5 sm:gap-2 text-xs overflow-x-auto scrollbar-none max-w-full pb-1">
             <span className="text-slate-400 font-medium flex items-center gap-1 mr-1">
               <Filter className="w-3.5 h-3.5 text-teal-400" /> Filter Region:
             </span>

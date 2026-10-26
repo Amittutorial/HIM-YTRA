@@ -82,17 +82,17 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           
           {/* QR Code Container */}
-          <div className="bg-slate-950 p-5 rounded-2xl border border-white/10 text-center space-y-3">
+          <div className="bg-slate-950 p-4 sm:p-5 rounded-2xl border border-white/10 text-center space-y-3">
             <div className="flex items-center justify-center gap-2 text-white font-bold text-sm">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <span>Verified Payee: {payeeName}</span>
             </div>
 
             {/* QR Image */}
-            <div className="relative mx-auto w-64 sm:w-72 rounded-2xl overflow-hidden border-2 border-teal-400/50 shadow-xl bg-black p-2">
+            <div className="relative mx-auto w-full max-w-[240px] sm:max-w-[280px] rounded-2xl overflow-hidden border-2 border-teal-400/50 shadow-xl bg-black p-2">
               <img
                 src="/payment-qr.jpg"
                 alt="Amit Patel UPI QR Code"

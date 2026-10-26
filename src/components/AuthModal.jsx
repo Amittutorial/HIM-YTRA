@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  X, User, Mail, ShieldCheck, KeyRound, Sparkles, CheckCircle2, 
-  Clock, ArrowRight, LogOut, Calendar, MapPin, Compass, AlertCircle,
-  RefreshCw, Check, Car, Phone, Lock, Eye, EyeOff, UserPlus, LogIn
+  X, User, Mail, ShieldCheck, Sparkles, CheckCircle2, 
+  ArrowRight, LogOut, Calendar, MapPin, Compass, AlertCircle,
+  RefreshCw, Check, Lock, Eye, EyeOff, UserPlus, LogIn
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { 
