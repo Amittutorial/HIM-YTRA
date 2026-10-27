@@ -157,21 +157,23 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
               </div>
 
               {/* Footer Price & Action */}
-              <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-[11px] uppercase text-teal-400 font-bold tracking-wide">
-                    Starting ₹{dest.startingPrice.toLocaleString('en-IN')} per person
+              <div className="pt-4 border-t border-white/10 space-y-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <div className="text-[11px] uppercase text-teal-400 font-bold tracking-wide">
+                      Starting ₹{dest.startingPrice.toLocaleString('en-IN')} per person
+                    </div>
+                    <div className="text-xl font-extrabold text-white font-['Outfit'] flex items-baseline gap-1">
+                      ₹{dest.startingPrice.toLocaleString('en-IN')}
+                      <span className="text-xs text-slate-400 font-normal">/ person</span>
+                    </div>
                   </div>
-                  <div className="text-xl font-extrabold text-white font-['Outfit'] flex items-baseline gap-1">
-                    ₹{dest.startingPrice.toLocaleString('en-IN')}
-                    <span className="text-xs text-slate-400 font-normal">/ person</span>
-                    <span className="text-[10px] text-teal-300 font-bold bg-teal-500/10 border border-teal-500/20 px-2 py-0.5 rounded-full ml-1">
-                      {dest.tripLength || '5D/4N'}
-                    </span>
-                  </div>
+                  <span className="text-[10px] text-teal-300 font-bold bg-teal-500/10 border border-teal-500/20 px-2.5 py-1 rounded-full shrink-0">
+                    {dest.tripLength || '5D/4N'}
+                  </span>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -179,7 +181,7 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
                       const el = document.getElementById('packages');
                       el?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-teal-500/20 text-slate-200 hover:text-teal-300 border border-white/10 transition cursor-pointer text-xs font-semibold flex items-center gap-1.5"
+                    className="flex-1 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-teal-500/20 text-slate-200 hover:text-teal-300 border border-white/10 transition cursor-pointer text-xs font-semibold flex items-center justify-center gap-1.5"
                     title="View packages for this destination"
                   >
                     <span>Packages</span>
@@ -191,9 +193,9 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
                       e.stopPropagation();
                       onOpenBooking?.(dest);
                     }}
-                    className="px-4 py-2 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs shadow-md shadow-teal-500/20 transition cursor-pointer"
+                    className="flex-1 px-3 py-2.5 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold text-xs shadow-md shadow-teal-500/20 transition cursor-pointer text-center"
                   >
-                    Reserve
+                    Reserve Now
                   </button>
                 </div>
               </div>
