@@ -294,6 +294,7 @@ DESTINATIONS.forEach((dest) => {
           Starting ₹${dest.startingPrice?.toLocaleString('en-IN') || '4,999'}
           <span style="font-size: 0.9rem; font-weight: 400; color: #94a3b8;"> / person</span>
         </div>
+        
       </div>
       <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
         <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I want to plan a tour to ${dest.name} (${dest.state}). Please send available packages and cab options!`)}" class="btn btn-primary">
