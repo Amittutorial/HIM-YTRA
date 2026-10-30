@@ -1,5 +1,23 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { X, Send, ThumbsUp, ThumbsDown, Compass, MessageCircle, ArrowRight, Phone } from 'lucide-react';
+import {
+  X,
+  Send,
+  ThumbsUp,
+  ThumbsDown,
+  Compass,
+  MessageCircle,
+  ArrowRight,
+  Phone,
+  Maximize2,
+  Minimize2,
+  Minus,
+  Sparkles,
+  MapPin,
+  Calendar,
+  ChevronRight,
+  ExternalLink
+} from 'lucide-react';
+import { getSmartAssistantResponse, HIMYATRA_PACKAGES } from '../lib/chatbotEngine';
 
 /* ─── Package card parser ─── */
 function parsePackageCards(text) {
@@ -15,7 +33,9 @@ function parsePackageCards(text) {
     }
     try {
       parts.push({ type: 'card', data: JSON.parse(match[1]) });
-    } catch { /* skip bad JSON */ }
+    } catch {
+      /* ignore malformed json */
+    }
     lastIndex = regex.lastIndex;
   }
   if (lastIndex < remaining.length) {
@@ -24,35 +44,81 @@ function parsePackageCards(text) {
   return parts.length ? parts : [{ type: 'text', content: text }];
 }
 
-/* ─── Mini Package Card ─── */
-function PackageCard({ data }) {
-  const whatsappMsg = encodeURIComponent(`Hi HimYatra! I am interested in "${data.title}" (${data.price}/person). Please share details!`);
+/* ─── Interactive Mini Package Card ─── */
+function PackageCard({ data, onSelectPackage, onBookPackage }) {
+  const pkgData = HIMYATRA_PACKAGES.find(p => p.id === data.pkgId) || data;
+  const whatsappMsg = encodeURIComponent(
+    `Hi HimYatra! I saw "${pkgData.title}" (${pkgData.price || data.price}/person) on your AI Assistant. Please share full itinerary and booking availability.`
+  );
+
+  const handleOpenDetails = () => {
+    if (onSelectPackage) {
+      onSelectPackage(pkgData);
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      params.set('pkg', pkgData.id || data.pkgId);
+      window.history.pushState({}, '', `?${params}`);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }
+  };
+
+  const handleBook = () => {
+    if (onBookPackage) {
+      onBookPackage(pkgData);
+    } else {
+      const el = document.getElementById('packages');
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="bg-slate-800/80 border border-teal-500/20 rounded-2xl p-3.5 my-2 space-y-2">
-      <div className="font-bold text-sm text-white leading-snug">{data.title}</div>
-      <div className="flex items-center gap-2 text-xs text-slate-400">
-        <span className="px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20 font-semibold">{data.duration}</span>
-        <span className="font-bold text-teal-400">{data.price}/person</span>
+    <div className="bg-slate-900/90 border border-teal-500/30 hover:border-teal-400/50 rounded-2xl p-3.5 my-2.5 space-y-2.5 shadow-lg shadow-teal-950/40 transition group">
+      {/* Badge & Price Header */}
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 mb-1">
+            {pkgData.badge || data.badge || 'HimYatra Curated'}
+          </span>
+          <h4 className="font-bold text-sm text-white leading-snug group-hover:text-teal-300 transition-colors">
+            {pkgData.title || data.title}
+          </h4>
+        </div>
       </div>
-      <div className="flex gap-2 pt-1">
+
+      {/* Meta Row */}
+      <div className="flex items-center justify-between text-xs pt-1 border-t border-white/5">
+        <span className="flex items-center gap-1 text-slate-300 font-medium">
+          <Calendar className="w-3.5 h-3.5 text-teal-400" />
+          {pkgData.duration || data.duration}
+        </span>
+        <div className="text-right">
+          <span className="text-[10px] text-slate-400 block -mb-0.5">Starting</span>
+          <span className="font-black text-sm text-teal-300 font-['Outfit']">
+            {pkgData.price || data.price}
+            <span className="text-[10px] text-slate-400 font-normal"> / person</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="grid grid-cols-2 gap-2 pt-1">
         <button
-          onClick={() => {
-            const params = new URLSearchParams(window.location.search);
-            params.set('pkg', data.pkgId);
-            window.history.pushState({}, '', `?${params}`);
-            window.dispatchEvent(new PopStateEvent('popstate'));
-          }}
-          className="flex-1 text-xs font-semibold py-2 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 flex items-center justify-center gap-1 transition cursor-pointer"
+          type="button"
+          onClick={handleOpenDetails}
+          className="text-xs font-bold py-2 px-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 flex items-center justify-center gap-1.5 transition cursor-pointer shadow-md shadow-teal-500/20 active:scale-95"
         >
-          View Details <ArrowRight className="w-3 h-3" />
+          <span>View Details</span>
+          <ArrowRight className="w-3.5 h-3.5" />
         </button>
+
         <a
           href={`https://wa.me/917619917057?text=${whatsappMsg}`}
           target="_blank"
           rel="noreferrer"
-          className="flex-1 text-xs font-semibold py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1 transition"
+          className="text-xs font-semibold py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1.5 transition shadow-md shadow-emerald-900/30 active:scale-95 text-center"
         >
-          WhatsApp <Phone className="w-3 h-3" />
+          <Phone className="w-3.5 h-3.5" />
+          <span>WhatsApp</span>
         </a>
       </div>
     </div>
@@ -62,72 +128,88 @@ function PackageCard({ data }) {
 /* ─── Typing Indicator ─── */
 function TypingIndicator() {
   return (
-    <div className="flex items-center gap-1 px-4 py-3">
-      <div className="flex gap-1">
-        {[0, 1, 2].map(i => (
+    <div className="flex items-center gap-2 px-4 py-3 bg-slate-900/80 rounded-2xl border border-white/5 max-w-[140px] animate-pulse">
+      <div className="flex gap-1.5">
+        {[0, 1, 2].map((i) => (
           <span
             key={i}
             className="w-2 h-2 rounded-full bg-teal-400"
             style={{
               animation: 'chatbotDotBounce 1.2s infinite',
-              animationDelay: `${i * 0.15}s`
+              animationDelay: `${i * 0.18}s`
             }}
           />
         ))}
       </div>
-      <span className="text-xs text-slate-400 ml-2">typing...</span>
+      <span className="text-[11px] text-teal-300 font-medium">Planning...</span>
     </div>
   );
 }
 
 /* ─── Message Bubble ─── */
-function MessageBubble({ msg, onFeedback }) {
+function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage }) {
   const isUser = msg.role === 'user';
   const parts = isUser ? [{ type: 'text', content: msg.content }] : parsePackageCards(msg.content);
 
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-chatFadeIn`}>
-      <div className={`max-w-[85%] space-y-1 ${isUser ? 'items-end' : 'items-start'}`}>
-        {/* Avatar row */}
+      <div className={`max-w-[88%] sm:max-w-[82%] space-y-1.5 ${isUser ? 'items-end' : 'items-start'}`}>
         {!isUser && (
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center">
-              <Compass className="w-3.5 h-3.5 text-teal-400" />
+          <div className="flex items-center gap-2 ml-1">
+            <div className="w-5 h-5 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center">
+              <Compass className="w-3 h-3 text-teal-400" />
             </div>
-            <span className="text-[10px] text-slate-500 font-medium">HimYatra</span>
+            <span className="text-[11px] font-bold text-teal-400">HimYatra AI</span>
+            <span className="text-[10px] text-slate-500">• Travel Specialist</span>
           </div>
         )}
 
-        <div className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-          isUser
-            ? 'bg-teal-500 text-white rounded-br-md'
-            : 'bg-slate-800/90 text-slate-200 border border-white/5 rounded-bl-md'
-        }`}>
+        <div
+          className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+            isUser
+              ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white rounded-br-sm shadow-md shadow-teal-900/30'
+              : 'bg-slate-900/95 text-slate-200 border border-white/10 rounded-bl-sm shadow-xl'
+          }`}
+        >
           {parts.map((part, i) =>
-            part.type === 'card'
-              ? <PackageCard key={i} data={part.data} />
-              : <span key={i} className="whitespace-pre-wrap">{part.content}</span>
+            part.type === 'card' ? (
+              <PackageCard
+                key={i}
+                data={part.data}
+                onSelectPackage={onSelectPackage}
+                onBookPackage={onBookPackage}
+              />
+            ) : (
+              <div key={i} className="whitespace-pre-wrap font-sans text-[13px] sm:text-sm">
+                {part.content}
+              </div>
+            )
           )}
         </div>
 
-        {/* Feedback thumbs (assistant only) */}
+        {/* Helpful Feedback (assistant only) */}
         {!isUser && (
-          <div className="flex items-center gap-1.5 mt-1 ml-1">
+          <div className="flex items-center gap-2 mt-1 ml-1 text-slate-500 text-[11px]">
+            <span>Helpful?</span>
             <button
               onClick={() => onFeedback?.(msg.id, 'up')}
               className={`p-1 rounded-lg transition cursor-pointer ${
-                msg.feedback === 'up' ? 'bg-teal-500/20 text-teal-400' : 'text-slate-600 hover:text-teal-400 hover:bg-white/5'
+                msg.feedback === 'up'
+                  ? 'bg-teal-500/20 text-teal-400'
+                  : 'text-slate-500 hover:text-teal-400 hover:bg-white/5'
               }`}
-              aria-label="Helpful"
+              title="Helpful reply"
             >
               <ThumbsUp className="w-3 h-3" />
             </button>
             <button
               onClick={() => onFeedback?.(msg.id, 'down')}
               className={`p-1 rounded-lg transition cursor-pointer ${
-                msg.feedback === 'down' ? 'bg-rose-500/20 text-rose-400' : 'text-slate-600 hover:text-rose-400 hover:bg-white/5'
+                msg.feedback === 'down'
+                  ? 'bg-rose-500/20 text-rose-400'
+                  : 'text-slate-500 hover:text-rose-400 hover:bg-white/5'
               }`}
-              aria-label="Not helpful"
+              title="Not helpful"
             >
               <ThumbsDown className="w-3 h-3" />
             </button>
@@ -141,95 +223,133 @@ function MessageBubble({ msg, onFeedback }) {
 /* ══════════════════════════════════════════════════════════════════
    Main AIChatbot Component
    ══════════════════════════════════════════════════════════════════ */
-export default function AIChatbot() {
+export default function AIChatbot({ onSelectPackage, onBookPackage }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
+
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [msgIdCounter, setMsgIdCounter] = useState(0);
+
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const WELCOME_MSG = "Namaste! 🙏 Main HimYatra Assistant hoon. Aap kahan ghoomna chahte hain — mountains, spiritual yatra, ya honeymoon trip? Batayein, main aapke liye best packages suggest karunga!";
+  const WELCOME_MSG = `Namaste! 🙏 Main **HimYatra Assistant** hoon.
+Himalayan trips, honeymoon packages, fixed-route cabs, ya Char Dham Yatra ke bare mein kuch bhi poochiye!
 
-  const QUICK_CHIPS = [
-    { label: '📦 Packages', msg: 'Show me your best tour packages' },
-    { label: '🚖 Cab Rentals', msg: 'What are your cab rental rates for Delhi to Manali?' },
-    { label: '🛕 Char Dham', msg: 'Tell me about Char Dham Yatra packages and dates' },
-    { label: '🗺️ Plan My Trip', msg: 'I want to plan a custom trip, help me choose' },
-    { label: '🌤️ Best Time', msg: 'What is the best time to visit Himachal Pradesh?' },
-    { label: '👤 Talk to Human', msg: 'I want to talk to a real person' },
+Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta hoon. Aap kahan ghoomna chahte hain?`;
+
+  const QUICK_TOPICS = [
+    { label: '💑 Honeymoon Packages', query: 'Show me best honeymoon packages for couple' },
+    { label: '🛕 Char Dham Yatra 2026', query: 'Char Dham yatra dates, registration and helicopter booking' },
+    { label: '🚖 Cab Rental Fares', query: 'What are your fixed cab rental fares from Delhi to Manali?' },
+    { label: '🏔️ Spiti Valley 4x4', query: 'Tell me about Spiti Valley 4x4 circuit itinerary and best time' },
+    { label: '👨‍👩‍👧 Family Tours', query: 'Suggest best peaceful family packages with comfortable stays' },
+    { label: '🌤️ Best Time to Visit', query: 'What is the best time to visit Himachal and Uttarakhand?' }
   ];
 
-  // Auto-scroll to bottom
+  // Auto-scroll on new messages
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+    if (isOpen && !isMinimized) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, isTyping, isOpen, isMinimized]);
 
-  // Focus input when opened
+  // Initial welcome message
   useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 300);
-      if (messages.length === 0) {
-        const id = 0;
-        setMessages([{ id, role: 'assistant', content: WELCOME_MSG, feedback: null }]);
-        setMsgIdCounter(1);
-      }
+    if (isOpen && messages.length === 0) {
+      setMessages([
+        {
+          id: 0,
+          role: 'assistant',
+          content: WELCOME_MSG,
+          feedback: null
+        }
+      ]);
+      setMsgIdCounter(1);
+      setTimeout(() => inputRef.current?.focus(), 250);
     }
   }, [isOpen]);
 
   const nextId = useCallback(() => {
-    setMsgIdCounter(prev => prev + 1);
-    return msgIdCounter;
+    setMsgIdCounter((prev) => prev + 1);
+    return msgIdCounter + 1;
   }, [msgIdCounter]);
 
   const handleFeedback = useCallback((msgId, type) => {
-    setMessages(prev => prev.map(m =>
-      m.id === msgId ? { ...m, feedback: m.feedback === type ? null : type } : m
-    ));
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === msgId ? { ...m, feedback: m.feedback === type ? null : type } : m
+      )
+    );
   }, []);
 
-  const sendMessage = useCallback(async (text) => {
-    if (!text.trim() || isTyping) return;
+  // Send message with Dual-Engine (Serverless Claude + Instant Standalone AI Engine)
+  const sendMessage = useCallback(
+    async (text) => {
+      if (!text || !text.trim() || isTyping) return;
 
-    const userMsg = { id: nextId(), role: 'user', content: text.trim(), feedback: null };
-    const newMessages = [...messages, userMsg];
-    setMessages(newMessages);
-    setInput('');
-    setIsTyping(true);
+      const userText = text.trim();
+      const userMsgId = nextId();
+      const userMsg = { id: userMsgId, role: 'user', content: userText, feedback: null };
+      const updatedMessages = [...messages, userMsg];
 
-    try {
-      // Build conversation for API (exclude feedback/id)
-      const apiMessages = newMessages
-        .filter(m => m.role === 'user' || m.role === 'assistant')
-        .map(m => ({ role: m.role, content: m.content }));
+      setMessages(updatedMessages);
+      setInput('');
+      setIsTyping(true);
 
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages })
-      });
+      // Natural typing delay
+      await new Promise((r) => setTimeout(r, 400));
 
-      const data = await res.json();
-      const reply = data.reply || 'Sorry, something went wrong. Please WhatsApp us for help! 🙏';
+      let assistantReply = '';
 
-      setMessages(prev => [...prev, {
-        id: nextId(),
-        role: 'assistant',
-        content: reply,
-        feedback: null
-      }]);
-    } catch (err) {
-      setMessages(prev => [...prev, {
-        id: nextId(),
-        role: 'assistant',
-        content: 'Sorry, network error. Please try again or WhatsApp us at YOUR_PHONE_NUMBER for immediate help! 🙏',
-        feedback: null
-      }]);
-    } finally {
+      try {
+        // Try serverless endpoint with 3.5s timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: updatedMessages.map((m) => ({ role: m.role, content: m.content }))
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.reply && !data.reply.includes('not configured')) {
+            assistantReply = data.reply;
+          }
+        }
+      } catch (e) {
+        // Fallback to standalone intelligence engine
+      }
+
+      // If serverless is unavailable or returned default fallback, use smart engine
+      if (!assistantReply) {
+        assistantReply = getSmartAssistantResponse(userText);
+      }
+
+      const botMsgId = nextId();
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: botMsgId,
+          role: 'assistant',
+          content: assistantReply,
+          feedback: null
+        }
+      ]);
+
       setIsTyping(false);
-    }
-  }, [messages, isTyping, nextId]);
+    },
+    [messages, isTyping, nextId]
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -243,153 +363,300 @@ export default function AIChatbot() {
     }
   };
 
-  const handleChip = (msg) => sendMessage(msg);
-
   const handleTalkToHuman = () => {
     const summary = messages
-      .filter(m => m.role === 'user')
-      .map(m => m.content)
+      .filter((m) => m.role === 'user')
+      .map((m) => m.content)
+      .slice(-3)
       .join(' | ');
-    const text = encodeURIComponent(`Hi HimYatra! I was chatting with your AI assistant. Here's what I need: ${summary}`);
+    const text = encodeURIComponent(
+      `Hi HimYatra Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a Himalayan trip'}. Please assist me!`
+    );
     window.open(`https://wa.me/917619917057?text=${text}`, '_blank');
+  };
+
+  const handleScrollToSection = (sectionId) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <>
-      {/* Keyframe animations */}
       <style>{`
         @keyframes chatbotDotBounce {
-          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-          30% { transform: translateY(-6px); opacity: 1; }
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.35; }
+          30% { transform: translateY(-7px); opacity: 1; }
         }
         @keyframes chatFadeIn {
-          from { opacity: 0; transform: translateY(8px); }
+          from { opacity: 0; transform: translateY(6px); }
           to   { opacity: 1; transform: translateY(0); }
         }
         .animate-chatFadeIn {
-          animation: chatFadeIn 0.3s ease-out both;
+          animation: chatFadeIn 0.25s ease-out both;
         }
         @keyframes chatSlideUp {
-          from { opacity: 0; transform: translateY(20px) scale(0.95); }
+          from { opacity: 0; transform: translateY(16px) scale(0.96); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
         }
         .animate-chatSlideUp {
-          animation: chatSlideUp 0.35s cubic-bezier(0.16,1,0.3,1) both;
+          animation: chatSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
-        @keyframes chatGlow {
-          0%, 100% { box-shadow: 0 0 15px rgba(13,148,136,0.3); }
-          50% { box-shadow: 0 0 30px rgba(13,148,136,0.5); }
+        @keyframes pulseTealGlow {
+          0%, 100% { box-shadow: 0 0 15px rgba(13, 148, 136, 0.4), 0 8px 25px rgba(0,0,0,0.4); }
+          50% { box-shadow: 0 0 28px rgba(20, 184, 166, 0.7), 0 8px 30px rgba(0,0,0,0.5); }
         }
-        .chatbot-glow {
-          animation: chatGlow 3s ease-in-out infinite;
+        .teal-launcher-glow {
+          animation: pulseTealGlow 3.5s ease-in-out infinite;
         }
       `}</style>
 
-      {/* ── Chat Window ── */}
-      {isOpen && (
-        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 z-[9999] sm:w-[380px] sm:h-[560px] flex flex-col bg-slate-950 sm:rounded-3xl sm:border sm:border-white/10 sm:shadow-2xl sm:shadow-teal-900/20 overflow-hidden animate-chatSlideUp">
+      {/* ── Minimized Floating Dock Pill ── */}
+      {isOpen && isMinimized && (
+        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] animate-chatSlideUp">
+          <button
+            onClick={() => setIsMinimized(false)}
+            className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-900/95 border border-teal-500/50 text-white shadow-2xl backdrop-blur-xl hover:bg-slate-800 transition cursor-pointer group"
+          >
+            <div className="w-6 h-6 rounded-full bg-teal-500 text-slate-950 flex items-center justify-center font-black">
+              <Compass className="w-3.5 h-3.5" />
+            </div>
+            <div className="text-xs text-left">
+              <div className="font-bold flex items-center gap-1.5">
+                <span>HimYatra Assistant</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              </div>
+              <div className="text-[10px] text-teal-300">Chat minimized • Click to resume</div>
+            </div>
+            <Maximize2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-300 transition-colors ml-1" />
+          </button>
+        </div>
+      )}
 
-          {/* Header — Glass-style */}
-          <div className="relative flex items-center justify-between px-5 py-4 bg-gradient-to-r from-teal-600/90 to-teal-500/90 backdrop-blur-xl border-b border-teal-400/20">
+      {/* ── Main Chat Window (Adjustable, Full-featured & Responsive) ── */}
+      {isOpen && !isMinimized && (
+        <div
+          className={`fixed z-[9999] flex flex-col bg-slate-950 border border-teal-500/30 shadow-2xl shadow-black/80 overflow-hidden animate-chatSlideUp transition-all duration-300 ${
+            isMaximized
+              ? 'inset-3 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[680px] sm:h-[84vh] sm:max-h-[820px] rounded-3xl'
+              : 'inset-x-2 bottom-2 top-14 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[410px] sm:h-[600px] rounded-2xl sm:rounded-3xl'
+          }`}
+        >
+          {/* Glass Header */}
+          <div className="relative flex items-center justify-between px-4 sm:px-5 py-3.5 bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-600 text-white shadow-md border-b border-white/10 shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center">
-                <Compass className="w-5 h-5 text-white" />
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-inner">
+                  <Compass className="w-5 h-5 text-white" />
+                </div>
+                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse" />
               </div>
               <div>
-                <div className="text-sm font-bold text-white tracking-tight">HimYatra Assistant</div>
-                <div className="flex items-center gap-1.5 text-[11px] text-teal-100">
-                  <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
-                  Online • AI Travel Guide
+                <div className="flex items-center gap-1.5 font-['Outfit'] font-black text-sm tracking-tight">
+                  <span>HimYatra AI Assistant</span>
+                  <span className="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-md font-mono">
+                    24/7
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[11px] text-teal-100 font-medium">
+                  <span>Pahadi Travel Specialist</span>
+                  <span>•</span>
+                  <span className="text-emerald-300 font-semibold">Online</span>
                 </div>
               </div>
             </div>
+
+            {/* Adjustable Controls: Minimize, Maximize/Restore, Close */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setIsMinimized(true)}
+                className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"
+                title="Minimize chat"
+                aria-label="Minimize"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsMaximized(!isMaximized)}
+                className="hidden sm:flex w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white items-center justify-center transition cursor-pointer"
+                title={isMaximized ? 'Restore standard size' : 'Expand window'}
+                aria-label="Resize"
+              >
+                {isMaximized ? (
+                  <Minimize2 className="w-4 h-4" />
+                ) : (
+                  <Maximize2 className="w-4 h-4" />
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="w-8 h-8 rounded-xl bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center transition cursor-pointer ml-1"
+                title="Close chat"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Quick Navigation Ribbon */}
+          <div className="px-3 py-1.5 bg-slate-900 border-b border-white/5 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0 text-[11px]">
+            <span className="text-slate-400 font-semibold shrink-0">Explore:</span>
             <button
-              onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition cursor-pointer"
-              aria-label="Close chat"
+              onClick={() => handleScrollToSection('packages')}
+              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
             >
-              <X className="w-4 h-4 text-white" />
+              📦 Packages
+            </button>
+            <button
+              onClick={() => handleScrollToSection('cab-rental')}
+              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
+            >
+              🚖 Cab Calculator
+            </button>
+            <button
+              onClick={() => handleScrollToSection('chardham')}
+              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
+            >
+              🛕 Char Dham
+            </button>
+            <button
+              onClick={() => handleScrollToSection('custom-trip')}
+              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
+            >
+              🗺️ Custom Trip
             </button>
           </div>
 
-          {/* Messages area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+          {/* Messages Scroll Area */}
+          <div className="flex-1 overflow-y-auto p-3.5 sm:p-4 space-y-3.5 scrollbar-thin scrollbar-thumb-teal-700 scrollbar-track-transparent">
             {messages.map((msg) => (
-              <MessageBubble key={msg.id} msg={msg} onFeedback={handleFeedback} />
+              <MessageBubble
+                key={msg.id}
+                msg={msg}
+                onFeedback={handleFeedback}
+                onSelectPackage={onSelectPackage}
+                onBookPackage={onBookPackage}
+              />
             ))}
 
             {isTyping && <TypingIndicator />}
 
-            {/* Quick chips — show only after welcome message with no user messages */}
-            {messages.length === 1 && messages[0].role === 'assistant' && !isTyping && (
-              <div className="flex flex-wrap gap-2 pt-2 animate-chatFadeIn">
-                {QUICK_CHIPS.map((chip, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleChip(chip.msg)}
-                    className="px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800/80 border border-teal-500/20 text-teal-300 hover:bg-teal-500/20 hover:border-teal-400/40 transition cursor-pointer whitespace-nowrap"
-                  >
-                    {chip.label}
-                  </button>
-                ))}
+            {/* Quick Topic Prompts (Always helpful for one-tap answers) */}
+            {messages.length <= 2 && !isTyping && (
+              <div className="pt-2 animate-chatFadeIn space-y-2">
+                <div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-teal-400" />
+                  <span>Frequently Asked Questions:</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {QUICK_TOPICS.map((topic, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => sendMessage(topic.query)}
+                      className="text-left p-2.5 rounded-xl bg-slate-900/90 hover:bg-teal-950/60 border border-white/10 hover:border-teal-400/40 text-xs text-slate-200 hover:text-teal-200 transition cursor-pointer flex items-center justify-between group"
+                    >
+                      <span>{topic.label}</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-teal-300 transition-transform group-hover:translate-x-0.5" />
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Talk to Human bar */}
-          <div className="px-4 py-2 border-t border-white/5">
+          {/* Direct Human WhatsApp Desk */}
+          <div className="px-3.5 py-2 border-t border-white/5 bg-slate-900/70 shrink-0 flex items-center justify-between gap-2">
+            <span className="text-[11px] text-slate-400 hidden sm:inline">
+              Need personalized dates or customized quote?
+            </span>
             <button
+              type="button"
               onClick={handleTalkToHuman}
-              className="w-full py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer"
+              className="w-full sm:w-auto px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition flex items-center justify-center gap-1.5 cursor-pointer ml-auto"
             >
-              <MessageCircle className="w-3.5 h-3.5" /> Talk to a Human on WhatsApp
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>Talk to Human on WhatsApp</span>
             </button>
           </div>
 
-          {/* Input area */}
-          <form onSubmit={handleSubmit} className="p-3 border-t border-white/10 bg-slate-950/80 backdrop-blur-md">
-            <div className="flex items-center gap-2 bg-slate-900 rounded-2xl px-3 py-2 border border-white/10 focus-within:border-teal-500/40 transition">
+          {/* Input Area */}
+          <form
+            onSubmit={handleSubmit}
+            className="p-3 border-t border-white/10 bg-slate-950/95 backdrop-blur-xl shrink-0"
+          >
+            <div className="flex items-center gap-2 bg-slate-900 rounded-2xl px-3 py-2 border border-white/15 focus-within:border-teal-400 transition shadow-inner">
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value.slice(0, 500))}
                 onKeyDown={handleKeyDown}
-                placeholder="Type your question..."
+                placeholder="Ask anything (e.g. Honeymoon package, Cab fares, Char Dham)..."
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
                 maxLength={500}
                 disabled={isTyping}
-                aria-label="Chat message"
+                aria-label="Ask HimYatra AI"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isTyping}
-                className="w-9 h-9 rounded-xl bg-teal-500 hover:bg-teal-400 disabled:bg-slate-700 disabled:text-slate-500 text-white flex items-center justify-center transition cursor-pointer shrink-0"
-                aria-label="Send message"
+                className="w-9 h-9 rounded-xl bg-teal-500 hover:bg-teal-400 disabled:bg-slate-800 disabled:text-slate-600 text-slate-950 font-bold flex items-center justify-center transition cursor-pointer shrink-0 shadow-md shadow-teal-500/20 active:scale-95"
+                aria-label="Send query"
               >
                 <Send className="w-4 h-4" />
               </button>
             </div>
-            <div className="text-center mt-1.5">
-              <span className="text-[10px] text-slate-600">Powered by AI • Your data stays private</span>
+            <div className="flex items-center justify-between text-[10px] text-slate-500 px-1 mt-1.5">
+              <span>Verified Local Himalayan Guidance</span>
+              <span>Direct Founder Support: +91 76199 17057</span>
             </div>
           </form>
         </div>
       )}
 
-      {/* ── Floating Launch Button ── */}
+      {/* ── Single Floating Launch Button (Clean & Never Overlapping) ── */}
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 right-4 sm:bottom-24 sm:right-6 z-[9998] w-14 h-14 rounded-full bg-teal-500 hover:bg-teal-400 text-white shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer chatbot-glow group"
-          aria-label="Open AI Travel Assistant"
-        >
-          <Compass className="w-7 h-7 group-hover:rotate-45 transition-transform duration-500" />
-          {/* Notification dot */}
-          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-slate-950 animate-pulse" />
-        </button>
+        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9998] flex items-center gap-3">
+          {/* Subtle Desktop Invitation Chip */}
+          <div
+            onClick={() => setIsOpen(true)}
+            className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/90 border border-teal-500/40 text-white shadow-xl backdrop-blur-md cursor-pointer hover:border-teal-400 transition animate-in fade-in slide-in-from-right-4 duration-300"
+          >
+            <Sparkles className="w-4 h-4 text-teal-400" />
+            <div className="text-xs">
+              <span className="font-bold text-teal-300">Plan Trip with AI</span>
+              <span className="text-slate-400 ml-1.5 text-[11px]">Honeymoon, Cabs & Yatra</span>
+            </div>
+          </div>
+
+          {/* Main Round Floating Button */}
+          <button
+            onClick={() => {
+              setIsOpen(true);
+              setIsMinimized(false);
+            }}
+            className="relative w-14 h-14 sm:w-15 sm:h-15 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
+            aria-label="Open AI Mountain Guide"
+            title="Chat with HimYatra AI Assistant"
+          >
+            <Compass className="w-7 h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
+
+            {/* Glowing Online Notification Dot */}
+            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-emerald-400 rounded-full border-2 border-slate-950 flex items-center justify-center">
+              <span className="w-2 h-2 rounded-full bg-emerald-200 animate-ping" />
+            </span>
+          </button>
+        </div>
       )}
     </>
   );

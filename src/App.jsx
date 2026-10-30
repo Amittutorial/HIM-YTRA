@@ -26,7 +26,6 @@ import RoadWeatherAlerts from './components/RoadWeatherAlerts';
 import FindMyTripQuizModal from './components/FindMyTripQuizModal';
 import LiveTripTrackingModal from './components/LiveTripTrackingModal';
 import PackageCompareModal from './components/PackageCompareModal';
-import FloatingWhatsApp from './components/FloatingWhatsApp';
 import AIChatbot from './components/AIChatbot';
 import PackageModal from './components/PackageModal';
 import { TOUR_PACKAGES, DESTINATIONS } from './data/travelData';
@@ -534,11 +533,11 @@ export default function App() {
         />
       )}
 
-      {/* Floating 24/7 WhatsApp Quick Desk with active package context */}
-      <FloatingWhatsApp activePackage={viewingPackage || activeBookingPackage} />
-
-      {/* AI Travel Assistant Chatbot */}
-      <AIChatbot />
+      {/* Premium AI Travel Assistant Chatbot (Honeymoon, Char Dham, Cabs & Custom Itineraries) */}
+      <AIChatbot
+        onSelectPackage={handleOpenPackageDetails}
+        onBookPackage={handleOpenBooking}
+      />
     </div>
   );
 }
