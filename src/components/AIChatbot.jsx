@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import {
   X,
   Send,
@@ -12,17 +12,20 @@ import {
   Minimize2,
   Minus,
   Sparkles,
-  MapPin,
   Calendar,
   ChevronRight,
-  ExternalLink
+  ArrowLeft,
+  Mail,
+  MapPin,
+  Languages
 } from 'lucide-react';
-import { getSmartAssistantResponse, HIMYATRA_PACKAGES } from '../lib/chatbotEngine';
+import { TOUR_PACKAGES } from '../data/travelData';
+import { getSmartAssistantResponse, HIMYATRA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
 
 /* ─── Package card parser ─── */
 function parsePackageCards(text) {
   const parts = [];
-  let remaining = text;
+  let remaining = text || '';
   const regex = /:::PACKAGE_CARD:::(.*?):::END:::/g;
   let match;
   let lastIndex = 0;
@@ -44,68 +47,188 @@ function parsePackageCards(text) {
   return parts.length ? parts : [{ type: 'text', content: text }];
 }
 
-/* ─── Interactive Mini Package Card ─── */
-function PackageCard({ data, onSelectPackage, onBookPackage }) {
-  const pkgData = HIMYATRA_PACKAGES.find(p => p.id === data.pkgId) || data;
+/* ─── Rich Text & Markdown Parser (Prevents raw markdown & URL display) ─── */
+function FormattedMessage({ content }) {
+  if (!content) return null;
+
+  // Split lines to format lists and blocks cleanly
+  const lines = content.split('\n');
+
+  return (
+    <div className="space-y-1.5 text-[13px] sm:text-sm font-sans leading-relaxed">
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) return <div key={idx} className="h-1" />;
+
+        // Bullet points
+        const isBullet = trimmed.startsWith('•') || trimmed.startsWith('*') || trimmed.startsWith('-');
+        const textContent = isBullet ? trimmed.replace(/^[•*-]\s*/, '') : trimmed;
+
+        // Parse bold: **bold** and links [label](url)
+        const parsedNodes = renderInlineMarkdown(textContent);
+
+        if (isBullet) {
+          return (
+            <div key={idx} className="flex items-start gap-2 pl-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-2 shrink-0" />
+              <div className="flex-1">{parsedNodes}</div>
+            </div>
+          );
+        }
+
+        return <div key={idx}>{parsedNodes}</div>;
+      })}
+    </div>
+  );
+}
+
+// Inline Markdown Parser: parses **bold**, [text](url), and emails/phones
+function renderInlineMarkdown(text) {
+  const regex = /(\*\*.*?\*\*|\[.*?\]\(.*?\)|\+91\s*\d{5}\s*\d{5}|amitpatel42203@gmail\.com)/g;
+  const parts = text.split(regex);
+
+  return parts.map((part, i) => {
+    if (!part) return null;
+
+    // Bold text: **something**
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <strong key={i} className="font-bold text-white tracking-wide">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+
+    // Markdown link: [label](url)
+    const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+    if (linkMatch) {
+      const [, label, url] = linkMatch;
+      return (
+        <a
+          key={i}
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          className="text-teal-300 hover:text-teal-200 underline font-semibold transition inline-flex items-center gap-0.5"
+        >
+          {label}
+        </a>
+      );
+    }
+
+    // Phone clickable
+    if (part.includes('+91 76199 17057') || part.includes('7619917057')) {
+      return (
+        <a
+          key={i}
+          href="tel:+917619917057"
+          className="text-teal-300 font-bold hover:underline"
+        >
+          {part}
+        </a>
+      );
+    }
+
+    // Email clickable
+    if (part.includes('amitpatel42203@gmail.com')) {
+      return (
+        <a
+          key={i}
+          href="mailto:amitpatel42203@gmail.com"
+          className="text-teal-300 font-semibold hover:underline"
+        >
+          amitpatel42203@gmail.com
+        </a>
+      );
+    }
+
+    return <span key={i}>{part}</span>;
+  });
+}
+
+/* ─── Interactive Mini Package Card (Instant Open without Page Reload) ─── */
+function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
+  // Find full tour package with complete itinerary, hotelStay, meals, etc.
+  const fullPkg = useMemo(() => {
+    const pkgId = data.pkgId || data.id;
+    return (
+      TOUR_PACKAGES.find((p) => p.id === pkgId) ||
+      HIMYATRA_PACKAGES.find((p) => p.id === pkgId) ||
+      data
+    );
+  }, [data]);
+
   const whatsappMsg = encodeURIComponent(
-    `Hi HimYatra! I saw "${pkgData.title}" (${pkgData.price || data.price}/person) on your AI Assistant. Please share full itinerary and booking availability.`
+    `Hi HimYatra! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
   );
 
-  const handleOpenDetails = () => {
+  // Instantly open details modal & minimize chat so user immediately sees the package modal!
+  const handleOpenDetails = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (onSelectPackage) {
-      onSelectPackage(pkgData);
+      onSelectPackage(fullPkg);
     } else {
       const params = new URLSearchParams(window.location.search);
-      params.set('pkg', pkgData.id || data.pkgId);
+      params.set('pkg', fullPkg.id || data.pkgId);
       window.history.pushState({}, '', `?${params}`);
       window.dispatchEvent(new PopStateEvent('popstate'));
     }
+
+    // Automatically minimize chat so the full modal is front and center!
+    if (onMinimizeChat) {
+      onMinimizeChat();
+    }
   };
 
-  const handleBook = () => {
+  const handleBook = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (onBookPackage) {
-      onBookPackage(pkgData);
-    } else {
-      const el = document.getElementById('packages');
-      el?.scrollIntoView({ behavior: 'smooth' });
+      onBookPackage(fullPkg);
+    }
+    if (onMinimizeChat) {
+      onMinimizeChat();
     }
   };
 
   return (
-    <div className="bg-slate-900/90 border border-teal-500/30 hover:border-teal-400/50 rounded-2xl p-3.5 my-2.5 space-y-2.5 shadow-lg shadow-teal-950/40 transition group">
-      {/* Badge & Price Header */}
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 mb-1">
-            {pkgData.badge || data.badge || 'HimYatra Curated'}
-          </span>
-          <h4 className="font-bold text-sm text-white leading-snug group-hover:text-teal-300 transition-colors">
-            {pkgData.title || data.title}
-          </h4>
-        </div>
+    <div className="bg-slate-900/95 border border-teal-500/30 hover:border-teal-400/60 rounded-2xl p-3.5 my-2.5 space-y-2.5 shadow-lg shadow-teal-950/40 transition group">
+      {/* Badge & Title */}
+      <div>
+        <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 mb-1">
+          {fullPkg.badge || data.badge || 'HimYatra Special'}
+        </span>
+        <h4 className="font-bold text-sm text-white leading-snug group-hover:text-teal-300 transition-colors">
+          {fullPkg.title || data.title}
+        </h4>
       </div>
 
       {/* Meta Row */}
       <div className="flex items-center justify-between text-xs pt-1 border-t border-white/5">
         <span className="flex items-center gap-1 text-slate-300 font-medium">
           <Calendar className="w-3.5 h-3.5 text-teal-400" />
-          {pkgData.duration || data.duration}
+          {fullPkg.duration || data.duration}
         </span>
         <div className="text-right">
           <span className="text-[10px] text-slate-400 block -mb-0.5">Starting</span>
           <span className="font-black text-sm text-teal-300 font-['Outfit']">
-            {pkgData.price || data.price}
+            {fullPkg.discountedPrice
+              ? `₹${fullPkg.discountedPrice.toLocaleString('en-IN')}`
+              : fullPkg.price || data.price}
             <span className="text-[10px] text-slate-400 font-normal"> / person</span>
           </span>
         </div>
       </div>
 
-      {/* Action Buttons */}
+      {/* Action Buttons: Instant View Details & Direct WhatsApp */}
       <div className="grid grid-cols-2 gap-2 pt-1">
         <button
           type="button"
           onClick={handleOpenDetails}
-          className="text-xs font-bold py-2 px-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 flex items-center justify-center gap-1.5 transition cursor-pointer shadow-md shadow-teal-500/20 active:scale-95"
+          className="text-xs font-bold py-2 px-2.5 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 flex items-center justify-center gap-1.5 transition cursor-pointer shadow-md shadow-teal-500/20 active:scale-95"
+          title="Instant open full package itinerary modal"
         >
           <span>View Details</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -141,13 +264,13 @@ function TypingIndicator() {
           />
         ))}
       </div>
-      <span className="text-[11px] text-teal-300 font-medium">Planning...</span>
+      <span className="text-[11px] text-teal-300 font-medium">HimYatra AI...</span>
     </div>
   );
 }
 
 /* ─── Message Bubble ─── */
-function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage }) {
+function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage, onMinimizeChat }) {
   const isUser = msg.role === 'user';
   const parts = isUser ? [{ type: 'text', content: msg.content }] : parsePackageCards(msg.content);
 
@@ -159,8 +282,7 @@ function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage }) {
             <div className="w-5 h-5 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center">
               <Compass className="w-3 h-3 text-teal-400" />
             </div>
-            <span className="text-[11px] font-bold text-teal-400">HimYatra AI</span>
-            <span className="text-[10px] text-slate-500">• Travel Specialist</span>
+            <span className="text-[11px] font-bold text-teal-400">HimYatra Assistant</span>
           </div>
         )}
 
@@ -178,16 +300,15 @@ function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage }) {
                 data={part.data}
                 onSelectPackage={onSelectPackage}
                 onBookPackage={onBookPackage}
+                onMinimizeChat={onMinimizeChat}
               />
             ) : (
-              <div key={i} className="whitespace-pre-wrap font-sans text-[13px] sm:text-sm">
-                {part.content}
-              </div>
+              <FormattedMessage key={i} content={part.content} />
             )
           )}
         </div>
 
-        {/* Helpful Feedback (assistant only) */}
+        {/* Feedback (assistant only) */}
         {!isUser && (
           <div className="flex items-center gap-2 mt-1 ml-1 text-slate-500 text-[11px]">
             <span>Helpful?</span>
@@ -228,6 +349,9 @@ export default function AIChatbot({ onSelectPackage, onBookPackage }) {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
 
+  // Language mode: 'auto' | 'en' | 'hi'
+  const [preferredLang, setPreferredLang] = useState('auto');
+
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -236,18 +360,32 @@ export default function AIChatbot({ onSelectPackage, onBookPackage }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const WELCOME_MSG = `Namaste! 🙏 Main **HimYatra Assistant** hoon.
+  const WELCOME_EN = `Hello! 🙏 I am your **HimYatra AI Travel Assistant**.
+Ask me anything about Himalayan honeymoon specials, Char Dham 2026, fixed cab rentals, or custom tours!
+
+I can generate tailor-made itineraries and pricing instantly. Where would you like to travel?`;
+
+  const WELCOME_HI = `Namaste! 🙏 Main **HimYatra Assistant** hoon.
 Himalayan trips, honeymoon packages, fixed-route cabs, ya Char Dham Yatra ke bare mein kuch bhi poochiye!
 
 Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta hoon. Aap kahan ghoomna chahte hain?`;
 
-  const QUICK_TOPICS = [
-    { label: '💑 Honeymoon Packages', query: 'Show me best honeymoon packages for couple' },
-    { label: '🛕 Char Dham Yatra 2026', query: 'Char Dham yatra dates, registration and helicopter booking' },
+  const QUICK_TOPICS_EN = [
+    { label: '💑 Honeymoon Packages', query: 'Show me best honeymoon packages for couple in English' },
+    { label: '🛕 Char Dham Yatra 2026', query: 'Char Dham yatra 2026 dates, registration and helicopter booking' },
     { label: '🚖 Cab Rental Fares', query: 'What are your fixed cab rental fares from Delhi to Manali?' },
     { label: '🏔️ Spiti Valley 4x4', query: 'Tell me about Spiti Valley 4x4 circuit itinerary and best time' },
     { label: '👨‍👩‍👧 Family Tours', query: 'Suggest best peaceful family packages with comfortable stays' },
     { label: '🌤️ Best Time to Visit', query: 'What is the best time to visit Himachal and Uttarakhand?' }
+  ];
+
+  const QUICK_TOPICS_HI = [
+    { label: '💑 Honeymoon Packages', query: 'Honeymoon packages dikhao for couple' },
+    { label: '🛕 Char Dham Yatra 2026', query: 'Char Dham yatra 2026 dates aur helicopter booking' },
+    { label: '🚖 Cab Rental Fares', query: 'Delhi se Manali cab ka kitna kiraya hai?' },
+    { label: '🏔️ Spiti Valley 4x4', query: 'Spiti Valley 4x4 package aur best time batao' },
+    { label: '👨‍👩‍👧 Family Tours', query: 'Family ke liye best packages batao' },
+    { label: '🌤️ Best Time to Visit', query: 'Himachal aur Uttarakhand ghoomne ka best time kab hai?' }
   ];
 
   // Auto-scroll on new messages
@@ -260,17 +398,29 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
   // Initial welcome message
   useEffect(() => {
     if (isOpen && messages.length === 0) {
+      const welcomeText = preferredLang === 'en' ? WELCOME_EN : WELCOME_HI;
       setMessages([
         {
           id: 0,
           role: 'assistant',
-          content: WELCOME_MSG,
+          content: welcomeText,
           feedback: null
         }
       ]);
       setMsgIdCounter(1);
       setTimeout(() => inputRef.current?.focus(), 250);
     }
+  }, [isOpen, preferredLang]);
+
+  // Keyboard shortcut: Esc to minimize/close
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsMinimized(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
   const nextId = useCallback(() => {
@@ -286,7 +436,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
     );
   }, []);
 
-  // Send message with Dual-Engine (Serverless Claude + Instant Standalone AI Engine)
+  // Send message with Dual-Engine (Serverless + Instant Standalone Engine)
   const sendMessage = useCallback(
     async (text) => {
       if (!text || !text.trim() || isTyping) return;
@@ -300,15 +450,15 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
       setInput('');
       setIsTyping(true);
 
-      // Natural typing delay
-      await new Promise((r) => setTimeout(r, 400));
+      // Natural quick typing delay
+      await new Promise((r) => setTimeout(r, 350));
 
       let assistantReply = '';
+      const chosenLang = preferredLang === 'auto' ? detectLanguage(userText) : preferredLang;
 
       try {
-        // Try serverless endpoint with 3.5s timeout
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3500);
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
 
         const res = await fetch('/api/chat', {
           method: 'POST',
@@ -330,9 +480,9 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
         // Fallback to standalone intelligence engine
       }
 
-      // If serverless is unavailable or returned default fallback, use smart engine
+      // If serverless is unavailable or returned fallback, use comprehensive local engine
       if (!assistantReply) {
-        assistantReply = getSmartAssistantResponse(userText);
+        assistantReply = getSmartAssistantResponse(userText, chosenLang);
       }
 
       const botMsgId = nextId();
@@ -348,7 +498,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
 
       setIsTyping(false);
     },
-    [messages, isTyping, nextId]
+    [messages, isTyping, nextId, preferredLang]
   );
 
   const handleSubmit = (e) => {
@@ -360,6 +510,15 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       sendMessage(input);
+    }
+  };
+
+  // Back to packages action requested by user
+  const handleBackToPackages = () => {
+    setIsMinimized(true);
+    const el = document.getElementById('packages');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -375,12 +534,11 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
     window.open(`https://wa.me/917619917057?text=${text}`, '_blank');
   };
 
-  const handleScrollToSection = (sectionId) => {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+  const toggleLanguage = () => {
+    setPreferredLang((prev) => (prev === 'en' ? 'hi' : 'en'));
   };
+
+  const currentTopics = preferredLang === 'en' ? QUICK_TOPICS_EN : QUICK_TOPICS_HI;
 
   return (
     <>
@@ -427,111 +585,102 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 <span>HimYatra Assistant</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
-              <div className="text-[10px] text-teal-300">Chat minimized • Click to resume</div>
+              <div className="text-[10px] text-teal-300">Click to resume conversation</div>
             </div>
             <Maximize2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-300 transition-colors ml-1" />
           </button>
         </div>
       )}
 
-      {/* ── Main Chat Window (Adjustable, Full-featured & Responsive) ── */}
+      {/* ── Main Chat Window (Adjusted for Laptop & Mobile) ── */}
       {isOpen && !isMinimized && (
         <div
-          className={`fixed z-[9999] flex flex-col bg-slate-950 border border-teal-500/30 shadow-2xl shadow-black/80 overflow-hidden animate-chatSlideUp transition-all duration-300 ${
+          className={`fixed z-[9999] flex flex-col bg-slate-950 border border-teal-500/40 shadow-2xl shadow-black/90 overflow-hidden animate-chatSlideUp transition-all duration-300 ${
             isMaximized
               ? 'inset-3 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[680px] sm:h-[84vh] sm:max-h-[820px] rounded-3xl'
-              : 'inset-x-2 bottom-2 top-14 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[410px] sm:h-[600px] rounded-2xl sm:rounded-3xl'
+              : 'inset-x-2 bottom-2 top-14 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[410px] sm:h-[580px] rounded-2xl sm:rounded-3xl'
           }`}
         >
-          {/* Glass Header */}
-          <div className="relative flex items-center justify-between px-4 sm:px-5 py-3.5 bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-600 text-white shadow-md border-b border-white/10 shrink-0">
-            <div className="flex items-center gap-3">
+          {/* Header with "← Back to Packages" button and Language Switcher */}
+          <div className="relative px-3.5 sm:px-4 py-3 bg-gradient-to-r from-teal-700 via-teal-600 to-emerald-600 text-white shadow-md border-b border-white/10 shrink-0">
+            <div className="flex items-center justify-between gap-2">
+              {/* Back to Packages Button (Direct answer to question 3!) */}
+              <button
+                type="button"
+                onClick={handleBackToPackages}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-950/30 hover:bg-slate-950/50 text-white text-xs font-bold border border-white/20 transition cursor-pointer active:scale-95 shrink-0"
+                title="Back to Packages on Website"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to Packages</span>
+              </button>
+
+              {/* Language Switcher Pill (Direct answer to question 4!) */}
+              <button
+                type="button"
+                onClick={toggleLanguage}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition cursor-pointer border border-white/20"
+                title="Toggle English / Hindi"
+              >
+                <Languages className="w-3.5 h-3.5" />
+                <span>{preferredLang === 'en' ? 'EN' : 'हिंदी'}</span>
+              </button>
+
+              {/* Controls: Minimize & Close */}
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsMinimized(true)}
+                  className="w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"
+                  title="Minimize chat"
+                  aria-label="Minimize"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsMaximized(!isMaximized)}
+                  className="hidden sm:flex w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white items-center justify-center transition cursor-pointer"
+                  title={isMaximized ? 'Restore standard size' : 'Expand window'}
+                  aria-label="Resize"
+                >
+                  {isMaximized ? (
+                    <Minimize2 className="w-3.5 h-3.5" />
+                  ) : (
+                    <Maximize2 className="w-3.5 h-3.5" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="w-7 h-7 rounded-lg bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center transition cursor-pointer"
+                  title="Close chat"
+                  aria-label="Close"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Assistant Sub-Header */}
+            <div className="flex items-center gap-2 mt-2 pt-2 border-t border-white/10">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-inner">
-                  <Compass className="w-5 h-5 text-white" />
+                <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+                  <Compass className="w-4 h-4 text-white" />
                 </div>
-                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-slate-950 animate-pulse" />
+                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-300 ring-1 ring-slate-950 animate-pulse" />
               </div>
               <div>
-                <div className="flex items-center gap-1.5 font-['Outfit'] font-black text-sm tracking-tight">
-                  <span>HimYatra AI Assistant</span>
-                  <span className="text-[10px] bg-white/20 px-1.5 py-0.2 rounded-md font-mono">
-                    24/7
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 text-[11px] text-teal-100 font-medium">
-                  <span>Pahadi Travel Specialist</span>
+                <div className="text-xs font-bold leading-tight">HimYatra AI Assistant</div>
+                <div className="text-[10px] text-teal-100 flex items-center gap-1">
+                  <span>Himalayan Specialist</span>
                   <span>•</span>
-                  <span className="text-emerald-300 font-semibold">Online</span>
+                  <span className="text-emerald-200">Online</span>
                 </div>
               </div>
             </div>
-
-            {/* Adjustable Controls: Minimize, Maximize/Restore, Close */}
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => setIsMinimized(true)}
-                className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer"
-                title="Minimize chat"
-                aria-label="Minimize"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsMaximized(!isMaximized)}
-                className="hidden sm:flex w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white items-center justify-center transition cursor-pointer"
-                title={isMaximized ? 'Restore standard size' : 'Expand window'}
-                aria-label="Resize"
-              >
-                {isMaximized ? (
-                  <Minimize2 className="w-4 h-4" />
-                ) : (
-                  <Maximize2 className="w-4 h-4" />
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-xl bg-white/10 hover:bg-rose-500 text-white flex items-center justify-center transition cursor-pointer ml-1"
-                title="Close chat"
-                aria-label="Close"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Navigation Ribbon */}
-          <div className="px-3 py-1.5 bg-slate-900 border-b border-white/5 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0 text-[11px]">
-            <span className="text-slate-400 font-semibold shrink-0">Explore:</span>
-            <button
-              onClick={() => handleScrollToSection('packages')}
-              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
-            >
-              📦 Packages
-            </button>
-            <button
-              onClick={() => handleScrollToSection('cab-rental')}
-              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
-            >
-              🚖 Cab Calculator
-            </button>
-            <button
-              onClick={() => handleScrollToSection('chardham')}
-              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
-            >
-              🛕 Char Dham
-            </button>
-            <button
-              onClick={() => handleScrollToSection('custom-trip')}
-              className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-teal-500/20 text-slate-300 hover:text-teal-300 transition shrink-0 cursor-pointer"
-            >
-              🗺️ Custom Trip
-            </button>
           </div>
 
           {/* Messages Scroll Area */}
@@ -543,20 +692,21 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 onFeedback={handleFeedback}
                 onSelectPackage={onSelectPackage}
                 onBookPackage={onBookPackage}
+                onMinimizeChat={() => setIsMinimized(true)}
               />
             ))}
 
             {isTyping && <TypingIndicator />}
 
-            {/* Quick Topic Prompts (Always helpful for one-tap answers) */}
+            {/* Frequently Asked Questions Chips */}
             {messages.length <= 2 && !isTyping && (
-              <div className="pt-2 animate-chatFadeIn space-y-2">
+              <div className="pt-1.5 animate-chatFadeIn space-y-2">
                 <div className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5 text-teal-400" />
-                  <span>Frequently Asked Questions:</span>
+                  <span>{preferredLang === 'en' ? 'Quick Questions:' : 'अक्सर पूछे जाने वाले सवाल:'}</span>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                  {QUICK_TOPICS.map((topic, idx) => (
+                <div className="grid grid-cols-1 gap-1.5">
+                  {currentTopics.map((topic, idx) => (
                     <button
                       key={idx}
                       type="button"
@@ -574,10 +724,10 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Direct Human WhatsApp Desk */}
-          <div className="px-3.5 py-2 border-t border-white/5 bg-slate-900/70 shrink-0 flex items-center justify-between gap-2">
+          {/* Direct WhatsApp Assistance Bar */}
+          <div className="px-3.5 py-2 border-t border-white/5 bg-slate-900/80 shrink-0 flex items-center justify-between gap-2">
             <span className="text-[11px] text-slate-400 hidden sm:inline">
-              Need personalized dates or customized quote?
+              Need custom dates or live cab quote?
             </span>
             <button
               type="button"
@@ -601,7 +751,11 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 value={input}
                 onChange={(e) => setInput(e.target.value.slice(0, 500))}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask anything (e.g. Honeymoon package, Cab fares, Char Dham)..."
+                placeholder={
+                  preferredLang === 'en'
+                    ? 'Ask about packages, cab fares, best time...'
+                    : 'Honeymoon package, Cab fares, Char Dham poochiye...'
+                }
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
                 maxLength={500}
                 disabled={isTyping}
@@ -617,29 +771,32 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
               </button>
             </div>
             <div className="flex items-center justify-between text-[10px] text-slate-500 px-1 mt-1.5">
-              <span>Verified Local Himalayan Guidance</span>
-              <span>Direct Founder Support: +91 76199 17057</span>
+              <span>Himalayan Tour Specialist</span>
+              <span>amitpatel42203@gmail.com</span>
             </div>
           </form>
         </div>
       )}
 
-      {/* ── Single Floating Launch Button (Clean & Never Overlapping) ── */}
+      {/* ── Single Floating Launch Button ── */}
       {!isOpen && (
         <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9998] flex items-center gap-3">
-          {/* Subtle Desktop Invitation Chip */}
+          {/* Desktop Invitation Chip */}
           <div
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              setIsOpen(true);
+              setIsMinimized(false);
+            }}
             className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/90 border border-teal-500/40 text-white shadow-xl backdrop-blur-md cursor-pointer hover:border-teal-400 transition animate-in fade-in slide-in-from-right-4 duration-300"
           >
             <Sparkles className="w-4 h-4 text-teal-400" />
             <div className="text-xs">
               <span className="font-bold text-teal-300">Plan Trip with AI</span>
-              <span className="text-slate-400 ml-1.5 text-[11px]">Honeymoon, Cabs & Yatra</span>
+              <span className="text-slate-400 ml-1.5 text-[11px]">Honeymoon & Cabs</span>
             </div>
           </div>
 
-          {/* Main Round Floating Button */}
+          {/* Main Floating Button */}
           <button
             onClick={() => {
               setIsOpen(true);

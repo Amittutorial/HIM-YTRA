@@ -1,5 +1,5 @@
 // HimYatra AI Travel Assistant Engine
-// Comprehensive knowledge base & natural language response engine for Himalayan travel
+// Comprehensive bilingual (English & Hindi) knowledge base & natural language response engine for Himalayan travel
 
 export const HIMYATRA_PACKAGES = [
   {
@@ -124,20 +124,11 @@ export const HIMYATRA_PACKAGES = [
   }
 ];
 
-export const CAB_RATES = [
-  { route: 'Delhi to Manali', sedan: '₹5,500', suv: '₹7,500', tempo: '₹12,000' },
-  { route: 'Delhi to Shimla', sedan: '₹4,000', suv: '₹6,000', tempo: '₹10,000' },
-  { route: 'Delhi to Haridwar / Rishikesh', sedan: '₹3,500', suv: '₹5,500', tempo: '₹9,500' },
-  { route: 'Haridwar to Kedarnath (Sonprayag)', sedan: 'N/A', suv: '₹6,500', tempo: '₹11,000' },
-  { route: 'Chandigarh to Manali', sedan: '₹3,500', suv: '₹5,500', tempo: '₹9,500' },
-  { route: 'Delhi to Dharamshala', sedan: '₹5,000', suv: '₹7,000', tempo: '₹11,000' }
-];
-
 export const CONTACT_INFO = {
   founder: 'Amit Verma',
   phone: '+91 76199 17057',
   whatsapp: '917619917057',
-  email: 'himyatra.help@gmail.com',
+  email: 'amitpatel42203@gmail.com',
   offices: 'The Mall Road, Shimla (HP) & Tapovan, Rishikesh (UK)'
 };
 
@@ -155,27 +146,71 @@ function formatCards(packages) {
 }
 
 /**
- * Generate intelligent, contextual travel responses for any visitor query.
- * Works 100% offline and standalone without external API dependencies.
+ * Detect language: 'en' for English, 'hi' for Hindi / Hinglish.
  */
-export function getSmartAssistantResponse(userQuery) {
-  const q = (userQuery || '').toLowerCase().trim();
+export function detectLanguage(text, forcedLang = null) {
+  if (forcedLang === 'en' || forcedLang === 'hi') return forcedLang;
+  const t = (text || '').toLowerCase();
+
+  // If user explicitly asks for language switch
+  if (/(in english|speak english|talk in english|english please|switch to english)/i.test(t)) return 'en';
+  if (/(in hindi|hindi me|hindi mein|talk in hindi|hindi please|switch to hindi)/i.test(t)) return 'hi';
+
+  // Devanagari script detection
+  if (/[\u0900-\u097F]/.test(t)) return 'hi';
+
+  // Common Hindi / Hinglish words
+  const hindiIndicators = [
+    'kya', 'hai', 'hain', 'kaise', 'kahan', 'kaha', 'kitna', 'kitne', 'chahiye',
+    'batao', 'batayein', 'mujhe', 'humko', 'hum', 'karo', 'jana', 'jaana', 'gadi',
+    'gaadi', 'kiraya', 'kiraye', 'shadi', 'shaadi', 'bheed', 'kab', 'sasta',
+    'accha', 'achi', 'bhai', 'aap', 'tum', 'namaste', 'pranam', 'dham', 'yatra',
+    'bolo', 'kripya', 'shamil'
+  ];
+
+  const words = t.split(/\s+/);
+  const matchCount = words.filter(w => hindiIndicators.includes(w)).length;
+  if (matchCount > 0) return 'hi';
+
+  return 'en';
+}
+
+/**
+ * Generate intelligent, contextual travel responses in English or Hindi.
+ */
+export function getSmartAssistantResponse(userQuery, langChoice = null) {
+  const rawQ = userQuery || '';
+  const q = rawQ.toLowerCase().trim();
+  const lang = detectLanguage(rawQ, langChoice);
+  const isEn = lang === 'en';
 
   // 1. GREETINGS & CASUAL
   if (/^(hi|hello|hii|heyy|heya|namaste|pranam|hola|good morning|good evening|good afternoon|kaise ho|kya haal)(\s|$|[!?.])/i.test(q)) {
+    if (isEn) {
+      return `Hello! 🙏 Welcome to **HimYatra**! I am your personal AI Mountain Travel Guide.
+
+How can I help you today?
+• 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
+• 🛕 **Char Dham & Kedarnath Yatra 2026** (Dates, Registration & Helicopter)
+• 🚖 **Cab Rentals with Fixed Fares** (Delhi / Chandigarh to Hills)
+• 🏔️ **Adventure & Treks** (Spiti Valley 4x4, Ladakh, Chopta-Tungnath)
+• 👨‍👩‍👧 **Family Mountain Holidays**
+
+Tell me your destination preference, travel month, or budget, and I'll recommend the best packages instantly!`;
+    }
     return `Namaste! 🙏 Welcome to **HimYatra**! Main aapka personal AI Mountain Travel Guide hoon.
 
 Aap kahan ghoomna chahte hain?
 • 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
-• 🛕 **Char Dham & Kedarnath Yatra** (2026 Registration & Heli)
-• 🚖 **Cab Rentals with Fixed Fares** (Delhi/Chandigarh to Hills)
-• 🏔️ **Adventure & Treks** (Spiti 4x4, Ladakh, Chopta-Tungnath)
+• 🛕 **Char Dham & Kedarnath Yatra 2026** (Registration & Heli Booking)
+• 🚖 **Cab Rentals with Fixed Fares** (Delhi/Chandigarh se Hills)
+• 🏔️ **Adventure & Treks** (Spiti 4x4, Ladakh, Chopta)
 • 👨‍👩‍👧 **Family Mountain Holidays**
 
 Bataiye, aapka travel month, destination ya budget kya hai? Main turant aapke liye best package plan karunga! 😊`;
   }
 
-  // 2. HONEYMOON PACKAGES (User's specific highlight!)
+  // 2. HONEYMOON PACKAGES
   if (/(honeymoon|couple|romantic|candle|candlelight|shadi|shaadi|wedding|anniversary|patni|biwi|wife|husband)/i.test(q)) {
     const honeymoonPkgs = [
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
@@ -183,24 +218,41 @@ Bataiye, aapka travel month, destination ya budget kya hai? Main turant aapke li
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
     ].filter(Boolean);
 
-    return `💖 **HimYatra Romantic & Honeymoon Specials!**
-Congratulations on your special journey! Himalayan valleys mein romance ke liye humare best curated packages yeh hain:
+    if (isEn) {
+      return `💖 **HimYatra Romantic & Honeymoon Specials!**
+Congratulations on your special journey! Here are our 3 most celebrated Himalayan honeymoon packages:
 
-1. **Kashmir Paradise (6D/5N)** — Dal Lake private shikara ride, sunset candle-light dinner on a heritage cedar houseboat, and snow gondola in Gulmarg!
-2. **Magical Himachal & Manali (6D/5N)** — Cozy wooden mountain resorts, snow views at Solang Valley, Rohtang/Atal tunnel excursion, and private cab.
-3. **Royal Udaipur & Lake Palace (6D/5N)** — Romantic evening boat cruise on Lake Pichola and royal heritage haveli stays.
+1. **Kashmir Paradise (6D/5N — ₹14,999/person)**: Private sunset Shikara on Dal Lake, romantic luxury houseboat stay, candlelight dinner & snow gondola in Gulmarg!
+2. **Magical Himachal & Manali (6D/5N — ₹13,499/person)**: Cozy mountain resorts, snow views at Solang Valley, Atal Tunnel to Sissu, and a dedicated private cab.
+3. **Royal Udaipur & Lake Palace (6D/5N — ₹13,999/person)**: Romantic evening boat cruise on shimmering Lake Pichola and royal heritage haveli stays.
 
 ✨ **Complimentary Honeymoon Inclusions:**
+• Welcome cake & flower bed decor (on request)
+• Daily buffet breakfast & romantic dinners
+• 100% private sanitized cab (Complete privacy, no sharing)
+• 24/7 on-ground Pahadi manager support
+
+Tap **"View Details"** below to see full day-by-day itineraries or connect on WhatsApp for custom dates:
+
+${formatCards(honeymoonPkgs)}`;
+    }
+
+    return `💖 **HimYatra Romantic & Honeymoon Specials!**
+Congratulations on your special journey! Himalayan valleys mein romance ke liye humare best 3 curated packages hain:
+
+1. **Kashmir Paradise (6D/5N — ₹14,999/person)** — Dal Lake private shikara ride, sunset candle-light dinner on a heritage cedar houseboat, and snow gondola in Gulmarg!
+2. **Magical Himachal & Manali (6D/5N — ₹13,499/person)** — Solang snow slopes, cozy wooden mountain resort, Atal Tunnel & private cab.
+3. **Royal Udaipur & Lake Palace (6D/5N — ₹13,999/person)** — Sunset boat cruise on Lake Pichola and royal heritage haveli stays.
+
+✨ **Special Honeymoon Inclusions:**
 • Welcome cake & flower bed decoration (on request)
 • Daily breakfast & romantic dinners
-• Dedicated sanitized private cab (No sharing, complete privacy)
+• Dedicated sanitized private cab (Complete privacy)
 • 24/7 on-ground Pahadi tour manager support
 
 Neeche diye gaye packages check karein ya direct WhatsApp par custom dates ke saath connect karein:
 
-${formatCards(honeymoonPkgs)}
-
-👉 Aap website ke **"Popular Packages"** section mein aur bhi romantic options dekh sakte hain!`;
+${formatCards(honeymoonPkgs)}`;
   }
 
   // 3. CHAR DHAM / KEDARNATH / BADRINATH / SPIRITUAL
@@ -211,25 +263,59 @@ ${formatCards(honeymoonPkgs)}
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-ayodhya-kashi')
     ].filter(Boolean);
 
+    if (isEn) {
+      return `🛕 **Sacred Devbhoomi Char Dham Yatra 2026**
+Har Har Mahadev! HimYatra provides complete, comfortable, and spiritually fulfilling pilgrimage arrangements:
+
+📌 **Key 2026 Yatra Highlights:**
+• **Season:** Portals (Kapat) open in May (Akshaya Tritiya) and close around Diwali / Bhai Dooj (November).
+• **Biometric Registration:** Our team assists you with free official biometric yatra registration.
+• **Helicopter Bookings:** Confirmed shuttle booking guidance from Phata, Guptkashi, and Sirsi.
+• **Sanitized Stays:** Clean, comfortable pilgrim-friendly hotels at Sonprayag, Guptkashi, and Badrinath.
+• **Expert Mountain Pilots:** Verified drivers who know every curve of the Garhwal Himalayas.
+
+Check our popular spiritual itineraries below:
+
+${formatCards(spiritualPkgs)}`;
+    }
+
     return `🛕 **Sacred Devbhoomi Char Dham Yatra 2026**
-Har Har Mahadev! HimYatra ensures a seamless, comfortable, and deeply spiritual pilgrimage for you and your family.
+Har Har Mahadev! HimYatra ensures a seamless, comfortable, and deeply spiritual pilgrimage for you and your family:
 
 📌 **Key Yatra Details & Assistance:**
-• **Season:** Kapat open in May (Akshaya Tritiya) and remain open till Bhai Dooj / Diwali (November).
-• **Biometric Registration:** Humari team free official biometric yatra registration complete karwake deti hai.
-• **Helicopter Bookings:** Phata, Sirsi, aur Guptkashi se Kedarnath Heli shuttle ticket guidance.
-• **Comfortable Stays:** Sonprayag, Guptkashi, Badrinath, Pipalkoti mein best sanitized pilgrim-friendly hotels.
-• **Pahadi Mountain Drivers:** Experienced hilly-route drivers with sanitized private cabs.
+• **Season:** Kapat May (Akshaya Tritiya) mein khulte hain aur Diwali/Bhai Dooj tak khule rehte hain.
+• **Biometric Registration:** Humari team official biometric registration me complete madad karti hai.
+• **Helicopter Booking:** Phata, Sirsi, aur Guptkashi se Kedarnath Heli shuttle ticket guidance.
+• **Comfortable Stays:** Sonprayag, Guptkashi, Badrinath mein best sanitized hotels.
+• **Pahadi Mountain Drivers:** Experienced hilly-route drivers with private cabs.
 
 Ye rahe humare top spiritual packages:
 
-${formatCards(spiritualPkgs)}
-
-VIP Darshan pass aur helicopter availability confirm karne ke liye WhatsApp par direct connect karein!`;
+${formatCards(spiritualPkgs)}`;
   }
 
   // 4. CAB RENTALS / TAXI FARES / VEHICLE
   if (/(cab|taxi|rental|fare|rate|price|kiraya|car|innova|ertiga|sedan|dzire|tempo|traveller|delhi to|chandigarh to|haridwar to)/i.test(q)) {
+    if (isEn) {
+      return `🚖 **HimYatra Verified Fixed-Route Cab Rentals**
+We provide dedicated, sanitized private vehicles with **expert local Pahadi drivers**. All rates are all-inclusive with **zero hidden charges** (Fuel, toll taxes, state permits, and driver night allowances included!).
+
+📋 **Popular Fixed Route One-Way Fares:**
+• **Delhi ➔ Manali:** Sedan (Dzire/Etios) **₹5,500** | SUV (Innova/Ertiga) **₹7,500** | 12-Seater Tempo **₹12,000**
+• **Delhi ➔ Shimla:** Sedan **₹4,000** | SUV **₹6,000** | Tempo **₹10,000**
+• **Delhi ➔ Haridwar / Rishikesh:** Sedan **₹3,500** | SUV **₹5,500** | Tempo **₹9,500**
+• **Haridwar ➔ Sonprayag (Kedarnath):** SUV **₹6,500** | Tempo **₹11,000**
+• **Chandigarh ➔ Manali:** Sedan **₹3,500** | SUV **₹5,500**
+• **Delhi ➔ Dharamshala:** Sedan **₹5,000** | SUV **₹7,000** | Tempo **₹11,000**
+
+✨ **Why Choose HimYatra Cabs?**
+1. 100% verified mountain drivers experienced in Himalayan terrain.
+2. Luggage carrier & clean air-conditioned vehicles.
+3. Punctual doorstep pickup from airport, station, or hotel.
+
+You can also use our **Cab Calculator** tool on the website or message us to book instantly!`;
+    }
+
     return `🚖 **HimYatra Verified Fixed-Route Cab Rentals**
 Hum provide karte hain **private, verified Pahadi drivers** ke saath fully sanitized vehicles, bina kisi hidden charges ke (All state tax, toll tax, fuel, and driver night allowances included!).
 
@@ -241,12 +327,12 @@ Hum provide karte hain **private, verified Pahadi drivers** ke saath fully sanit
 • **Chandigarh ➔ Manali:** Sedan **₹3,500** | SUV **₹5,500**
 • **Delhi ➔ Dharamshala:** Sedan **₹5,000** | SUV **₹7,000** | Tempo **₹11,000**
 
-✨ **Why Choose HimYatra Cabs?**
-1. 100% verified local drivers experienced in hill terrains.
-2. Clean air-conditioned vehicles with luggage carrier.
-3. On-time doorstep pickup from airport, railway station, or home.
+✨ **HimYatra Cabs ke Fayde:**
+1. Hilly terrain ke certified local Pahadi drivers.
+2. Clean AC cabs with carrier.
+3. On-time doorstep pickup from airport or railway station.
 
-Aap website par **"Cab Rentals"** section mein online route calculator bhi use kar sakte hain! Booking confirm karne ke liye message karein.`;
+Aap website par **"Cab Rentals"** section mein online route calculator bhi use kar sakte hain!`;
   }
 
   // 5. SPITI VALLEY / LADAKH / RAW ADVENTURE
@@ -257,13 +343,33 @@ Aap website par **"Cab Rentals"** section mein online route calculator bhi use k
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat')
     ].filter(Boolean);
 
+    if (isEn) {
+      return `🏔️ **High-Altitude Spiti & Ladakh 4x4 Expeditions**
+Ready to explore the highest trans-Himalayan motorable roads? We provide high-clearance 4x4 SUVs, experienced mountain drivers, and oxygen-equipped backup:
+
+✨ **Spiti Valley Highlights:**
+• 1000-year-old Key & Tabo Monasteries
+• Stargazing & Camping at crescent Chandratal Lake
+• Send a postcard from the World's Highest Post Office in Hikkim
+• Cross Chicham Bridge (Asia's highest suspension bridge)
+
+✨ **Ladakh Highlights:**
+• Blue crystal waters of Pangong Tso Lake
+• Khardung La Pass (17,582 ft)
+• Double-humped camel safari at Nubra white sand dunes
+
+⚠️ *Altitude Safety:* Day 1 rest and proper hydration are mandatory for smooth acclimatization.
+
+${formatCards(advPkgs)}`;
+    }
+
     return `🏔️ **High Altitude Spiti & Ladakh 4x4 Expeditions**
-Himalayas ke sabse thrilling trans-Himalayan desert circuits ke liye HimYatra offer karta hai dedicated high-clearance 4x4 SUVs, experienced mountain captains, aur oxygen-cylinder equipped vehicles!
+Himalayas ke sabse thrilling trans-Himalayan desert circuits ke liye HimYatra offer karta hai dedicated high-clearance 4x4 SUVs aur certified mountain drivers:
 
 ✨ **Spiti Valley Highlights:**
 • 1000-year-old Key & Tabo Monasteries
 • Stargazing & Camping at turquoise Crescent Chandratal Lake
-• World's Highest Post Office at Hikkim (send a postcard to loved ones!)
+• World's Highest Post Office at Hikkim
 • Chicham Bridge (Asia's highest suspension bridge)
 
 ✨ **Ladakh Highlights:**
@@ -271,7 +377,7 @@ Himalayas ke sabse thrilling trans-Himalayan desert circuits ke liye HimYatra of
 • Khardung La Pass (17,582 ft)
 • Nubra Valley double-humped Bactrian camel safari
 
-⚠️ *Health Tip:* High altitude trips par Day 1 par rest and hydration acclimatization zaroori hota hai.
+⚠️ *Health Tip:* High altitude trips par Day 1 rest aur hydration zaroori hota hai.
 
 ${formatCards(advPkgs)}`;
   }
@@ -284,8 +390,22 @@ ${formatCards(advPkgs)}`;
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
     ].filter(Boolean);
 
+    if (isEn) {
+      return `👨‍👩‍👧‍👦 **HimYatra Family Vacation Packages**
+For family holidays, comfort, hygienic food, gentle driving, and an easy pace are top priorities:
+
+🌟 **Top Family Recommendations:**
+1. **Magical Himachal (Shimla & Manali):** Toy train views, safe scenic Kufri amusement park, Mall Road shopping, and snow fun at Solang.
+2. **Dharamshala & Mini-Switzerland Khajjiar:** Peaceful pine forests, Dalai Lama temple, cricket stadium, and green meadows of Khajjiar.
+3. **Royal Rajasthan:** Grand palaces, cultural folk shows, and boat rides with zero steep walking.
+
+All family packages include spacious rooms, pure-veg options, and senior/child-friendly assistance:
+
+${formatCards(familyPkgs)}`;
+    }
+
     return `👨‍👩‍👧‍👦 **HimYatra Family Vacation Packages**
-Family trip ke liye sabse important hota hai **comfort, safe driving, hygienic food, aur easy-paced itineraries** without exhausting travel.
+Family trip ke liye sabse important hota hai **comfort, safe driving, hygienic food, aur easy-paced itineraries**:
 
 🌟 **Top Family Recommendations:**
 1. **Magical Himachal (Shimla & Manali):** Toy train views, safe scenic Kufri amusement park, Mall Road shopping, and snow activities at Solang.
@@ -299,25 +419,47 @@ ${formatCards(familyPkgs)}`;
 
   // 7. BEST TIME TO VISIT / WEATHER / SNOW
   if (/(best time|weather|snow|snowfall|barf|winter|summer|monsoon|kab jaye|temperature|month|december|january|february|march|april|may|june|july|august|september|october|november)/i.test(q)) {
-    return `🌤️ **Best Time to Visit Himachal Pradesh & Uttarakhand**
+    if (isEn) {
+      return `🌤️ **Best Time to Visit Himachal Pradesh & Uttarakhand**
 
 ❄️ **Winter & Snow Season (December to February):**
 • **Top Destinations:** Manali, Solang Valley, Kufri, Auli (Skiing), Chopta, Gulmarg.
-• **Vibe:** White snow blankets, live snowfall, skiing, cozy bonfire stays.
+• **Vibe:** Fresh snowfall, winter sports, skiing, cozy bonfire evenings.
 
 🌸 **Spring & Summer Escape (March to June):**
 • **Top Destinations:** Shimla, Dharamshala, Manali, Nainital, Mussoorie, Rishikesh, Kashmir.
-• **Vibe:** Pleasant weather (15°C - 25°C), escaping North Indian heatwaves, river rafting, blooming apple orchards.
+• **Vibe:** Pleasant weather (15°C - 25°C), escaping summer heat, river rafting, blooming apple orchards.
 
 🌧️ **Monsoon & Lush Meadows (July to August):**
-• **Top Destinations:** Valley of Flowers (peak bloom!), Kinnaur, Spiti (rain-shadow zone), Meghalaya.
+• **Top Destinations:** Valley of Flowers (peak bloom!), Kinnaur, Spiti (rain-shadow zone).
 • **Vibe:** Verdant green hills, waterfalls in full glory.
 
 🍂 **Autumn & Clear Himalayan Views (September to November):**
 • **Top Destinations:** Char Dham Yatra, Spiti Valley, Ladakh, Chopta-Chandrashila.
 • **Vibe:** Crystal-clear blue skies, golden sunsets, best photography season!
 
-Aap kis month mein travel plan kar rahe hain? Bataiye, main specific weather aur live road update share karunga!`;
+Which month are you planning to travel? Tell me, and I'll give you exact route and weather status!`;
+    }
+
+    return `🌤️ **Best Time to Visit Himachal Pradesh & Uttarakhand**
+
+❄️ **Winter & Snow Season (December to February):**
+• **Top Destinations:** Manali, Solang Valley, Kufri, Auli (Skiing), Chopta, Gulmarg.
+• **Vibe:** Live snowfall, skiing, cozy bonfire stays.
+
+🌸 **Spring & Summer Escape (March to June):**
+• **Top Destinations:** Shimla, Dharamshala, Manali, Nainital, Mussoorie, Rishikesh, Kashmir.
+• **Vibe:** Pleasant weather (15°C - 25°C), escaping heat, river rafting, blooming apple orchards.
+
+🌧️ **Monsoon & Lush Meadows (July to August):**
+• **Top Destinations:** Valley of Flowers (peak bloom!), Kinnaur, Spiti.
+• **Vibe:** Lush green valleys and full waterfalls.
+
+🍂 **Autumn & Clear Views (September to November):**
+• **Top Destinations:** Char Dham Yatra, Spiti Valley, Ladakh, Chopta-Chandrashila.
+• **Vibe:** Clear blue skies, golden sunsets, best photography season!
+
+Aap kis month mein travel plan kar rahe hain? Bataiye, main specific weather update share karunga!`;
   }
 
   // 8. TREKS & SUMMITS / ADVENTURE SPORTS
@@ -328,17 +470,31 @@ Aap kis month mein travel plan kar rahe hain? Bataiye, main specific weather aur
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit')
     ].filter(Boolean);
 
+    if (isEn) {
+      return `🥾 **Himalayan Treks & Adventure Tours**
+Looking to experience breathtaking mountain trails? Our guided treks are suitable for both beginners and seasoned hikers:
+
+1. **Chopta-Tungnath-Chandrashila (Uttarakhand):**
+   • Altitude: 4,000m (Highest Shiva temple on Earth!).
+   • Highlights: 360° summit views of Nanda Devi, Chaukhamba & Trishul peaks!
+2. **Triund Day Trek (McLeodganj):** Beautiful walk along Dhauladhar ridges with mountain café stops.
+3. **Adventure Activities:** Paragliding at Solang, River Rafting in Kullu & Rishikesh, Skiing in Auli.
+
+Includes certified mountain guides, quality camping gear, and warm meals:
+
+${formatCards(trekPkgs)}`;
+    }
+
     return `🥾 **Himalayan Treks & Adventure Tours**
 Himalayas ke breathtaking trails par trekking karna chahte hain? Humare guided treks beginners aur experienced dono ke liye perfect hain:
 
 1. **Chopta-Tungnath-Chandrashila (Uttarakhand):**
    • Altitude: 4,000m (Highest Shiva temple on Earth!).
-   • Difficulty: Moderate (Family friendly with horses available).
    • 360° panoramic view of Nanda Devi, Chaukhamba & Trishul peaks!
-2. **Triund Day Trek (McLeodganj):** Beautiful walk along Dhauladhar ridges with mountain café stays.
+2. **Triund Day Trek (McLeodganj):** Beautiful walk along Dhauladhar ridges.
 3. **Adventure Sports:** Paragliding at Solang, River Rafting in Kullu & Rishikesh, Skiing in Auli.
 
-Certified mountain guides, quality camping gear, warm meals, aur safety equipment shamil hain:
+Certified mountain guides, quality camping gear, aur meals shamil hain:
 
 ${formatCards(trekPkgs)}`;
   }
@@ -351,11 +507,24 @@ ${formatCards(trekPkgs)}`;
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie')
     ].filter(Boolean);
 
-    return `💰 **HimYatra Value & Budget Packages (Under ₹10,000 per person)**
-Quality se compromise kiye bina affordable travel! Hum direct local hoteliers aur cab fleet maintain karte hain, isliye aapko milti hai sabse reasonable pricing:
+    if (isEn) {
+      return `💰 **HimYatra Value & Budget Packages (Under ₹10,000 per person)**
+Affordable travel without compromising on hygiene or safety! We maintain our own verified cab fleet and direct hotel partnerships:
 
 1. **Sacred Amritsar Heritage (3D/2N):** Starting at just **₹4,999/person**! (Golden Temple + Wagah Border + Food Walk)
-2. **Offbeat Jibhi & Tirthan (4D/3N):** Starting at **₹7,999/person**! (Hidden water streams & wooden cottages)
+2. **Offbeat Jibhi & Tirthan (4D/3N):** Starting at **₹7,999/person**! (Hidden streams & cozy wooden cottages)
+3. **Dharamshala & Khajjiar (5D/4N):** Starting at **₹8,499/person**!
+
+${formatCards(budgetPkgs)}
+
+Use coupon code **HIM1000** for an additional discount on custom bookings!`;
+    }
+
+    return `💰 **HimYatra Value & Budget Packages (Under ₹10,000 per person)**
+Quality se compromise kiye bina affordable travel! Hum direct local hoteliers aur cab fleet maintain karte hain:
+
+1. **Sacred Amritsar Heritage (3D/2N):** Starting at just **₹4,999/person**!
+2. **Offbeat Jibhi & Tirthan (4D/3N):** Starting at **₹7,999/person**!
 3. **Dharamshala & Khajjiar (5D/4N):** Starting at **₹8,499/person**!
 
 ${formatCards(budgetPkgs)}
@@ -365,7 +534,8 @@ Coupon code **HIM1000** use karne par custom bookings par extra discount bhi ava
 
   // 10. INCLUSIONS & EXCLUSIONS
   if (/(inclusion|exclusion|kya milega|hotel|food|meals|breakfast|dinner|khana|stay)/i.test(q)) {
-    return `🏨 **What is Included in HimYatra Packages?**
+    if (isEn) {
+      return `🏨 **What is Included in HimYatra Tour Packages?**
 
 ✅ **All Inclusions:**
 • **Hotels & Stays:** 3-Star & 4-Star sanitized mountain view rooms, valley resorts, or luxury houseboats.
@@ -377,37 +547,78 @@ Coupon code **HIM1000** use karne par custom bookings par extra discount bhi ava
 
 ❌ **Exclusions:**
 • Personal shopping, train/air tickets (unless requested), lunches, and entry tickets for special adventure activities (paragliding/rafting).`;
+    }
+
+    return `🏨 **What is Included in HimYatra Packages?**
+
+✅ **All Inclusions:**
+• **Hotels & Stays:** 3-Star & 4-Star sanitized mountain view rooms, valley resorts, or luxury houseboats.
+• **Meals:** Daily buffet breakfast and hot delicious dinner included.
+• **Private Cab:** Dedicated vehicle (Dzire / Innova / Tempo) for your entire trip with pickup & drop.
+• **All Vehicle Charges:** Fuel, state entry permits, toll taxes, parking fees, and driver night allowances.
+• **Sightseeing:** All points as per the day-by-day confirmed itinerary.
+• **24x7 Assistance:** Dedicated local trip manager on call throughout your journey.
+
+❌ **Exclusions:**
+• Personal shopping, train/air tickets (unless requested), lunches, and entry tickets for adventure activities.`;
   }
 
   // 11. BOOKING PROCESS, ADVANCE & REFUND POLICY
   if (/(how to book|booking kaise|advance|payment|refund|cancellation|cancel|policy|upi|card|netbanking)/i.test(q)) {
+    if (isEn) {
+      return `💳 **HimYatra Booking & Cancellation Policy**
+
+🔹 **Easy 3-Step Booking:**
+1. **Choose Package / Custom Plan:** Confirm your dates, destination, and traveler count.
+2. **Only 30% Advance Deposit:** Pay a 30% token advance to reserve your hotel rooms and dedicated cab (UPI, Credit/Debit Card, Netbanking).
+3. **Instant Confirmation Voucher:** Receive your official itinerary voucher, hotel receipts, and driver details on WhatsApp and Email.
+*The remaining 70% balance is payable upon arrival at your destination!*
+
+🛡️ **100% Transparent Cancellation:**
+• **15+ days before trip:** 100% Full Refund (Zero cancellation fee).
+• **7 to 14 days before:** 50% refund.
+• **Free Rescheduling:** Date modification at zero extra charge subject to hotel availability.`;
+    }
+
     return `💳 **HimYatra Booking & Cancellation Policy**
 
 🔹 **Easy 3-Step Booking:**
 1. **Choose Package / Custom Plan:** Apni dates, destination, aur traveler count confirm karein.
-2. **Only 30% Advance Deposit:** Apni cab aur hotels reserve karne ke liye sirf 30% token advance dena hota hai (UPI, Card, Bank Transfer).
+2. **Only 30% Advance Deposit:** Cab aur hotels reserve karne ke liye sirf 30% token advance dena hota hai (UPI, Card, Bank Transfer).
 3. **Instant Confirmation Voucher:** Payment ke baad aapko official itinerary voucher, hotel receipts, aur driver details WhatsApp/Email par mil jati hain.
 *Remaining 70% balance aap destination par arrival ke samay pay kar sakte hain!*
 
 🛡️ **100% Transparent Cancellation:**
 • **15+ days before trip:** 100% Full Refund (Zero cancellation fee).
 • **7 to 14 days before:** 50% refund.
-• **Rescheduling:** Date change request available at zero extra charge subject to hotel availability.`;
+• **Free Rescheduling:** Date change request available at zero extra charge subject to hotel availability.`;
   }
 
-  // 12. CONTACT / FOUNDER / TALK TO HUMAN
-  if (/(human|person|talk|call|phone|number|mobile|whatsapp|contact|support|agent|owner|founder|amit verma|office)/i.test(q)) {
+  // 12. CONTACT / FOUNDER / TALK TO HUMAN / HELP
+  if (/(human|person|talk|call|phone|number|mobile|whatsapp|contact|support|agent|owner|founder|amit verma|office|help|email|gmail)/i.test(q)) {
+    if (isEn) {
+      return `📞 **HimYatra Direct Contact & Support Desk**
+You can directly reach out to our founder and Himalayan travel specialists:
+
+• 👤 **Founder & Lead Specialist:** Amit Verma
+• 📱 **Direct Call & WhatsApp:** +91 76199 17057
+• ✉️ **Official Email:** amitpatel42203@gmail.com
+• 🏢 **Desks:** The Mall Road, Shimla (HP) & Tapovan, Rishikesh (Uttarakhand)
+• ⏰ **Support Hours:** 24/7 on-trip assistance!
+
+Tap **"Talk to Human on WhatsApp"** below to start an instant direct chat! 🙏`;
+    }
+
     return `📞 **HimYatra Direct Contact & Support Desk**
 Aap direct humare founder aur Himalayan travel experts se baat kar sakte hain:
 
 • 👤 **Founder & Lead Specialist:** Amit Verma
-• 📱 **Direct Call / WhatsApp:** [+91 76199 17057](tel:+917619917057)
-• 💬 **Instant WhatsApp Chat:** [Click to Chat on WhatsApp](https://wa.me/917619917057?text=Hi%20HimYatra!%20I%20want%20to%20plan%20a%20trip.)
-• ✉️ **Official Email:** himyatra.help@gmail.com
+• 📱 **Direct Call & WhatsApp:** +91 76199 17057
+• ✉️ **Official Email:** amitpatel42203@gmail.com
 • 🏢 **Desks:** The Mall Road, Shimla (HP) & Tapovan, Rishikesh (Uttarakhand)
 • ⏰ **Support Hours:** 24/7 on-trip assistance!
 
-Neeche diya gaya **"Talk to a Human on WhatsApp"** button dabayein, aur hum turant aapse jud jayenge! 🙏`;
+Neeche diya gaya **"Talk to Human on WhatsApp"** button dabayein, aur hum turant aapse jud jayenge! 🙏`;
   }
 
   // 13. PLAN MY TRIP / CUSTOM ITINERARY
@@ -418,6 +629,19 @@ Neeche diya gaya **"Talk to a Human on WhatsApp"** button dabayein, aur hum tura
       HIMYATRA_PACKAGES.find(p => p.id === 'pkg-chardham-complete')
     ].filter(Boolean);
 
+    if (isEn) {
+      return `🗺️ **Let's Plan Your Dream Himalayan Trip!**
+I can tailor-make a custom itinerary for you. Tell me these 3 quick details:
+
+1. **Your dream destination:** Himachal (Manali/Shimla), Uttarakhand (Char Dham/Rishikesh), Kashmir, or Spiti?
+2. **Traveler count & trip style:** Couple/Honeymoon, Family, Friends, or Solo?
+3. **Number of days & rough budget:** How many days are you planning?
+
+In the meantime, take a look at our 3 all-time bestseller packages:
+
+${formatCards(featuredPkgs)}`;
+    }
+
     return `🗺️ **Let's Plan Your Dream Himalayan Trip!**
 Main aapke liye tailored itinerary bana sakta hoon. Mujhe yeh 3 choti baatein bataiye:
 
@@ -425,11 +649,9 @@ Main aapke liye tailored itinerary bana sakta hoon. Mujhe yeh 3 choti baatein ba
 2. **Kitne log aur trip type:** Couple/Honeymoon, Family, Friends ya Solo?
 3. **Kitne din aur budget:** Kitne dino ki trip plan kar rahe hain?
 
-Tab tak aap humare 3 highest-rated all-time bestseller packages dekh sakte hain:
+Tab tak aap humare 3 highest-rated bestseller packages dekh sakte hain:
 
-${formatCards(featuredPkgs)}
-
-Aap website par **"Custom Trip Builder"** tool bhi use kar sakte hain instant automated quote ke liye!`;
+${formatCards(featuredPkgs)}`;
   }
 
   // 14. SPECIFIC DESTINATION KEYWORD LOOKUP
@@ -464,20 +686,48 @@ Aap website par **"Custom Trip Builder"** tool bhi use kar sakte hain instant au
       .filter((p, index, self) => p && self.findIndex(t => t.id === p.id) === index)
       .slice(0, 3);
 
-    return `🏔️ **${matchedDest[0].key.toUpperCase()} Tours & Sightseeing Packages**
+    const placeName = matchedDest[0].key.toUpperCase();
+    if (isEn) {
+      return `🏔️ **${placeName} Tours & Sightseeing Packages**
+You asked about **${matchedDest.map(m => m.key).join(', ')}**! We have dedicated private cabs, premium verified stays, and complete sightseeing itineraries available:
+
+${formatCards(matchedPkgs)}
+
+Tap **"View Details"** to see day-by-day itineraries or message us on WhatsApp for custom quotes!`;
+    }
+
+    return `🏔️ **${placeName} Tours & Sightseeing Packages**
 Aapne **${matchedDest.map(m => m.key).join(', ')}** ke bare mein poocha! Humare pass is destination ke liye direct private vehicle, premium verified stays, aur complete sightseeing itineraries available hain:
 
 ${formatCards(matchedPkgs)}
 
-Aap website ke **"Destinations"** ya **"Packages"** section mein jakar day-by-day complete plan dekh sakte hain, ya humein WhatsApp par message bhejkar custom quotation le sakte hain!`;
+Aap **"View Details"** dabakar complete day-by-day plan dekh sakte hain ya direct WhatsApp par custom quote le sakte hain!`;
   }
 
-  // 15. COMPREHENSIVE INTELLIGENT FALLBACK (Polite, helpful, and never gives an error!)
+  // 15. DEFAULT HELPFUL FALLBACK
   const samplePkgs = [
     HIMYATRA_PACKAGES[0],
     HIMYATRA_PACKAGES[1],
     HIMYATRA_PACKAGES[3]
   ];
+
+  if (isEn) {
+    return `Thank you for reaching out! 🙏
+At **HimYatra**, we curate custom tour packages, fixed-rate cab rentals, and stays across **Himachal Pradesh, Uttarakhand, Kashmir, Spiti, Ladakh, and Spiritual circuits**.
+
+You can ask me questions like:
+• *"Show me honeymoon packages for couple"*
+• *"What is the fixed cab fare from Delhi to Manali?"*
+• *"Kedarnath Yatra 2026 dates and helicopter booking"*
+• *"Best time to visit Spiti Valley"*
+• *"Family packages under ₹15,000"*
+
+Here are our top trending packages:
+
+${formatCards(samplePkgs)}
+
+Tap **"Talk to Human on WhatsApp"** for personal quotes!`;
+  }
 
   return `Thank you for reaching out! 🙏
 HimYatra par hum **Himachal Pradesh, Uttarakhand, Kashmir, Spiti, Ladakh aur Spiritual circuits** ke custom tour packages, cab rentals, aur hotels organize karte hain.
@@ -493,5 +743,5 @@ Ye rahe humare top trending packages:
 
 ${formatCards(samplePkgs)}
 
-Direct quote aur assistance ke liye humare travel expert se WhatsApp par judein!`;
+Direct assistance ke liye WhatsApp par judein!`;
 }

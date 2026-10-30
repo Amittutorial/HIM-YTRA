@@ -12,7 +12,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-2.5 sm:p-6 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[10000] overflow-y-auto bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-2.5 sm:p-6 animate-in fade-in duration-200">
       <div className="relative w-full max-w-4xl bg-slate-900 border border-teal-500/30 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-black/90 my-3 sm:my-8 print:border-none print:shadow-none print:bg-white print:text-black">
         
         {/* Close Button */}

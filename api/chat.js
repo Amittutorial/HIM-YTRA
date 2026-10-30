@@ -30,7 +30,11 @@ function sanitize(str) {
 
 const SYSTEM_PROMPT = `You are the HimYatra Assistant on the HimYatra website. HimYatra offers tour packages, cab rentals, spiritual circuits (like Char Dham), and adventure trips across Himachal Pradesh, Uttarakhand, Kashmir, Rajasthan, Ladakh, and more.
 
-Your job: help visitors choose packages, understand routes, plan trips, and contact the team. Reply in the user's language (Hindi, Hinglish, or English). Be warm, polite, and concise: 2 to 5 sentences, a short list only when it helps.
+Your job: help visitors choose packages, understand routes, plan trips, and contact the team.
+CRITICAL LANGUAGE RULE:
+- If the user writes or speaks in English, reply strictly in English.
+- If the user writes in Hindi or Hinglish, reply in Hindi/Hinglish.
+Be warm, polite, and concise: 2 to 5 sentences, a short list only when it helps.
 
 Business information (use ONLY this):
 - Packages & prices:
@@ -58,7 +62,7 @@ Business information (use ONLY this):
 - Inclusions (most packages): Hotel stay, daily breakfast & dinner, private cab, sightseeing, driver allowance, all tolls & parking.
 - Exclusions: Flights/trains, lunch, personal expenses, adventure activities.
 - Cancellation: 100% full refund 15+ days before. 50% refund 7-14 days before.
-- Founder & Contact: Amit Verma | Phone/WhatsApp: +91 76199 17057 | Email: himyatra.help@gmail.com | Desks: Shimla (HP) & Rishikesh (UK)
+- Founder & Contact: Amit Verma | Phone/WhatsApp: +91 76199 17057 | Email: amitpatel42203@gmail.com | Desks: Shimla (HP) & Rishikesh (UK)
 - Payment: 30% advance to confirm booking (UPI, card), balance on arrival.
 
 PACKAGE RECOMMENDATION FORMAT:
@@ -69,60 +73,56 @@ For honeymoon: always suggest Kashmir Paradise (pkg-kashmir-paradise), Magical H
 
 function fallbackSmartReply(text) {
   const q = (text || '').toLowerCase();
+  const isEn = !/(kya|hai|hain|kaise|kahan|kaha|kitna|batao|mujhe|hum|jana|gaadi|kiraya|sasta|namaste|yatra|chahiye)/i.test(q);
 
   // Honeymoon
   if (/(honeymoon|couple|romantic|candle|shadi|shaadi|wedding|anniversary)/i.test(q)) {
-    return `💖 **HimYatra Romantic & Honeymoon Specials!**
-Congratulations on your special journey! Humare top 3 curated Himalayan honeymoon packages hain:
+    if (isEn) {
+      return `💖 **HimYatra Romantic & Honeymoon Specials!**
+Congratulations on your special journey! Here are our 3 most celebrated Himalayan honeymoon packages:
 
-1. **Kashmir Paradise (6D/5N - ₹14,999/person)** — Dal Lake private shikara ride, romantic houseboat stay, candle-light dinner, and Gulmarg snow gondola!
-2. **Magical Himachal & Manali (6D/5N - ₹13,499/person)** — Solang snow slopes, cozy wooden mountain resort, Atal Tunnel & private cab.
-3. **Royal Udaipur & Lake Palace (6D/5N - ₹13,999/person)** — Sunset boat cruise on Lake Pichola and royal heritage stays.
+1. **Kashmir Paradise (6D/5N — ₹14,999/person)**: Private sunset Shikara on Dal Lake, romantic luxury houseboat stay, candlelight dinner & snow gondola in Gulmarg!
+2. **Magical Himachal & Manali (6D/5N — ₹13,499/person)**: Cozy mountain resorts, snow views at Solang Valley, Atal Tunnel to Sissu, and private cab.
+3. **Royal Udaipur & Lake Palace (6D/5N — ₹13,999/person)**: Romantic evening boat cruise on Lake Pichola and royal heritage stays.
 
 :::PACKAGE_CARD:::{"title":"Kashmir Paradise: Srinagar, Gulmarg & Houseboat","duration":"6D / 5N","price":"₹14,999","pkgId":"pkg-kashmir-paradise"}:::END:::
 :::PACKAGE_CARD:::{"title":"Magical Himachal: Shimla, Kullu & Manali","duration":"6D / 5N","price":"₹13,499","pkgId":"pkg-himachal-magic"}:::END:::
-:::PACKAGE_CARD:::{"title":"Royal Rajputana: Jaipur Pink City & Udaipur","duration":"6D / 5N","price":"₹13,999","pkgId":"pkg-rajasthan-royalty"}:::END:::
+:::PACKAGE_CARD:::{"title":"Royal Rajputana: Jaipur Pink City & Udaipur","duration":"6D / 5N","price":"₹13,999","pkgId":"pkg-rajasthan-royalty"}:::END:::`;
+    }
+    return `💖 **HimYatra Romantic & Honeymoon Specials!**
+Congratulations on your special journey! Humare top 3 curated Himalayan honeymoon packages hain:
 
-Aap website par **"Popular Packages"** section mein jakar bhi inki complete details dekh sakte hain ya direct WhatsApp par custom dates ke saath connect karein!`;
+1. **Kashmir Paradise (6D/5N — ₹14,999/person)** — Dal Lake private shikara ride, romantic houseboat stay, candle-light dinner, and Gulmarg snow gondola!
+2. **Magical Himachal & Manali (6D/5N — ₹13,499/person)** — Solang snow slopes, cozy wooden mountain resort, Atal Tunnel & private cab.
+3. **Royal Udaipur & Lake Palace (6D/5N — ₹13,999/person)** — Sunset boat cruise on Lake Pichola and royal heritage stays.
+
+:::PACKAGE_CARD:::{"title":"Kashmir Paradise: Srinagar, Gulmarg & Houseboat","duration":"6D / 5N","price":"₹14,999","pkgId":"pkg-kashmir-paradise"}:::END:::
+:::PACKAGE_CARD:::{"title":"Magical Himachal: Shimla, Kullu & Manali","duration":"6D / 5N","price":"₹13,499","pkgId":"pkg-himachal-magic"}:::END:::
+:::PACKAGE_CARD:::{"title":"Royal Rajputana: Jaipur Pink City & Udaipur","duration":"6D / 5N","price":"₹13,999","pkgId":"pkg-rajasthan-royalty"}:::END:::`;
   }
 
-  // Char Dham / Kedarnath
-  if (/(char\s*dham|chardham|kedarnath|badrinath|gangotri|yamunotri|darshan|heli|yatra)/i.test(q)) {
-    return `🛕 **Sacred Devbhoomi Char Dham Yatra 2026**
-Har Har Mahadev! Kapat opens in May 2026. Hum provide karte hain:
-• Free biometric yatra registration
-• Helicopter shuttle booking assistance (Phata / Guptkashi / Sirsi)
-• Sanitized private cabs with experienced mountain drivers
-• Deluxe stays at Sonprayag & Badrinath
-
-:::PACKAGE_CARD:::{"title":"Complete Char Dham Yatra: All 4 Dhams","duration":"10D / 9N","price":"₹24,999","pkgId":"pkg-chardham-complete"}:::END:::
-:::PACKAGE_CARD:::{"title":"Sacred Do Dham: Kedarnath & Badrinath","duration":"6D / 5N","price":"₹18,999","pkgId":"pkg-kedarnath-badrinath"}:::END:::
-
-VIP Darshan pass aur helicopter ticket availability ke liye direct WhatsApp par contact karein!`;
+  // Help / Contact
+  if (/(help|contact|phone|call|email|gmail|whatsapp|founder|amit)/i.test(q)) {
+    return `📞 **HimYatra Direct Contact & Support Desk**
+• 👤 **Founder:** Amit Verma
+• 📱 **Direct Call & WhatsApp:** +91 76199 17057
+• ✉️ **Official Email:** amitpatel42203@gmail.com
+• 🏢 **Desks:** The Mall Road, Shimla (HP) & Tapovan, Rishikesh (Uttarakhand)`;
   }
 
-  // Cab Rentals
-  if (/(cab|taxi|rental|fare|rate|price|kiraya|car|innova|tempo)/i.test(q)) {
-    return `🚖 **HimYatra Verified Fixed-Route Cab Fares:**
-• **Delhi ➔ Manali:** Sedan **₹5,500** | SUV **₹7,500** | 12-Seater Tempo **₹12,000**
-• **Delhi ➔ Shimla:** Sedan **₹4,000** | SUV **₹6,000** | Tempo **₹10,000**
-• **Delhi ➔ Haridwar / Rishikesh:** Sedan **₹3,500** | SUV **₹5,500** | Tempo **₹9,500**
-• **Haridwar ➔ Sonprayag (Kedarnath):** SUV **₹6,500** | Tempo **₹11,000**
-• **Chandigarh ➔ Manali:** Sedan **₹3,500** | SUV **₹5,500**
+  // General greeting / fallback
+  if (isEn) {
+    return `Hello! 🙏 Welcome to **HimYatra**!
+I am your personal AI Himalayan Travel Assistant. How can I help you today?
+• 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
+• 🛕 **Char Dham & Kedarnath Yatra 2026**
+• 🚖 **Fixed Route Cabs** (Delhi/Chandigarh to Hills)
+• 🏔️ **Adventure & Treks** (Spiti 4x4, Ladakh, Chopta)
 
-Sabhi fares mein toll, state taxes, fuel aur driver allowances shamil hain (Zero hidden charges!). Website ke **"Cab Rentals"** section mein booking karein!`;
+:::PACKAGE_CARD:::{"title":"Magical Himachal: Shimla, Kullu & Manali","duration":"6D / 5N","price":"₹13,499","pkgId":"pkg-himachal-magic"}:::END:::
+:::PACKAGE_CARD:::{"title":"Kashmir Paradise: Srinagar, Gulmarg & Houseboat","duration":"6D / 5N","price":"₹14,999","pkgId":"pkg-kashmir-paradise"}:::END:::`;
   }
 
-  // Spiti / Ladakh
-  if (/(spiti|ladakh|leh|adventure|4x4|chandratal)/i.test(q)) {
-    return `🏔️ **Spiti & Ladakh High-Altitude 4x4 Expeditions:**
-Trans-Himalayan rugged circuits ke liye hum provide karte hain high-clearance 4x4 SUVs aur certified mountain drivers.
-
-:::PACKAGE_CARD:::{"title":"Raw Spiti Valley 4x4 Circuit: Chandratal & Kaza","duration":"8D / 7N","price":"₹16,999","pkgId":"pkg-spiti-circuit"}:::END:::
-:::PACKAGE_CARD:::{"title":"Himalayan Frontier: Leh Ladakh & Pangong Tso","duration":"7D / 6N","price":"₹19,999","pkgId":"pkg-ladakh-pangong"}:::END:::`;
-  }
-
-  // Greetings or general
   return `Namaste! 🙏 Welcome to **HimYatra**!
 Main aapki Himalayan travel planning mein madad kar sakta hoon:
 • 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
@@ -131,25 +131,21 @@ Main aapki Himalayan travel planning mein madad kar sakta hoon:
 • 🏔️ **Adventure & Treks** (Spiti 4x4, Ladakh, Chopta)
 
 :::PACKAGE_CARD:::{"title":"Magical Himachal: Shimla, Kullu & Manali","duration":"6D / 5N","price":"₹13,499","pkgId":"pkg-himachal-magic"}:::END:::
-:::PACKAGE_CARD:::{"title":"Kashmir Paradise: Srinagar, Gulmarg & Houseboat","duration":"6D / 5N","price":"₹14,999","pkgId":"pkg-kashmir-paradise"}:::END:::
-
-Aap kis destination ya month mein plan kar rahe hain? Bataiye! 😊`;
+:::PACKAGE_CARD:::{"title":"Kashmir Paradise: Srinagar, Gulmarg & Houseboat","duration":"6D / 5N","price":"₹14,999","pkgId":"pkg-kashmir-paradise"}:::END:::`;
 }
 
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  // Rate limit
   const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
   if (rateLimit(ip)) {
     return res.status(429).json({
       error: 'Too many requests. Please wait a moment.',
-      reply: 'Aapne thoda tezi se message bheje hain. Kripya 30 seconds wait karein ya WhatsApp par sampark karein: +91 76199 17057'
+      reply: 'Please wait a moment before sending another message or WhatsApp us directly at: +91 76199 17057'
     });
   }
 
@@ -161,7 +157,6 @@ export default async function handler(req, res) {
 
     const lastUserMsg = [...messages].reverse().find(m => m.role === 'user')?.content || '';
 
-    // Sanitize user messages
     const sanitizedMessages = messages.map(m => ({
       role: m.role === 'assistant' ? 'assistant' : 'user',
       content: m.role === 'user' ? sanitize(m.content) : (m.content || '').slice(0, 2000)
@@ -170,7 +165,6 @@ export default async function handler(req, res) {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     const model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
 
-    // If API key is present, attempt Claude API call with timeout
     if (apiKey) {
       try {
         const controller = new AbortController();
@@ -201,11 +195,10 @@ export default async function handler(req, res) {
           }
         }
       } catch (e) {
-        console.warn('Claude API request timed out or failed, falling back to smart engine:', e?.message);
+        console.warn('Claude API request timed out or failed, falling back:', e?.message);
       }
     }
 
-    // Smart fallback engine — always active, 100% reliable, zero failures!
     const reply = fallbackSmartReply(lastUserMsg);
     return res.status(200).json({ reply });
 
