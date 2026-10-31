@@ -388,12 +388,29 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
     { label: '🌤️ Best Time to Visit', query: 'Himachal aur Uttarakhand ghoomne ka best time kab hai?' }
   ];
 
+  const chatWindowRef = useRef(null);
+
   // Auto-scroll on new messages
   useEffect(() => {
     if (isOpen && !isMinimized) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isTyping, isOpen, isMinimized]);
+
+  // Click outside to minimize on desktop
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isOpen && !isMinimized && chatWindowRef.current && !chatWindowRef.current.contains(e.target)) {
+        // Do not minimize if clicking the floating toggle button
+        const isLaunchBtn = e.target.closest('[aria-label="Open AI Mountain Guide"]');
+        if (!isLaunchBtn) {
+          setIsMinimized(true);
+        }
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, isMinimized]);
 
   // Initial welcome message
   useEffect(() => {
@@ -572,7 +589,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
 
       {/* ── Minimized Floating Dock Pill ── */}
       {isOpen && isMinimized && (
-        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] animate-chatSlideUp">
+        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex items-center gap-2 animate-chatSlideUp">
           <button
             onClick={() => setIsMinimized(false)}
             className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-900/95 border border-teal-500/50 text-white shadow-2xl backdrop-blur-xl hover:bg-slate-800 transition cursor-pointer group"
@@ -589,16 +606,31 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             </div>
             <Maximize2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-teal-300 transition-colors ml-1" />
           </button>
+
+          {/* Dismiss Pill Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setIsMinimized(false);
+              setIsOpen(false);
+            }}
+            className="w-9 h-9 rounded-full bg-slate-900/95 border border-white/20 hover:bg-rose-500 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer shadow-lg"
+            title="Close assistant"
+            aria-label="Close"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 
       {/* ── Main Chat Window (Adjusted for Laptop & Mobile) ── */}
       {isOpen && !isMinimized && (
         <div
+          ref={chatWindowRef}
           className={`fixed z-[9999] flex flex-col bg-slate-950 border border-teal-500/40 shadow-2xl shadow-black/90 overflow-hidden animate-chatSlideUp transition-all duration-300 ${
             isMaximized
-              ? 'inset-3 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[680px] sm:h-[84vh] sm:max-h-[820px] rounded-3xl'
-              : 'inset-x-2 bottom-2 top-14 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[410px] sm:h-[580px] rounded-2xl sm:rounded-3xl'
+              ? 'inset-3 sm:inset-auto sm:bottom-4 sm:right-4 md:right-6 sm:w-[640px] sm:h-[min(640px,calc(100vh-80px))] sm:max-h-[calc(100vh-80px)] rounded-3xl'
+              : 'inset-x-2 bottom-2 top-12 sm:inset-auto sm:bottom-4 sm:right-4 md:right-6 sm:w-[385px] md:w-[400px] sm:h-[min(510px,calc(100vh-80px))] sm:max-h-[calc(100vh-80px)] rounded-2xl sm:rounded-3xl'
           }`}
         >
           {/* Header with "← Back to Packages" button and Language Switcher */}
@@ -724,18 +756,25 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Direct WhatsApp Assistance Bar */}
+          {/* Direct WhatsApp & Back Navigation Bar */}
           <div className="px-3.5 py-2 border-t border-white/5 bg-slate-900/80 shrink-0 flex items-center justify-between gap-2">
-            <span className="text-[11px] text-slate-400 hidden sm:inline">
-              Need custom dates or live cab quote?
-            </span>
+            <button
+              type="button"
+              onClick={handleBackToPackages}
+              className="text-[11px] font-bold text-slate-300 hover:text-teal-300 flex items-center gap-1.5 transition cursor-pointer py-1 px-2 rounded-lg hover:bg-white/5"
+              title="Close chat and view packages on website"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-teal-400" />
+              <span>{preferredLang === 'en' ? 'Back to Packages' : 'पैकेज पर जाएं'}</span>
+            </button>
+
             <button
               type="button"
               onClick={handleTalkToHuman}
-              className="w-full sm:w-auto px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition flex items-center justify-center gap-1.5 cursor-pointer ml-auto"
+              className="px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition flex items-center justify-center gap-1.5 cursor-pointer ml-auto"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>Talk to Human on WhatsApp</span>
+              <span>Talk to Human</span>
             </button>
           </div>
 
