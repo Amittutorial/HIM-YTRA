@@ -84,7 +84,7 @@ export default function LiveTripTrackingModal({ isOpen, onClose, tripId = 'HY-TR
         <form onSubmit={handleSearchTrip} className="flex gap-2">
           <input
             type="text"
-            placeholder="Enter Trip ID (e.g. HY-TRIP-8821, HY-78210)"
+            placeholder="Enter Trip ID (e.g. VV-TRIP-8821, VV-78210)"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             className="flex-1 bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-teal-400"

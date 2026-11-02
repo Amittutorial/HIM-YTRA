@@ -25,7 +25,7 @@ export default function DestinationsSection({ activeTab, setActiveTab, onSelectD
           <h2 className="text-3xl sm:text-5xl font-black text-white font-['Outfit'] tracking-tight">
             Explore Featured Destinations <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-emerald-300 to-cyan-300">
-              Across India & The Himalayas
+              Across India & Worldwide
             </span>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base max-w-xl">

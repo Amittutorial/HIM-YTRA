@@ -348,6 +348,7 @@ export default function AIChatbot({ onSelectPackage, onBookPackage }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [showInviteChip, setShowInviteChip] = useState(true);
 
   // Language mode: 'auto' | 'en' | 'hi'
   const [preferredLang, setPreferredLang] = useState('auto');
@@ -589,7 +590,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
 
       {/* ── Minimized Floating Dock Pill ── */}
       {isOpen && isMinimized && (
-        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex items-center gap-2 animate-chatSlideUp">
+        <div className="fixed bottom-16 right-3.5 sm:bottom-20 md:bottom-6 sm:right-5 z-[9999] flex items-center gap-2 animate-chatSlideUp">
           <button
             onClick={() => setIsMinimized(false)}
             className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-slate-900/95 border border-teal-500/50 text-white shadow-2xl backdrop-blur-xl hover:bg-slate-800 transition cursor-pointer group"
@@ -819,37 +820,52 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
 
       {/* ── Single Floating Launch Button ── */}
       {!isOpen && (
-        <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9998] flex items-center gap-3">
-          {/* Desktop Invitation Chip */}
-          <div
-            onClick={() => {
-              setIsOpen(true);
-              setIsMinimized(false);
-            }}
-            className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-900/90 border border-teal-500/40 text-white shadow-xl backdrop-blur-md cursor-pointer hover:border-teal-400 transition animate-in fade-in slide-in-from-right-4 duration-300"
-          >
-            <Sparkles className="w-4 h-4 text-teal-400" />
-            <div className="text-xs">
-              <span className="font-bold text-teal-300">Plan Trip with AI</span>
-              <span className="text-slate-400 ml-1.5 text-[11px]">Honeymoon & Cabs</span>
+        <div className="fixed bottom-16 right-3.5 sm:bottom-20 md:bottom-6 sm:right-5 z-[9998] flex items-center gap-2.5">
+          {/* Desktop Only Invitation Chip (Hidden on mobile/tablets to prevent covering form inputs or buttons) */}
+          {showInviteChip && (
+            <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-teal-500/40 text-white shadow-xl backdrop-blur-md hover:border-teal-400 transition animate-in fade-in duration-300">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(true);
+                  setIsMinimized(false);
+                }}
+                className="flex items-center gap-2 cursor-pointer text-left"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                <span className="text-xs font-bold text-teal-300">Plan Trip with AI</span>
+                <span className="text-slate-400 text-[11px]">Honeymoon & Cabs</span>
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowInviteChip(false);
+                }}
+                className="p-0.5 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition cursor-pointer ml-1"
+                title="Dismiss tip"
+                aria-label="Dismiss"
+              >
+                <X className="w-3 h-3" />
+              </button>
             </div>
-          </div>
+          )}
 
-          {/* Main Floating Button */}
+          {/* Main Floating Button (Compact on mobile so it never covers cards or actions) */}
           <button
             onClick={() => {
               setIsOpen(true);
               setIsMinimized(false);
             }}
-            className="relative w-14 h-14 sm:w-15 sm:h-15 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
+            className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
             aria-label="Open AI Mountain Guide"
             title="Chat with ValleyVista AI Assistant"
           >
-            <Compass className="w-7 h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
+            <Compass className="w-6 h-6 sm:w-7 sm:h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
 
             {/* Glowing Online Notification Dot */}
-            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-emerald-400 rounded-full border-2 border-slate-950 flex items-center justify-center">
-              <span className="w-2 h-2 rounded-full bg-emerald-200 animate-ping" />
+            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-emerald-400 rounded-full border-2 border-slate-950 flex items-center justify-center">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-200 animate-ping" />
             </span>
           </button>
         </div>

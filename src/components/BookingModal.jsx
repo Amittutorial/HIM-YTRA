@@ -108,7 +108,7 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
 
   const handleConfirmReservation = async (e) => {
     e.preventDefault();
-    const id = `HY-${Math.floor(100000 + Math.random() * 900000)}`;
+    const id = `VV-${Math.floor(100000 + Math.random() * 900000)}`;
     setBookingId(id);
     setIsConfirmed(true);
 

@@ -68,8 +68,13 @@ export default function MobileBottomBar({ onOpenBooking, onOpenAuth, theme = 'da
               : 'bg-slate-900 border-white/15 text-slate-200 hover:bg-slate-800'
         }`}
       >
-        <User className="w-3.5 h-3.5 text-teal-500 shrink-0" />
-        <span className="truncate max-w-[62px]">{currentUser ? `@${currentUser.username}` : 'Login'}</span>
+        <div className="relative shrink-0">
+          <User className="w-3.5 h-3.5 text-teal-500 shrink-0" />
+          {currentUser && (
+            <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-emerald-400 ring-1 ring-slate-950" />
+          )}
+        </div>
+        <span className="font-bold">{currentUser ? 'Account' : 'Login'}</span>
       </button>
 
       {/* Book Now button */}

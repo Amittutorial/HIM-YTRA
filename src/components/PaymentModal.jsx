@@ -64,7 +64,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
 
       // Send automated notification to Amit's Gmail
       sendBookingEmail({
-        bookingId: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
+        bookingId: bookingRef || `VV-${Date.now().toString().slice(-6)}`,
         packageTitle: packageName || 'ValleyVista Tour Token Advance',
         state: 'Worldwide & Himalayan Tours',
         name: 'UPI Customer',
