@@ -24,8 +24,12 @@ export default function Navbar({
 
   useEffect(() => {
     const handleAuth = (e) => setCurrentUser(e.detail);
+    window.addEventListener('valleyvista-auth-changed', handleAuth);
     window.addEventListener('himyatra-auth-changed', handleAuth);
-    return () => window.removeEventListener('himyatra-auth-changed', handleAuth);
+    return () => {
+      window.removeEventListener('valleyvista-auth-changed', handleAuth);
+      window.removeEventListener('himyatra-auth-changed', handleAuth);
+    };
   }, []);
 
   useEffect(() => {
@@ -121,10 +125,10 @@ export default function Navbar({
           }`}>
             {/* Logo with Mountain Photo */}
             <a href="#" className="flex items-center gap-2.5 group shrink-0 mr-2 sm:mr-4 xl:mr-6">
-              <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full overflow-hidden border-2 border-teal-400/70 shadow-lg shadow-teal-500/25 group-hover:scale-105 group-hover:border-teal-300 transition shrink-0 bg-slate-900 relative">
+              <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full overflow-hidden border-2 border-emerald-400/70 shadow-lg shadow-emerald-500/25 group-hover:scale-105 group-hover:border-emerald-300 transition shrink-0 bg-slate-900 relative">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="HimYatra Mountains"
+                  alt="ValleyVista Worldwide"
                   className="w-full h-full object-cover object-center scale-110 group-hover:scale-125 transition duration-300"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -136,11 +140,11 @@ export default function Navbar({
                 <span className={`text-lg sm:text-xl xl:text-2xl font-black tracking-tight font-['Outfit'] flex items-center gap-1 ${
                   isLight ? 'text-slate-900' : 'text-white'
                 }`}>
-                  Him<span className="text-teal-500">Yatra</span>
+                  Valley<span className="text-emerald-400">Vista</span>
                 </span>
-                <span className={`text-[9px] sm:text-[10px] -mt-1 tracking-widest uppercase font-semibold ${
-                  isLight ? 'text-teal-700' : 'text-teal-300/80'
-                }`}>Himalayan Journeys</span>
+                <span className={`text-[8.5px] sm:text-[9.5px] -mt-1 tracking-widest uppercase font-semibold ${
+                  isLight ? 'text-emerald-700' : 'text-emerald-300/80'
+                }`}>From Everywhere. To Everywhere.</span>
               </div>
             </a>
 
@@ -396,7 +400,7 @@ export default function Navbar({
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              {lang === 'hi' ? '🏔️ गंतव्य (हिमाचल और उत्तराखंड)' : '🏔️ Destinations (Himachal & Uttarakhand)'}
+              {lang === 'hi' ? '🌍 गंतव्य (घरेलू और अंतर्राष्ट्रीय)' : '🌍 Destinations (Domestic & Worldwide)'}
             </a>
             <a
               href="#packages"
@@ -410,7 +414,7 @@ export default function Navbar({
               onClick={() => setMobileMenuOpen(false)}
               className="block text-lg font-semibold text-white hover:text-teal-400 py-2 border-b border-white/5"
             >
-              {lang === 'hi' ? '✨ अपनी यात्रा बनाएं' : '✨ Customize Your Yatra'}
+              {lang === 'hi' ? '✨ अपनी यात्रा बनाएं' : '✨ Customize Your Journey'}
             </a>
             <a
               href="#offers"

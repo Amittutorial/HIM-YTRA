@@ -20,14 +20,14 @@ function writeBoth(subPath, content) {
   }
 }
 
-console.log('🏔️ Starting HimYatra Pre-rendering engine...');
+console.log('🏔️ Starting ValleyVista Pre-rendering engine...');
 
 // 1. Generate Static Pre-rendered Pages for Every Tour Package
 TOUR_PACKAGES.forEach((pkg) => {
 
   const canonicalUrl = `https://him-ytra.vercel.app/?pkg=${pkg.id}`;
   const ogImage = pkg.image || 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&h=630&q=85';
-  const pageTitle = `${pkg.title} (${pkg.duration}) — ₹${pkg.discountedPrice?.toLocaleString('en-IN') || pkg.price} | HimYatra`;
+  const pageTitle = `${pkg.title} (${pkg.duration}) — ₹${pkg.discountedPrice?.toLocaleString('en-IN') || pkg.price} | ValleyVista`;
   const metaDesc = `${pkg.desc || pkg.subtitle || ''} Experience ${pkg.title} across ${pkg.state}. Includes ${pkg.transport || 'private cab'}, hotel stays, meals & 24/7 mountain support.`;
 
   const itineraryHtml = (pkg.itinerary || [])
@@ -93,7 +93,7 @@ TOUR_PACKAGES.forEach((pkg) => {
     },
     "provider": {
       "@type": "TravelAgency",
-      "name": "HimYatra Himalayan Tours & Travels",
+      "name": "ValleyVista Worldwide Tours & Travels",
       "telephone": "+917619917057",
       "url": "https://him-ytra.vercel.app/"
     }
@@ -122,7 +122,7 @@ TOUR_PACKAGES.forEach((pkg) => {
 <body>
   <div class="container">
     <div style="margin-bottom: 1.5rem;">
-      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to HimYatra Home</a>
+      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to ValleyVista Home</a>
     </div>
 
     <div>
@@ -145,7 +145,7 @@ TOUR_PACKAGES.forEach((pkg) => {
         </div>
       </div>
       <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice}/person). Please share details!`)}" class="btn btn-primary">
+        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice}/person). Please share details!`)}" class="btn btn-primary">
           💬 WhatsApp Inquiry
         </a>
         <a href="/?pkg=${pkg.id}" class="btn btn-secondary">
@@ -187,7 +187,7 @@ TOUR_PACKAGES.forEach((pkg) => {
     </div>
 
     <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #64748b; font-size: 0.85rem; text-align: center;">
-      <p>© 2026 HimYatra Himalayan Tours & Cab Rentals. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
+      <p>© 2026 ValleyVista Worldwide Tours & Travels. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
     </footer>
   </div>
 </body>
@@ -202,7 +202,7 @@ console.log(`✅ Pre-rendered ${TOUR_PACKAGES.length} individual tour package pa
 DESTINATIONS.forEach((dest) => {
   const canonicalUrl = `https://him-ytra.vercel.app/?dest=${dest.id}`;
   const ogImage = dest.image || 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&h=630&q=85';
-  const pageTitle = `${dest.name} Tour Packages, Cabs & Travel Guide (${dest.state}) — HimYatra`;
+  const pageTitle = `${dest.name} Tour Packages, Cabs & Travel Guide (${dest.state}) — ValleyVista`;
   const metaDesc = `Explore ${dest.name} in ${dest.state}. ${dest.tagline || ''}. Altitude: ${dest.altitude || 'Himalayas'}. Best time to visit: ${dest.bestTime}. Starting ₹${dest.startingPrice?.toLocaleString('en-IN') || '4,999'} per person.`;
 
   const highlightsHtml = (dest.highlights || [])
@@ -271,7 +271,7 @@ DESTINATIONS.forEach((dest) => {
 <body>
   <div class="container">
     <div style="margin-bottom: 1.5rem;">
-      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to HimYatra Home</a>
+      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to ValleyVista Home</a>
     </div>
 
     <div>
@@ -297,11 +297,11 @@ DESTINATIONS.forEach((dest) => {
         
       </div>
       <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I want to plan a tour to ${dest.name} (${dest.state}). Please send available packages and cab options!`)}" class="btn btn-primary">
+        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I want to plan a tour to ${dest.name} (${dest.state}). Please send available packages and cab options!`)}" class="btn btn-primary">
           💬 Plan on WhatsApp
         </a>
         <a href="/?dest=${dest.id}" class="btn btn-secondary">
-          ✨ View Packages on HimYatra
+          ✨ View Packages on ValleyVista
         </a>
       </div>
     </div>
@@ -312,7 +312,7 @@ DESTINATIONS.forEach((dest) => {
     </ul>
 
     <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #64748b; font-size: 0.85rem; text-align: center;">
-      <p>© 2026 HimYatra Himalayan Tours & Cab Rentals. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
+      <p>© 2026 ValleyVista Worldwide Tours & Travels. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
     </footer>
   </div>
 </body>

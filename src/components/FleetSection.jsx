@@ -18,7 +18,7 @@ export default function FleetSection({ onOpenBooking }) {
             </span>
           </h2>
           <p className="text-slate-400 text-sm sm:text-base max-w-2xl">
-            Driving in high Himalayas demands verified experience. Every HimYatra vehicle undergoes mandatory mechanical safety audits and is manned by local drivers with 8+ years on hill roads.
+            Every ValleyVista vehicle undergoes mandatory mechanical safety audits and is manned by verified local drivers with 8+ years of certified experience.
           </p>
         </div>
 

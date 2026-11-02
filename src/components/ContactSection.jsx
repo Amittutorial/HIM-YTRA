@@ -29,7 +29,7 @@ export default function ContactSection({ onOpenHelpCenter }) {
   const offices = [
     {
       city: 'Shimla Head Office (HP)',
-      address: 'HimYatra House, Near The Ridge, The Mall, Shimla, Himachal Pradesh 171001',
+      address: 'ValleyVista Headquarters, Near The Ridge, The Mall, Shimla, Himachal Pradesh 171001',
       phone: '+91 76199 17057',
       timing: '9:00 AM - 9:00 PM IST (Daily)'
     },
@@ -79,7 +79,7 @@ export default function ContactSection({ onOpenHelpCenter }) {
             </a>
 
             <a
-              href="https://wa.me/917619917057?text=Hi%20HimYatra!%20I%20am%20planning%20a%20trip%20to%20Himachal/Uttarakhand.%20Please%20guide%20me."
+              href="https://wa.me/917619917057?text=Hi%20ValleyVista!%20I%20am%20planning%20a%20holiday%20tour.%20Please%20guide%20me."
               target="_blank"
               rel="noreferrer"
               className="px-5 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition"

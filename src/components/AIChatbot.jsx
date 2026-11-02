@@ -20,7 +20,7 @@ import {
   Languages
 } from 'lucide-react';
 import { TOUR_PACKAGES } from '../data/travelData';
-import { getSmartAssistantResponse, HIMYATRA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
+import { getSmartAssistantResponse, VALLEYVISTA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
 
 /* ─── Package card parser ─── */
 function parsePackageCards(text) {
@@ -153,13 +153,13 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
     const pkgId = data.pkgId || data.id;
     return (
       TOUR_PACKAGES.find((p) => p.id === pkgId) ||
-      HIMYATRA_PACKAGES.find((p) => p.id === pkgId) ||
+      VALLEYVISTA_PACKAGES.find((p) => p.id === pkgId) ||
       data
     );
   }, [data]);
 
   const whatsappMsg = encodeURIComponent(
-    `Hi HimYatra! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
+    `Hi ValleyVista! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
   );
 
   // Instantly open details modal & minimize chat so user immediately sees the package modal!
@@ -198,7 +198,7 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
       {/* Badge & Title */}
       <div>
         <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 mb-1">
-          {fullPkg.badge || data.badge || 'HimYatra Special'}
+          {fullPkg.badge || data.badge || 'ValleyVista Special'}
         </span>
         <h4 className="font-bold text-sm text-white leading-snug group-hover:text-teal-300 transition-colors">
           {fullPkg.title || data.title}
@@ -264,7 +264,7 @@ function TypingIndicator() {
           />
         ))}
       </div>
-      <span className="text-[11px] text-teal-300 font-medium">HimYatra AI...</span>
+      <span className="text-[11px] text-teal-300 font-medium">ValleyVista AI...</span>
     </div>
   );
 }
@@ -280,9 +280,9 @@ function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage, onMini
         {!isUser && (
           <div className="flex items-center gap-2 ml-1">
             <div className="w-5 h-5 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center">
-              <Compass className="w-3 h-3 text-teal-400" />
+              <Compass className="w-3.5 h-3.5 text-teal-400" />
             </div>
-            <span className="text-[11px] font-bold text-teal-400">HimYatra Assistant</span>
+            <span className="text-[11px] font-bold text-teal-400">ValleyVista Assistant</span>
           </div>
         )}
 
@@ -360,13 +360,13 @@ export default function AIChatbot({ onSelectPackage, onBookPackage }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const WELCOME_EN = `Hello! 🙏 I am your **HimYatra AI Travel Assistant**.
-Ask me anything about Himalayan honeymoon specials, Char Dham 2026, fixed cab rentals, or custom tours!
+  const WELCOME_EN = `Hello! 🙏 I am your **ValleyVista AI Travel Assistant**.
+Ask me anything about worldwide holiday packages, domestic India tours, honeymoon specials, Char Dham 2026, fixed cab rentals, or custom itineraries!
 
 I can generate tailor-made itineraries and pricing instantly. Where would you like to travel?`;
 
-  const WELCOME_HI = `Namaste! 🙏 Main **HimYatra Assistant** hoon.
-Himalayan trips, honeymoon packages, fixed-route cabs, ya Char Dham Yatra ke bare mein kuch bhi poochiye!
+  const WELCOME_HI = `Namaste! 🙏 Main **ValleyVista Assistant** hoon.
+Worldwide holidays, domestic tours, honeymoon packages, fixed-route cabs, ya Char Dham Yatra ke bare mein kuch bhi poochiye!
 
 Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta hoon. Aap kahan ghoomna chahte hain?`;
 
@@ -546,7 +546,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
       .slice(-3)
       .join(' | ');
     const text = encodeURIComponent(
-      `Hi HimYatra Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a Himalayan trip'}. Please assist me!`
+      `Hi ValleyVista Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a holiday trip'}. Please assist me!`
     );
     window.open(`https://wa.me/917619917057?text=${text}`, '_blank');
   };
@@ -599,7 +599,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             </div>
             <div className="text-xs text-left">
               <div className="font-bold flex items-center gap-1.5">
-                <span>HimYatra Assistant</span>
+                <span>ValleyVista Assistant</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <div className="text-[10px] text-teal-300">Click to resume conversation</div>
@@ -705,9 +705,9 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-300 ring-1 ring-slate-950 animate-pulse" />
               </div>
               <div>
-                <div className="text-xs font-bold leading-tight">HimYatra AI Assistant</div>
+                <div className="text-xs font-bold leading-tight">ValleyVista AI Assistant</div>
                 <div className="text-[10px] text-teal-100 flex items-center gap-1">
-                  <span>Himalayan Specialist</span>
+                  <span>Worldwide Travel Specialist</span>
                   <span>•</span>
                   <span className="text-emerald-200">Online</span>
                 </div>
@@ -798,7 +798,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
                 maxLength={500}
                 disabled={isTyping}
-                aria-label="Ask HimYatra AI"
+                aria-label="Ask ValleyVista AI"
               />
               <button
                 type="submit"
@@ -810,7 +810,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
               </button>
             </div>
             <div className="flex items-center justify-between text-[10px] text-slate-500 px-1 mt-1.5">
-              <span>Himalayan Tour Specialist</span>
+              <span>Worldwide Travel Specialist</span>
               <span>amitpatel42203@gmail.com</span>
             </div>
           </form>
@@ -843,7 +843,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             }}
             className="relative w-14 h-14 sm:w-15 sm:h-15 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
             aria-label="Open AI Mountain Guide"
-            title="Chat with HimYatra AI Assistant"
+            title="Chat with ValleyVista AI Assistant"
           >
             <Compass className="w-7 h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
 

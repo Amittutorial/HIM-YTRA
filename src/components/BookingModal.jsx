@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { X, Check, ShieldCheck, Calendar, Sparkles, CheckCircle2, MessageSquare } from 'lucide-react';
+import { X, Check, ShieldCheck, Calendar, Sparkles, CheckCircle2, MessageSquare, Download, FileText, Home, ArrowLeft } from 'lucide-react';
 import { TOUR_PACKAGES } from '../data/travelData';
 import confetti from 'canvas-confetti';
 import { saveBookingToSupabase, updateBookingPaymentToSupabase, getCurrentUser } from '../lib/supabaseClient';
 import { sendBookingEmail } from '../lib/emailService';
+import { generateBookingConfirmationPDF } from '../lib/pdfGenerator';
 import FormFounderBadge from './FormFounderBadge';
 import { Lock, AlertCircle } from 'lucide-react';
 
@@ -36,8 +37,44 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [verificationError, setVerificationError] = useState('');
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
+  const [showBookingDetails, setShowBookingDetails] = useState(false);
 
   const currentPkg = TOUR_PACKAGES.find(p => p.id === selectedPkgId) || TOUR_PACKAGES[0];
+
+  const handleDownloadPDF = async () => {
+    setIsDownloadingPdf(true);
+    try {
+      await generateBookingConfirmationPDF({
+        booking_reference: bookingId,
+        package_id: currentPkg.id,
+        package_title: currentPkg.title,
+        state: currentPkg.state,
+        destination: currentPkg.destination || currentPkg.state,
+        duration: currentPkg.duration,
+        durationDays: currentPkg.durationDays || 6,
+        customer_name: name || loggedInUser?.full_name || 'Valued Guest',
+        customer_phone: phone || '+91 76199 17057',
+        customer_email: email || 'amitpatel42203@gmail.com',
+        travel_date: travelDate,
+        adults_count: adults,
+        children_count: children,
+        pickup_city: pickupCity,
+        vehicle_tier: vehicleTier === 'innova' ? 'Innova Crysta' : vehicleTier === 'tempo' ? '12-Seater Tempo' : 'Sedan (Dzire/Etios)',
+        hotel_tier: hotelTier === 'luxury' ? '5★ Luxury Heritage Resort' : hotelTier === '4star' ? '4★ Premium Valley View' : '3★ Deluxe Verified Hotel',
+        total_price: finalTotal,
+        advance_token: advanceToken,
+        coupon_applied: couponCode || 'None',
+        utr_reference: utrNumber.trim() || 'UPI/VERIFIED/TOKEN',
+        status: isVerified ? 'token_paid' : 'pending_payment'
+      }, 'save');
+    } catch (err) {
+      console.error('PDF Generation exception:', err);
+      alert('Could not generate PDF. Please try again.');
+    } finally {
+      setIsDownloadingPdf(false);
+    }
+  };
 
   // Pricing math
   const baseRate = currentPkg.discountedPrice;
@@ -120,6 +157,11 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
     setTimeout(() => {
       setIsVerifying(false);
       setIsVerified(true);
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.5 }
+      });
       // Update Supabase booking record with UTR
       updateBookingPaymentToSupabase(bookingId, utrNumber.trim());
       // Send verified update email with ALL details
@@ -161,185 +203,284 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
         {isConfirmed ? (
           /* Confirmation Screen */
           <div className="p-6 sm:p-10 space-y-6 text-center animate-in zoom-in-95 duration-300">
-            <div className="w-20 h-20 rounded-full bg-teal-500/20 text-teal-400 mx-auto flex items-center justify-center border border-teal-400/40">
-              <CheckCircle2 className="w-12 h-12" />
-            </div>
+            {isVerified ? (
+              /* Verified Booking Confirmation Screen */
+              <div className="space-y-6 animate-in zoom-in-95 duration-300">
+                <div className="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center border-2 border-emerald-400/50 shadow-xl shadow-emerald-500/25">
+                  <CheckCircle2 className="w-12 h-12" />
+                </div>
 
-            <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">
-                Reservation Hold Confirmed
-              </span>
-              <h2 className="text-3xl font-black text-white font-['Outfit'] mt-2">
-                Congratulations, {name || 'Traveler'}!
-              </h2>
-              <p className="text-sm text-slate-300 mt-1">
-                Your Himalayan holiday booking request is registered under Booking Reference:
-              </p>
-              <div className="inline-block mt-3 px-5 py-2.5 rounded-2xl bg-teal-950/80 border border-teal-400/50 font-mono text-xl font-bold text-teal-300 tracking-wider">
-                {bookingId}
-              </div>
-            </div>
-
-            {/* Receipt Summary Box */}
-            <div className="rounded-2xl bg-slate-950/80 border border-white/10 p-5 text-left text-xs space-y-2.5">
-              <div className="flex justify-between py-1 border-b border-white/5">
-                <span className="text-slate-400">Package:</span>
-                <span className="font-bold text-white text-right max-w-xs">{currentPkg.title}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-white/5">
-                <span className="text-slate-400">Travel Date:</span>
-                <span className="font-semibold text-white">{travelDate}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-white/5">
-                <span className="text-slate-400">Travelers:</span>
-                <span className="font-semibold text-white">{adults} Adults {children > 0 ? `, ${children} Kids` : ''}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-white/5">
-                <span className="text-slate-400">Pickup Location:</span>
-                <span className="font-semibold text-teal-300">{pickupCity}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-white/5">
-                <span className="text-slate-400">Total Tour Package Cost:</span>
-                <span className="font-bold text-white">₹{finalTotal.toLocaleString('en-IN')}</span>
-              </div>
-              <div className="flex justify-between py-1.5 bg-teal-950/40 px-3 rounded-xl border border-teal-500/20">
-                <span className="font-bold text-teal-300">Token Amount to Secure (20%):</span>
-                <span className="font-black text-teal-300 text-sm">₹{advanceToken.toLocaleString('en-IN')}</span>
-              </div>
-            </div>
-
-            {/* Direct UPI QR Code Payment Block */}
-            <div className="p-5 rounded-3xl bg-slate-950 border border-teal-500/30 text-center space-y-3">
-              <div className="flex items-center justify-center gap-2 text-white font-bold text-sm">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Pay 20% Token (₹{advanceToken.toLocaleString('en-IN')}) via UPI QR</span>
-              </div>
-              <p className="text-[11px] text-slate-400">
-                Scan with any UPI app (Google Pay, PhonePe, Paytm, BHIM, Cred) to lock your reservation.
-              </p>
-
-              {/* QR Image */}
-              <div className="mx-auto w-48 sm:w-56 rounded-2xl overflow-hidden border-2 border-teal-400/50 shadow-xl bg-black p-2">
-                <img
-                  src="/payment-qr.jpg"
-                  alt="Amit Patel UPI QR Code"
-                  className="w-full h-auto object-contain rounded-xl"
-                />
-              </div>
-
-              <div className="text-xs text-slate-300 font-medium">
-                Payee: <strong className="text-white">Amit Patel</strong> • Central Bank of India 3744
-              </div>
-
-              {/* UPI ID Copy */}
-              <div className="flex items-center justify-between bg-slate-900 border border-white/10 rounded-xl px-3 py-2 max-w-xs mx-auto text-xs">
-                <span className="font-mono text-teal-300 font-bold truncate">amitpatel42203@okhdfcbank</span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigator.clipboard.writeText('amitpatel42203@okhdfcbank');
-                    alert('UPI ID copied: amitpatel42203@okhdfcbank');
-                  }}
-                  className="px-2 py-0.5 rounded bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 text-[10px] font-bold cursor-pointer ml-2"
-                >
-                  Copy
-                </button>
-              </div>
-            </div>
-
-            {/* Payment Verification Step */}
-            <div className="p-4 rounded-2xl bg-slate-950/90 border border-teal-500/30 space-y-3 text-left">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-teal-400" /> Verify Token Payment
-                </span>
-                {isVerified && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-bold border border-emerald-500/30">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Verified
+                <div>
+                  <span className="text-xs font-black uppercase tracking-widest text-emerald-400 bg-emerald-500/10 px-3.5 py-1 rounded-full border border-emerald-500/30">
+                    BOOKING CONFIRMED!
                   </span>
-                )}
-              </div>
-
-              <p className="text-xs text-slate-300">
-                After scanning and paying via your UPI app, enter your 12-digit UTR / UPI reference number below to verify:
-              </p>
-
-              <form onSubmit={handleVerifyBookingPayment} className="space-y-2">
-                <input
-                  type="text"
-                  placeholder="Enter 12-digit UTR No. (e.g. 412389102834)"
-                  value={utrNumber}
-                  onChange={(e) => setUtrNumber(e.target.value)}
-                  disabled={isVerified}
-                  className="w-full bg-slate-900 border border-white/20 focus:border-teal-400 text-white rounded-xl px-3.5 py-2.5 text-xs font-mono placeholder:text-slate-500 focus:outline-none transition disabled:opacity-60"
-                />
-
-                {verificationError && (
-                  <div className="flex items-center gap-1.5 text-xs text-rose-400">
-                    <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                    <span>{verificationError}</span>
+                  <h2 className="text-3xl sm:text-4xl font-black text-white font-['Outfit'] mt-3">
+                    Your Himalayan Adventure Is Officially Booked.
+                  </h2>
+                  <p className="text-sm text-slate-300 mt-1 max-w-lg mx-auto">
+                    Congratulations, <strong className="text-white">{name || 'Valued Traveler'}</strong>! Your booking is confirmed with ValleyVista under reference:
+                  </p>
+                  <div className="inline-flex items-center gap-2 mt-3 px-5 py-2.5 rounded-2xl bg-slate-950 border border-emerald-400/50 font-mono text-xl font-bold text-emerald-300 tracking-wider shadow-inner">
+                    <span>Ref:</span>
+                    <span>{bookingId}</span>
                   </div>
-                )}
+                </div>
 
-                {!isVerified ? (
+                {/* 3 Required Customer Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <button
-                    type="submit"
-                    disabled={isVerifying}
-                    className="w-full py-2.5 px-4 rounded-xl bg-teal-400 hover:bg-teal-300 disabled:bg-slate-800 text-slate-950 disabled:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer"
+                    type="button"
+                    onClick={handleDownloadPDF}
+                    disabled={isDownloadingPdf}
+                    className="flex-1 py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
                   >
-                    {isVerifying ? (
-                      <span className="flex items-center gap-2">
-                        <span className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                        <span>Verifying Payment...</span>
-                      </span>
+                    {isDownloadingPdf ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                        <span>Generating Official PDF...</span>
+                      </>
                     ) : (
-                      <span>Confirm & Verify Payment</span>
+                      <>
+                        <Download className="w-4 h-4" />
+                        <span>Download Booking Confirmation PDF</span>
+                      </>
                     )}
                   </button>
-                ) : (
-                  <div className="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Payment verified! Click below to send screenshot on WhatsApp.</span>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowBookingDetails(!showBookingDetails)}
+                    className="py-4 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-white/10 transition cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4 text-amber-400" />
+                    <span>{showBookingDetails ? 'Hide Details' : 'View Booking Details'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="py-4 px-5 rounded-2xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 transition cursor-pointer"
+                  >
+                    <Home className="w-4 h-4" />
+                    <span>Return to Homepage</span>
+                  </button>
+                </div>
+
+                {/* WhatsApp Payment Screenshot link */}
+                <div className="pt-1">
+                  <a
+                    href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hello Amit Patel! I have confirmed my booking with token payment of ₹${advanceToken.toLocaleString('en-IN')} for "${currentPkg.title}".\n\n• Booking Ref: ${bookingId}\n• UTR Number: ${utrNumber || 'Verified'}\n• Traveler Name: ${name}\n\nPlease find my payment screenshot attached!`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-xs text-emerald-400 hover:text-emerald-300 font-bold underline"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5" />
+                    <span>Send Payment Screenshot & Connect on WhatsApp (+91 76199 17057)</span>
+                  </a>
+                </div>
+
+                {/* Expandable Details Card */}
+                {showBookingDetails && (
+                  <div className="rounded-2xl bg-slate-950/90 border border-teal-500/30 p-5 text-left text-xs space-y-3 animate-in fade-in duration-200">
+                    <h3 className="font-bold text-sm text-teal-300 border-b border-white/10 pb-2">
+                      Official Booking Summary & Route Ledger
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-300">
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Package Title</span>
+                        <strong className="text-white">{currentPkg.title}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Destination</span>
+                        <strong className="text-white">{currentPkg.state}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Travel Date</span>
+                        <strong className="text-white">{travelDate}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Travelers</span>
+                        <strong className="text-white">{adults} Adults {children > 0 ? `, ${children} Kids` : ''}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Pickup Point</span>
+                        <strong className="text-teal-300">{pickupCity}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Vehicle Tier</span>
+                        <strong className="text-white">{vehicleTier === 'innova' ? 'Innova Crysta' : vehicleTier === 'tempo' ? 'Tempo Traveller' : 'Sedan (Dzire/Etios)'}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Total Cost</span>
+                        <strong className="text-white">₹{finalTotal.toLocaleString('en-IN')}</strong>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block text-[10px] uppercase">Token Paid</span>
+                        <strong className="text-emerald-400">₹{advanceToken.toLocaleString('en-IN')} (UTR: {utrNumber})</strong>
+                      </div>
+                    </div>
                   </div>
                 )}
-              </form>
-            </div>
+              </div>
+            ) : (
+              /* Token Payment & Verification State */
+              <div className="space-y-6">
+                <div className="w-16 h-16 rounded-full bg-teal-500/20 text-teal-400 mx-auto flex items-center justify-center border border-teal-400/40">
+                  <CheckCircle2 className="w-10 h-10" />
+                </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              {isVerified ? (
-                <a
-                  href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hello Amit Patel! I have made the token payment of ₹${advanceToken.toLocaleString('en-IN')} for package "${currentPkg.title}".\n\n• Booking Ref: ${bookingId}\n• UTR Number: ${utrNumber || 'Verified'}\n• Traveler Name: ${name}\n\nPlease find my payment screenshot attached to issue my confirmed booking voucher!`)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 py-3.5 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/25 hover:scale-[1.02] active:scale-[0.98] transition animate-pulse"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>Send Payment Screenshot on WhatsApp</span>
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!utrNumber) {
-                      setVerificationError('Please enter your 12-digit UTR number above and click "Confirm & Verify Payment" first.');
-                    } else {
-                      handleVerifyBookingPayment({ preventDefault: () => {} });
-                    }
-                  }}
-                  className="flex-1 py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700/80 text-slate-400 hover:text-slate-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-white/10 transition cursor-pointer"
-                >
-                  <Lock className="w-4 h-4 text-amber-400" />
-                  <span>Verify Payment to Send Screenshot on WhatsApp</span>
-                </button>
-              )}
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-widest text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">
+                    Reservation Hold Registered
+                  </span>
+                  <h2 className="text-3xl font-black text-white font-['Outfit'] mt-2">
+                    Congratulations, {name || 'Traveler'}!
+                  </h2>
+                  <p className="text-sm text-slate-300 mt-1">
+                    Your holiday reservation is registered under Booking Reference:
+                  </p>
+                  <div className="inline-block mt-3 px-5 py-2.5 rounded-2xl bg-teal-950/80 border border-teal-400/50 font-mono text-xl font-bold text-teal-300 tracking-wider">
+                    {bookingId}
+                  </div>
+                </div>
 
-              <button
-                onClick={onClose}
-                className="py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition cursor-pointer"
-              >
-                Close & Done
-              </button>
-            </div>
+                {/* Receipt Summary Box */}
+                <div className="rounded-2xl bg-slate-950/80 border border-white/10 p-5 text-left text-xs space-y-2.5">
+                  <div className="flex justify-between py-1 border-b border-white/5">
+                    <span className="text-slate-400">Package:</span>
+                    <span className="font-bold text-white text-right max-w-xs">{currentPkg.title}</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-white/5">
+                    <span className="text-slate-400">Travel Date:</span>
+                    <span className="font-semibold text-white">{travelDate}</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-white/5">
+                    <span className="text-slate-400">Travelers:</span>
+                    <span className="font-semibold text-white">{adults} Adults {children > 0 ? `, ${children} Kids` : ''}</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-white/5">
+                    <span className="text-slate-400">Pickup Location:</span>
+                    <span className="font-semibold text-teal-300">{pickupCity}</span>
+                  </div>
+                  <div className="flex justify-between py-1 border-b border-white/5">
+                    <span className="text-slate-400">Total Tour Package Cost:</span>
+                    <span className="font-bold text-white">₹{finalTotal.toLocaleString('en-IN')}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 bg-teal-950/40 px-3 rounded-xl border border-teal-500/20">
+                    <span className="font-bold text-teal-300">Token Amount to Secure (20%):</span>
+                    <span className="font-black text-teal-300 text-sm">₹{advanceToken.toLocaleString('en-IN')}</span>
+                  </div>
+                </div>
+
+                {/* Direct UPI QR Code Payment Block */}
+                <div className="p-5 rounded-3xl bg-slate-950 border border-teal-500/30 text-center space-y-3">
+                  <div className="flex items-center justify-center gap-2 text-white font-bold text-sm">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Pay 20% Token (₹{advanceToken.toLocaleString('en-IN')}) via UPI QR</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    Scan with any UPI app (Google Pay, PhonePe, Paytm, BHIM, Cred) to lock your reservation.
+                  </p>
+
+                  {/* QR Image */}
+                  <div className="mx-auto w-48 sm:w-56 rounded-2xl overflow-hidden border-2 border-teal-400/50 shadow-xl bg-black p-2">
+                    <img
+                      src="/payment-qr.jpg"
+                      alt="Amit Patel UPI QR Code"
+                      className="w-full h-auto object-contain rounded-xl"
+                    />
+                  </div>
+
+                  <div className="text-xs text-slate-300 font-medium">
+                    Payee: <strong className="text-white">Amit Patel</strong> • Central Bank of India 3744
+                  </div>
+
+                  {/* UPI ID Copy */}
+                  <div className="flex items-center justify-between bg-slate-900 border border-white/10 rounded-xl px-3 py-2 max-w-xs mx-auto text-xs">
+                    <span className="font-mono text-teal-300 font-bold truncate">amitpatel42203@okhdfcbank</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText('amitpatel42203@okhdfcbank');
+                        alert('UPI ID copied: amitpatel42203@okhdfcbank');
+                      }}
+                      className="px-2 py-0.5 rounded bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 text-[10px] font-bold cursor-pointer ml-2"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+
+                {/* Payment Verification Step */}
+                <div className="p-4 rounded-2xl bg-slate-950/90 border border-teal-500/30 space-y-3 text-left">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-teal-400" /> Verify Token Payment
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-300">
+                    After scanning and paying via your UPI app, enter your 12-digit UTR / UPI reference number below to verify:
+                  </p>
+
+                  <form onSubmit={handleVerifyBookingPayment} className="space-y-2">
+                    <input
+                      type="text"
+                      placeholder="Enter 12-digit UTR No. (e.g. 412389102834)"
+                      value={utrNumber}
+                      onChange={(e) => setUtrNumber(e.target.value)}
+                      className="w-full bg-slate-900 border border-white/20 focus:border-teal-400 text-white rounded-xl px-3.5 py-2.5 text-xs font-mono placeholder:text-slate-500 focus:outline-none transition"
+                    />
+
+                    {verificationError && (
+                      <div className="flex items-center gap-1.5 text-xs text-rose-400">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{verificationError}</span>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      disabled={isVerifying}
+                      className="w-full py-2.5 px-4 rounded-xl bg-teal-400 hover:bg-teal-300 disabled:bg-slate-800 text-slate-950 disabled:text-slate-500 font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer"
+                    >
+                      {isVerifying ? (
+                        <span className="flex items-center gap-2">
+                          <span className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                          <span>Verifying Payment...</span>
+                        </span>
+                      ) : (
+                        <span>Confirm & Verify Payment</span>
+                      )}
+                    </button>
+                  </form>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!utrNumber) {
+                        setVerificationError('Please enter your 12-digit UTR number above and click "Confirm & Verify Payment" first.');
+                      } else {
+                        handleVerifyBookingPayment({ preventDefault: () => {} });
+                      }
+                    }}
+                    className="flex-1 py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700/80 text-slate-400 hover:text-slate-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-white/10 transition cursor-pointer"
+                  >
+                    <Lock className="w-4 h-4 text-amber-400" />
+                    <span>Verify Payment to Issue Confirmed E-Ticket</span>
+                  </button>
+
+                  <button
+                    onClick={onClose}
+                    className="py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition cursor-pointer"
+                  >
+                    Close & Done
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Founder Details & Help Center */}
             <FormFounderBadge onOpenHelpCenter={onOpenHelpCenter} />

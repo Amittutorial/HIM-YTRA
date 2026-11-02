@@ -1,5 +1,5 @@
 /**
- * HimYatra Hindi / English Translation Dictionary
+ * ValleyVista Hindi / English Translation Dictionary
  * Used by the `lang` state across the app.
  * `t(key)` returns the Hindi or English string for the active language.
  */
@@ -63,7 +63,7 @@ const translations = {
   'search.placeholder': { en: 'e.g. Manali, Kedarnath, Spiti, मनाली...', hi: 'जैसे मनाली, केदारनाथ, स्पिति...' },
 
   // ─── Trust Stats ────────────────────────────────────────
-  'trust.whyChoose': { en: 'Why Choose HimYatra?', hi: 'हिमयात्रा क्यों चुनें?' },
+  'trust.whyChoose': { en: 'Why Choose ValleyVista?', hi: 'वैलीविस्टा क्यों चुनें?' },
   'trust.localDrivers': { en: 'Local Pahadi Drivers', hi: 'स्थानीय पहाड़ी ड्राइवर' },
   'trust.noHiddenCost': { en: 'No Hidden Costs', hi: 'कोई छिपी लागत नहीं' },
   'trust.support247': { en: '24/7 Mountain Support', hi: '24/7 पहाड़ी सहायता' },

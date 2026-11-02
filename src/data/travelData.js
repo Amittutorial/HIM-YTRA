@@ -1389,7 +1389,7 @@ export const TESTIMONIALS = [
     package: 'Magical Himachal (Shimla & Manali)',
     rating: 5,
     date: 'February 2026',
-    comment: 'HimYatra made our 25th anniversary trip completely stress-free! Our driver Vicky bhaiya was so polite and knew every snow turn around Atal Tunnel. The hotel rooms in Manali had direct snow mountain views. Truly genuine Pahadi hospitality!',
+    comment: 'ValleyVista made our 25th anniversary trip completely stress-free! Our driver Vicky bhaiya was so polite and knew every snow turn around Atal Tunnel. The hotel rooms in Manali had direct snow mountain views. Truly genuine hospitality!',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
   },
   {
@@ -1398,7 +1398,7 @@ export const TESTIMONIALS = [
     package: 'Sacred Do Dham Yatra (Kedarnath & Badrinath)',
     rating: 5,
     date: 'October 2025',
-    comment: 'Traveling with my 68-year-old parents to Kedarnath seemed daunting, but HimYatra organized priority token assistance and clean oxygen support. Their team kept calling us twice daily to check health and road updates. Devbhoomi was truly magical.',
+    comment: 'Traveling with my 68-year-old parents to Kedarnath seemed daunting, but ValleyVista organized priority token assistance and clean oxygen support. Their team kept calling us twice daily to check health and road updates. Devbhoomi was truly magical.',
     avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80'
   },
   {
@@ -1416,14 +1416,14 @@ export const TESTIMONIALS = [
     package: 'Nainital & Jim Corbett Family Tour',
     rating: 5,
     date: 'December 2025',
-    comment: 'We wanted pure vegetarian Jain meal arrangements and child-friendly stops, and HimYatra took care of every single detail. We even spotted two Royal Bengal Tigers during our morning Corbett safari! Highly recommended for families.',
+    comment: 'We wanted pure vegetarian Jain meal arrangements and child-friendly stops, and ValleyVista took care of every single detail. We even spotted two Royal Bengal Tigers during our morning Corbett safari! Highly recommended for families.',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80'
   }
 ];
 
 export const FAQS = [
   {
-    question: 'How do bookings and reservations work with HimYatra?',
+    question: 'How do bookings and reservations work with ValleyVista?',
     answer: 'You can reserve any tour package with just a 20% advance token amount. The remaining balance can be paid upon arrival or check-in. We send you an instant booking voucher with confirmed hotel details, driver contact numbers, and day-to-day itinerary.'
   },
   {

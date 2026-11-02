@@ -141,7 +141,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <a
-                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I just created a custom ${durationDays}-day trip for ${selectedSpots.join(', ')} with ${travelersCount} travelers starting from ${pickupCity}. Please share the itinerary!`)}`}
+                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I just created a custom ${durationDays}-day trip for ${selectedSpots.join(', ')} with ${travelersCount} travelers starting from ${pickupCity}. Please share the itinerary!`)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
@@ -391,7 +391,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
 
                   {/* Send on WhatsApp Button */}
                   <a
-                    href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I want a custom quote:
+                    href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I want a custom quote:
 📍 Region: ${selectedRegion}
 🏔️ Spots: ${selectedSpots.join(', ')}
 ⏱️ Duration: ${durationDays} Days

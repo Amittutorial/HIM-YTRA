@@ -14,13 +14,13 @@ export default function ReviewsSection() {
           Loved by Over <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-300">15,000+ Indian Families</span> & Explorers
         </h2>
         <p className="text-slate-400 text-sm sm:text-base">
-          Read genuine experiences from travelers across Mumbai, Bengaluru, Delhi, Kolkata, and Gujarat who trusted HimYatra with their precious Himalayan holidays.
+          Read genuine experiences from travelers across the country and worldwide who trusted ValleyVista with their precious holidays.
         </p>
 
         {/* Google Reviews Trust Badge & Link */}
         <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <a
-            href="https://www.google.com/search?q=HimYatra+Tours+and+Travels+Himachal+Uttarakhand+reviews"
+            href="https://www.google.com/search?q=ValleyVista+Worldwide+Tours+and+Travels+reviews"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900 border border-white/20 hover:border-amber-400/50 text-white text-xs font-bold transition shadow-lg hover:scale-102"

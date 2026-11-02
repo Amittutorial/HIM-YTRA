@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, QrCode, Copy, Check, MessageSquare, ShieldCheck, Smartphone, CheckCircle2, Lock, ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
+import { X, QrCode, Copy, Check, MessageSquare, ShieldCheck, Smartphone, CheckCircle2, Lock, ArrowRight, Sparkles, AlertCircle, Download } from 'lucide-react';
 import { sendBookingEmail } from '../lib/emailService';
+import { generateBookingConfirmationPDF } from '../lib/pdfGenerator';
 import FormFounderBadge from './FormFounderBadge';
 
 export default function PaymentModal({ initialAmount, bookingRef, packageName, onClose, onOpenHelpCenter }) {
@@ -12,6 +13,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
   const [isVerifying, setIsVerifying] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [verificationError, setVerificationError] = useState('');
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
 
   const upiId = 'amitpatel42203@okhdfcbank';
   const payeeName = 'Amit Verma';
@@ -22,6 +24,29 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     navigator.clipboard.writeText(upiId);
     setCopiedUpi(true);
     setTimeout(() => setCopiedUpi(false), 2500);
+  };
+
+  const handleDownloadPDF = async () => {
+    setIsDownloadingPdf(true);
+    try {
+      await generateBookingConfirmationPDF({
+        booking_reference: bookingRef || `VV-${Date.now().toString().slice(-6)}`,
+        package_title: packageName || 'ValleyVista Premium Travel Experience',
+        state: 'Worldwide & Himalayan Tours',
+        customer_name: 'Valued Customer',
+        customer_phone: '+91 76199 17057',
+        customer_email: 'amitpatel42203@gmail.com',
+        total_price: amount,
+        advance_token: amount,
+        utr_reference: utrNumber.trim() || 'UPI/VERIFIED',
+        status: 'token_paid'
+      }, 'save');
+    } catch (err) {
+      console.error('PDF error in PaymentModal:', err);
+      alert('Could not download PDF. Please try again.');
+    } finally {
+      setIsDownloadingPdf(false);
+    }
   };
 
   const handleVerifyPayment = (e) => {
@@ -40,8 +65,8 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
       // Send automated notification to Amit's Gmail
       sendBookingEmail({
         bookingId: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
-        packageTitle: packageName || 'HimYatra Tour Token Advance',
-        state: 'Himachal & Uttarakhand',
+        packageTitle: packageName || 'ValleyVista Tour Token Advance',
+        state: 'Worldwide & Himalayan Tours',
         name: 'UPI Customer',
         phone: 'Provided via WhatsApp',
         advanceToken: amount,
@@ -50,7 +75,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     }, 1000);
   };
 
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'HimYatra Tour Advance')}`;
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'ValleyVista Tour Advance')}`;
 
   const whatsappMessage = encodeURIComponent(
     `Hello Amit Patel! I have completed my UPI payment of ₹${Number(amount).toLocaleString('en-IN')}.\n\n• UTR / Ref No: ${utrNumber || 'Verified'}\n• Booking Ref: ${bookingRef || 'General Advance'}\n• Package: ${packageName || 'Tour Advance'}\n\nPlease find my attached payment screenshot to confirm my reservation and issue the voucher!`
@@ -225,25 +250,48 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
               ) : (
                 <div className="p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Payment verified with UTR <strong>{utrNumber}</strong>! Please send screenshot below.</span>
+                  <span>Payment verified with UTR <strong>{utrNumber}</strong>!</span>
                 </div>
               )}
             </form>
           </div>
 
-          {/* Step 3: Clickable WhatsApp Button (Enabled after verification) */}
-          <div className="pt-1">
-            {isVerified ? (
+          {/* Post-verification actions: Download PDF and WhatsApp confirmation */}
+          {isVerified && (
+            <div className="space-y-2.5 animate-in fade-in duration-200">
+              <button
+                type="button"
+                onClick={handleDownloadPDF}
+                disabled={isDownloadingPdf}
+                className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition cursor-pointer"
+              >
+                {isDownloadingPdf ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                    <span>Preparing E-Ticket PDF...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4" />
+                    <span>Download Booking Confirmation & E-Ticket PDF</span>
+                  </>
+                )}
+              </button>
+
               <a
                 href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full py-3.5 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] transition animate-pulse"
+                className="w-full py-3 px-5 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-bold text-xs flex items-center justify-center gap-2 transition"
               >
-                <MessageSquare className="w-4 h-4 fill-slate-950" />
+                <MessageSquare className="w-4 h-4" />
                 <span>Send Payment Screenshot on WhatsApp</span>
               </a>
-            ) : (
+            </div>
+          )}
+
+          {!isVerified && (
+            <div className="pt-1">
               <button
                 type="button"
                 onClick={() => {
@@ -256,10 +304,10 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
                 className="w-full py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700/80 text-slate-400 hover:text-slate-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-white/10 transition cursor-pointer"
               >
                 <Lock className="w-4 h-4 text-amber-400" />
-                <span>Verify Payment to Send Screenshot on WhatsApp</span>
+                <span>Verify Payment to Issue Booking Confirmation</span>
               </button>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="flex items-center justify-center gap-2 text-[10px] text-slate-400">
             <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />

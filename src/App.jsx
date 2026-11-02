@@ -33,7 +33,7 @@ import { TOUR_PACKAGES, DESTINATIONS } from './data/travelData';
 export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('himyatra-theme') || 'dark';
+    return localStorage.getItem('valleyvista-theme') || localStorage.getItem('himyatra-theme') || 'dark';
   });
 
   const [activeRegion, setActiveRegion] = useState('himachal');
@@ -46,11 +46,11 @@ export default function App() {
   const [preAppliedCoupon, setPreAppliedCoupon] = useState('');
 
   // Modals & Enhanced Features State
-  const [lang, setLang] = useState(() => localStorage.getItem('himyatra-lang') || 'en');
+  const [lang, setLang] = useState(() => localStorage.getItem('valleyvista-lang') || localStorage.getItem('himyatra-lang') || 'en');
   const t = useMemo(() => createTranslator(lang), [lang]);
   const [quizModalOpen, setQuizModalOpen] = useState(false);
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
-  const [trackingTripId, setTrackingTripId] = useState('HY-TRIP-8821');
+  const [trackingTripId, setTrackingTripId] = useState('VV-TRIP-8821');
   const [compareModalOpen, setCompareModalOpen] = useState(false);
   const [viewingPackage, setViewingPackage] = useState(null);
 
@@ -62,6 +62,7 @@ export default function App() {
 
   // Synchronize theme with html and body classes
   useEffect(() => {
+    localStorage.setItem('valleyvista-theme', theme);
     localStorage.setItem('himyatra-theme', theme);
     const root = document.documentElement;
     if (theme === 'light') {
@@ -87,9 +88,9 @@ export default function App() {
         const match = TOUR_PACKAGES.find(p => p.id === pkgId);
         if (match) {
           setViewingPackage(match);
-          document.title = `${match.title} (${match.duration}) — HimYatra Packages`;
+          document.title = `${match.title} (${match.duration}) — ValleyVista Packages`;
           const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with HimYatra.`);
+          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with ValleyVista.`);
         }
       }
 
@@ -98,7 +99,7 @@ export default function App() {
         const matchDest = DESTINATIONS.find(d => d.id === destId || d.searchKeyword?.toLowerCase() === destId.toLowerCase());
         if (matchDest) {
           handleSelectDestination(matchDest);
-          document.title = `${matchDest.name} Tours & Sightseeing — HimYatra`;
+          document.title = `${matchDest.name} Tours & Sightseeing — ValleyVista`;
           const el = document.getElementById('destinations');
           setTimeout(() => el?.scrollIntoView({ behavior: 'smooth' }), 300);
         }
@@ -139,6 +140,7 @@ export default function App() {
   const toggleLanguage = () => {
     setLang((prev) => {
       const next = prev === 'en' ? 'hi' : 'en';
+      localStorage.setItem('valleyvista-lang', next);
       localStorage.setItem('himyatra-lang', next);
       return next;
     });
@@ -149,9 +151,9 @@ export default function App() {
     if (pkg) {
       const newUrl = `${window.location.pathname}?pkg=${encodeURIComponent(pkg.id)}`;
       window.history.pushState({ pkgId: pkg.id }, '', newUrl);
-      document.title = `${pkg.title} (${pkg.duration}) — HimYatra Packages`;
+      document.title = `${pkg.title} (${pkg.duration}) — ValleyVista Packages`;
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with HimYatra.`);
+      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with ValleyVista.`);
     }
   };
 
@@ -160,7 +162,7 @@ export default function App() {
     const currentParams = new URLSearchParams(window.location.search);
     if (currentParams.has('pkg')) {
       window.history.pushState({}, '', window.location.pathname);
-      document.title = 'HimYatra — Premium Himachal & Uttarakhand Tours, Cabs & Char Dham Yatra';
+      document.title = 'ValleyVista | Worldwide Travel, Tours & Holiday Experiences';
     }
   };
 

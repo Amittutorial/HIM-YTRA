@@ -1,5 +1,5 @@
 /**
- * Automated Professional Email & Notification Service for HimYatra
+ * Automated Professional Email & Notification Service for ValleyVista
  * Delivers customer inquiries, vacation reservations, and successful payment details
  * directly to amitpatel42203@gmail.com
  *
@@ -18,7 +18,7 @@ const SITE_URL = 'https://him-ytra.vercel.app/';
 export async function sendInquiryEmail(inquiry) {
   try {
     const payload = {
-      _subject: `🔔 [NEW INQUIRY] ${inquiry.name || 'Traveler'} | 📞 ${inquiry.phone} | ${inquiry.destination || 'Himalayan Tour'} - HimYatra`,
+      _subject: `🔔 [NEW INQUIRY] ${inquiry.name || 'Traveler'} | 📞 ${inquiry.phone} | ${inquiry.destination || 'Worldwide Tour'} - ValleyVista`,
       _template: 'table',
       _captcha: 'false',
       _next: SITE_URL,
@@ -27,15 +27,15 @@ export async function sendInquiryEmail(inquiry) {
       'Customer Mobile / WhatsApp': inquiry.phone || 'Not provided',
       'Customer Email Address': inquiry.email || 'Not provided',
       '--- VACATION & TRIP INQUIRY DETAILS ---': '----------------------------------------',
-      'Interested Destination / Region': inquiry.destination || 'Himachal Pradesh / Uttarakhand',
-      'Departure / Starting City': inquiry.fromCity || 'Delhi NCR / Chandigarh',
+      'Interested Destination / Region': inquiry.destination || 'Worldwide & Domestic India Tours',
+      'Departure / Starting City': inquiry.fromCity || 'Delhi NCR / Mumbai / Flexible',
       'Planned Travel Date / Month': inquiry.travelDate || 'Flexible / To be confirmed',
       'Number of Travelers / Guests': inquiry.travelersCount || 'Not specified',
-      'Inquiry Message / Special Requests': inquiry.message || 'Interested in Himalayan travel packages & custom quote',
+      'Inquiry Message / Special Requests': inquiry.message || 'Interested in travel packages & custom quote',
       'Form Submission Source': inquiry.source || 'Website Inquire Modal',
       'Website URL': SITE_URL,
       '--- COMPANY & FOUNDER CREDENTIALS ---': '----------------------------------------',
-      'Agency Name': 'HimYatra Holidays Private Limited',
+      'Agency Name': 'ValleyVista Worldwide Travels Private Limited',
       'Founder': `${FOUNDER_NAME} (${FOUNDER_PHONE})`,
       'Founder Helpline': FOUNDER_PHONE,
       'Official Email': TARGET_GMAIL,
@@ -95,7 +95,7 @@ export async function sendBookingEmail(booking) {
       'Customer Mobile / WhatsApp': booking.phone,
       'Customer Email Address': booking.email || 'Not provided',
       '--- COMPANY & FOUNDER CREDENTIALS ---': '----------------------------------------',
-      'Agency Name': 'HimYatra Holidays Private Limited',
+      'Agency Name': 'ValleyVista Worldwide Travels Private Limited',
       'Founder': `${FOUNDER_NAME} (${FOUNDER_PHONE})`,
       'Company Helpline': FOUNDER_PHONE,
       'Company Email': TARGET_GMAIL,

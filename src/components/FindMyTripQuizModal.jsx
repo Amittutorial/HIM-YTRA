@@ -261,7 +261,7 @@ export default function FindMyTripQuizModal({ isOpen, onClose, onSelectPackage, 
                         {lang === 'hi' ? 'अभी बुक करें' : 'Book Now'}
                       </button>
                       <a
-                        href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I matched with "${pkg.title}" (₹${pkg.price}/person) in the Trip Quiz. Please share itinerary!`)}`}
+                        href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I matched with "${pkg.title}" (₹${pkg.price}/person) in the Trip Quiz. Please share itinerary!`)}`}
                         target="_blank"
                         rel="noreferrer"
                         className="p-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition flex items-center justify-center cursor-pointer"

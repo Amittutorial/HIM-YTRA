@@ -1,5 +1,5 @@
 // Vercel Serverless Function — POST /api/chat
-// Proxies conversation to Claude API if configured, otherwise serves smart Himalayan travel knowledge engine.
+// Proxies conversation to Claude API if configured, otherwise serves smart ValleyVista travel knowledge engine.
 // Never exposes keys to frontend and never crashes or leaves visitors with an error.
 
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -28,7 +28,7 @@ function sanitize(str) {
     .slice(0, MAX_MSG_LENGTH);
 }
 
-const SYSTEM_PROMPT = `You are the HimYatra Assistant on the HimYatra website. HimYatra offers tour packages, cab rentals, spiritual circuits (like Char Dham), and adventure trips across Himachal Pradesh, Uttarakhand, Kashmir, Rajasthan, Ladakh, and more.
+const SYSTEM_PROMPT = `You are the ValleyVista Assistant on the ValleyVista worldwide travel website (From Everywhere. To Everywhere.). ValleyVista offers domestic India and worldwide holiday packages, custom itineraries, fixed-rate cab rentals, spiritual circuits (like Char Dham), honeymoon specials, and adventure trips.
 
 Your job: help visitors choose packages, understand routes, plan trips, and contact the team.
 CRITICAL LANGUAGE RULE:
@@ -61,9 +61,10 @@ Business information (use ONLY this):
 
 - Inclusions (most packages): Hotel stay, daily breakfast & dinner, private cab, sightseeing, driver allowance, all tolls & parking.
 - Exclusions: Flights/trains, lunch, personal expenses, adventure activities.
-- Cancellation: 100% full refund 15+ days before. 50% refund 7-14 days before.
+- Cancellation: 100% full refund 15+ days before. 75% refund 7-14 days before. Weather protection guarantee.
 - Founder & Contact: Amit Verma | Phone/WhatsApp: +91 76199 17057 | Email: amitpatel42203@gmail.com | Desks: Shimla (HP) & Rishikesh (UK)
-- Payment: 30% advance to confirm booking (UPI, card), balance on arrival.
+- Co-Founder: Abhishek Verma | Phone: +91 7408989182
+- Payment: 20% advance token to confirm booking (UPI, card), balance on arrival.
 
 PACKAGE RECOMMENDATION FORMAT:
 When recommending a package, output a card block like this:
@@ -78,8 +79,8 @@ function fallbackSmartReply(text) {
   // Honeymoon
   if (/(honeymoon|couple|romantic|candle|shadi|shaadi|wedding|anniversary)/i.test(q)) {
     if (isEn) {
-      return `💖 **HimYatra Romantic & Honeymoon Specials!**
-Congratulations on your special journey! Here are our 3 most celebrated Himalayan honeymoon packages:
+      return `💖 **ValleyVista Romantic & Honeymoon Specials!**
+Congratulations on your special journey! Here are our 3 most celebrated honeymoon packages:
 
 1. **Kashmir Paradise (6D/5N — ₹14,999/person)**: Private sunset Shikara on Dal Lake, romantic luxury houseboat stay, candlelight dinner & snow gondola in Gulmarg!
 2. **Magical Himachal & Manali (6D/5N — ₹13,499/person)**: Cozy mountain resorts, snow views at Solang Valley, Atal Tunnel to Sissu, and private cab.
@@ -89,8 +90,8 @@ Congratulations on your special journey! Here are our 3 most celebrated Himalaya
 :::PACKAGE_CARD:::{"title":"Magical Himachal: Shimla, Kullu & Manali","duration":"6D / 5N","price":"₹13,499","pkgId":"pkg-himachal-magic"}:::END:::
 :::PACKAGE_CARD:::{"title":"Royal Rajputana: Jaipur Pink City & Udaipur","duration":"6D / 5N","price":"₹13,999","pkgId":"pkg-rajasthan-royalty"}:::END:::`;
     }
-    return `💖 **HimYatra Romantic & Honeymoon Specials!**
-Congratulations on your special journey! Humare top 3 curated Himalayan honeymoon packages hain:
+    return `💖 **ValleyVista Romantic & Honeymoon Specials!**
+Congratulations on your special journey! Humare top 3 curated honeymoon packages hain:
 
 1. **Kashmir Paradise (6D/5N — ₹14,999/person)** — Dal Lake private shikara ride, romantic houseboat stay, candle-light dinner, and Gulmarg snow gondola!
 2. **Magical Himachal & Manali (6D/5N — ₹13,499/person)** — Solang snow slopes, cozy wooden mountain resort, Atal Tunnel & private cab.
@@ -103,8 +104,9 @@ Congratulations on your special journey! Humare top 3 curated Himalayan honeymoo
 
   // Help / Contact
   if (/(help|contact|phone|call|email|gmail|whatsapp|founder|amit)/i.test(q)) {
-    return `📞 **HimYatra Direct Contact & Support Desk**
-• 👤 **Founder:** Amit Verma
+    return `📞 **ValleyVista Direct Contact & Support Desk**
+• 👤 **Founder:** Amit Verma (+91 76199 17057)
+• 👤 **Co-Founder:** Abhishek Verma (+91 7408989182)
 • 📱 **Direct Call & WhatsApp:** +91 76199 17057
 • ✉️ **Official Email:** amitpatel42203@gmail.com
 • 🏢 **Desks:** The Mall Road, Shimla (HP) & Tapovan, Rishikesh (Uttarakhand)`;
@@ -112,8 +114,8 @@ Congratulations on your special journey! Humare top 3 curated Himalayan honeymoo
 
   // General greeting / fallback
   if (isEn) {
-    return `Hello! 🙏 Welcome to **HimYatra**!
-I am your personal AI Himalayan Travel Assistant. How can I help you today?
+    return `Hello! 🙏 Welcome to **ValleyVista**! (From Everywhere. To Everywhere.)
+I am your personal AI Travel Assistant. How can I help you today?
 • 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
 • 🛕 **Char Dham & Kedarnath Yatra 2026**
 • 🚖 **Fixed Route Cabs** (Delhi/Chandigarh to Hills)
@@ -123,11 +125,11 @@ I am your personal AI Himalayan Travel Assistant. How can I help you today?
 :::PACKAGE_CARD:::{"title":"Kashmir Paradise: Srinagar, Gulmarg & Houseboat","duration":"6D / 5N","price":"₹14,999","pkgId":"pkg-kashmir-paradise"}:::END:::`;
   }
 
-  return `Namaste! 🙏 Welcome to **HimYatra**!
-Main aapki Himalayan travel planning mein madad kar sakta hoon:
+  return `Namaste! 🙏 Welcome to **ValleyVista**! (From Everywhere. To Everywhere.)
+Main aapki travel planning mein madad kar sakta hoon:
 • 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
 • 🛕 **Char Dham & Kedarnath Yatra 2026**
-• 🚖 **Fixed Route Cabs** (Delhi/Chandigarh to Hills)
+• 🚖 **Fixed Route Cabs** (Delhi/Chandigarh se Hills)
 • 🏔️ **Adventure & Treks** (Spiti 4x4, Ladakh, Chopta)
 
 :::PACKAGE_CARD:::{"title":"Magical Himachal: Shimla, Kullu & Manali","duration":"6D / 5N","price":"₹13,499","pkgId":"pkg-himachal-magic"}:::END:::

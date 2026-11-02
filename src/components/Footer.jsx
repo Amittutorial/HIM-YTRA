@@ -12,10 +12,10 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
           {/* Brand Col (2 cols on lg) */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-teal-400/60 shadow-md shadow-teal-500/20 shrink-0 bg-slate-900">
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-emerald-400/60 shadow-md shadow-emerald-500/20 shrink-0 bg-slate-900">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="HimYatra Mountains"
+                  alt="ValleyVista Worldwide"
                   className="w-full h-full object-cover object-center scale-110"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -24,27 +24,27 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
                 />
               </div>
               <span className="text-2xl font-black text-white font-['Outfit'] tracking-tight">
-                Him<span className="text-teal-400">Yatra</span>
+                Valley<span className="text-emerald-400">Vista</span>
               </span>
             </div>
 
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-sm">
-              HimYatra is Himachal’s premier homegrown mountain travel specialist. Dedicated to crafting memorable, safe, and authentic journeys across Himachal Pradesh and Uttarakhand Devbhoomi.
+              ValleyVista is a premier worldwide travel company. Dedicated to crafting memorable, safe, and authentic journeys across domestic India and international destinations. From Everywhere. To Everywhere.
             </p>
 
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-semibold flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> HP Tourism Reg. No. HP/TOUR/2026/891
+              <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5" /> Tourism Reg. No. HP/TOUR/2026/891
               </span>
-              <span className="px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-300 text-[11px] font-semibold flex items-center gap-1">
-                <Award className="w-3.5 h-3.5" /> Devbhoomi Certified
+              <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-[11px] font-semibold flex items-center gap-1">
+                <Award className="w-3.5 h-3.5" /> Worldwide Certified
               </span>
             </div>
           </div>
 
           {/* Himachal Links */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-sm font-['Outfit'] uppercase tracking-wider text-teal-400">
+            <h4 className="text-white font-bold text-sm font-['Outfit'] uppercase tracking-wider text-emerald-400">
               Himachal Pradesh
             </h4>
             <ul className="space-y-2">
@@ -53,7 +53,7 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
                   <a
                     href="#destinations"
                     onClick={() => onSelectState?.('Himachal Pradesh')}
-                    className="hover:text-teal-300 transition"
+                    className="hover:text-emerald-300 transition"
                   >
                     {item}
                   </a>
@@ -62,18 +62,18 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
             </ul>
           </div>
 
-          {/* Uttarakhand Links */}
+          {/* Uttarakhand & Pan-India Links */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-sm font-['Outfit'] uppercase tracking-wider text-teal-400">
-              Uttarakhand Devbhoomi
+            <h4 className="text-white font-bold text-sm font-['Outfit'] uppercase tracking-wider text-emerald-400">
+              Uttarakhand & Beyond
             </h4>
             <ul className="space-y-2">
-              {['Kedarnath & Badrinath', 'Rishikesh & Haridwar', 'Mussoorie & Dhanaulti', 'Nainital & Bhimtal', 'Jim Corbett Tiger Safari', 'Auli Skiing Resort', 'Chopta & Tungnath', 'Valley of Flowers'].map((item) => (
+              {['Kedarnath & Badrinath', 'Rishikesh & Haridwar', 'Mussoorie & Dhanaulti', 'Nainital & Bhimtal', 'Kashmir Dal Lake & Gulmarg', 'Ladakh Pangong Tso', 'Rajasthan Royal Palaces', 'Kerala Backwaters & Goa'].map((item) => (
                 <li key={item}>
                   <a
                     href="#destinations"
                     onClick={() => onSelectState?.('Uttarakhand')}
-                    className="hover:text-teal-300 transition"
+                    className="hover:text-emerald-300 transition"
                   >
                     {item}
                   </a>
@@ -84,13 +84,13 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
 
           {/* Quick Support & Payment */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-sm font-['Outfit'] uppercase tracking-wider text-teal-400">
+            <h4 className="text-white font-bold text-sm font-['Outfit'] uppercase tracking-wider text-emerald-400">
               24/7 Helpline
             </h4>
             <div className="space-y-2 text-slate-300">
               <div>
                 <span className="text-[10px] text-slate-400 uppercase block font-semibold">Toll-Free Assistance</span>
-                <a href="tel:+917619917057" className="text-sm font-bold text-white hover:text-teal-300">
+                <a href="tel:+917619917057" className="text-sm font-bold text-white hover:text-emerald-300">
                   +91 76199 17057
                 </a>
               </div>
@@ -128,13 +128,23 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
 
         {/* Bottom copyright and heartfelt note */}
         <div className="pt-8 space-y-4">
-          {/* Founder Credit Row */}
+          {/* Founder & Co-Founder Credit Row */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-slate-900/60 border border-white/10">
-            <div className="flex items-center gap-3 text-xs">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center text-slate-950 font-black text-sm">A</div>
-              <div>
-                <div className="text-white font-bold">Amit Verma</div>
-                <div className="text-slate-400 text-[11px]">Founder & CEO, HimYatra Travels | +91 76199 17057</div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-slate-950 font-black text-sm">A</div>
+                <div>
+                  <div className="text-white font-bold">Amit Verma</div>
+                  <div className="text-slate-400 text-[11px]">Founder & Managing Director • +91 76199 17057</div>
+                </div>
+              </div>
+              <span className="hidden sm:inline text-slate-600">•</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-emerald-600 flex items-center justify-center text-slate-950 font-black text-sm">AV</div>
+                <div>
+                  <div className="text-white font-bold">Abhishek Verma</div>
+                  <div className="text-slate-400 text-[11px]">Co-Founder & Operations • +91 7408989182</div>
+                </div>
               </div>
             </div>
             <button
@@ -149,7 +159,7 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
           {/* Copyright Row */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-xs">
             <div>
-              © {new Date().getFullYear()} HimYatra Travels Private Limited. All Rights Reserved. Made with ❤️ in Himachal.
+              © {new Date().getFullYear()} ValleyVista Travels Private Limited. All Rights Reserved. From Everywhere. To Everywhere.
             </div>
             <div className="flex items-center gap-4 text-[11px]">
               <a href="#about" className="hover:text-white transition">About Us</a>
@@ -158,7 +168,7 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
               <span>•</span>
               <a href="#offers" className="hover:text-white transition">Offers & Coupons</a>
               <span>•</span>
-              <button onClick={() => onOpenBooking(null)} className="text-teal-400 font-bold hover:underline cursor-pointer">
+              <button onClick={() => onOpenBooking(null)} className="text-emerald-400 font-bold hover:underline cursor-pointer">
                 Book a Tour
               </button>
             </div>

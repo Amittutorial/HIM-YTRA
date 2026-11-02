@@ -399,3 +399,56 @@ html.light, body.light {
 .light ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+
+/* ══════════════════════════════════════════════════════════════════
+   OFFICIAL EXECUTIVE PRINT & PDF EXPORT STYLES
+   ══════════════════════════════════════════════════════════════════ */
+@media print {
+  @page {
+    margin: 10mm 12mm;
+    size: A4 portrait;
+  }
+
+  html, body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10.5pt !important;
+    line-height: 1.5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide background elements, floating buttons, chat, and navbar during print */
+  #mobile-bottom-bar,
+  #navbar,
+  nav,
+  footer,
+  .chatbot-launcher,
+  [aria-label="Open AI Mountain Guide"],
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* Make sure modal content is fully visible and not clipped */
+  .fixed {
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .overflow-y-auto,
+  .overflow-hidden {
+    overflow: visible !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+
+  /* Ensure page breaks don't cut boxes awkwardly */
+  .break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}

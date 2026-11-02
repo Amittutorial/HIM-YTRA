@@ -7,8 +7,12 @@ export default function MobileBottomBar({ onOpenBooking, onOpenAuth, theme = 'da
 
   useEffect(() => {
     const handleAuth = (e) => setCurrentUser(e.detail);
+    window.addEventListener('valleyvista-auth-changed', handleAuth);
     window.addEventListener('himyatra-auth-changed', handleAuth);
-    return () => window.removeEventListener('himyatra-auth-changed', handleAuth);
+    return () => {
+      window.removeEventListener('valleyvista-auth-changed', handleAuth);
+      window.removeEventListener('himyatra-auth-changed', handleAuth);
+    };
   }, []);
 
   const isLight = theme === 'light';
@@ -37,7 +41,7 @@ export default function MobileBottomBar({ onOpenBooking, onOpenAuth, theme = 'da
 
       {/* WhatsApp button */}
       <a
-        href="https://wa.me/917619917057?text=Hi%20HimYatra!%20I%20want%20to%20plan%20a%20Himalayan%20trip."
+        href="https://wa.me/917619917057?text=Hi%20ValleyVista!%20I%20want%20to%20plan%20a%20tour."
         target="_blank"
         rel="noreferrer"
         className={`flex-1 py-2 px-1 rounded-xl text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 active:scale-95 transition border ${

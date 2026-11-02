@@ -15,7 +15,7 @@ export default function FormFounderBadge({ onOpenHelpCenter }) {
             <strong className="text-white font-bold text-xs truncate">Amit Verma</strong>
             <ShieldCheck className="w-3.5 h-3.5 text-teal-400 shrink-0" />
           </div>
-          <p className="text-[10px] text-teal-300/80 truncate">HimYatra Himalayan Tour Specialist</p>
+          <p className="text-[10px] text-teal-300/80 truncate">ValleyVista Worldwide Travel Specialist</p>
         </div>
       </div>
 

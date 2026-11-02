@@ -124,7 +124,7 @@ export default function RoadWeatherAlerts() {
                 <div className="text-[11px] text-slate-500 flex items-center gap-2 pt-0.5">
                   <span>⏱️ {alert.lastUpdated}</span>
                   <span>•</span>
-                  <span className="text-teal-400 font-medium">Verified by HimYatra Ops</span>
+                  <span className="text-teal-400 font-medium">Verified by ValleyVista Ops</span>
                 </div>
               </div>
 
@@ -158,7 +158,7 @@ export default function RoadWeatherAlerts() {
                 You will receive urgent road updates for <strong className="text-teal-300">{routeInterest}</strong> directly on WhatsApp.
               </p>
               <a
-                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I subscribed for road alerts for ${routeInterest}. Please send current live advisory.`)}`}
+                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I subscribed for road alerts for ${routeInterest}. Please send current live advisory.`)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-md"

@@ -253,15 +253,15 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
           <div className="lg:col-span-7 space-y-3 sm:space-y-4">
             <div className="inline-flex items-center gap-2 text-teal-300 font-semibold text-xs sm:text-sm tracking-wider uppercase bg-teal-500/10 px-3.5 py-1.5 rounded-full border border-teal-500/20 backdrop-blur-md">
               <Sparkles className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-              <span>Premium Mountain Experiences</span>
+              <span>Worldwide Travel & Holiday Experiences</span>
             </div>
 
             <h1 className="text-[clamp(1.75rem,6.5vw,4.5rem)] font-extrabold tracking-tight text-white font-['Outfit'] leading-[1.08]">
               Unforgettable <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-teal-100 to-teal-400">
-                Himalayan Journeys
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-400">
+                Journeys Worldwide
               </span> <br />
-              <span className="text-white/95">by HimYatra</span>
+              <span className="text-white/95">by ValleyVista</span>
             </h1>
 
             {/* Quick trust metrics */}
@@ -269,11 +269,11 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               <div className="flex items-center gap-1.5 bg-slate-950/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
                 <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400 shrink-0" />
                 <span className="font-bold text-white">4.9 / 5</span>
-                <span className="text-slate-400">(2,400+ Indian Travelers)</span>
+                <span className="text-slate-400">(4,800+ Verified Travelers)</span>
               </div>
               <div className="flex items-center gap-1.5 bg-slate-950/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
                 <ShieldCheck className="w-3.5 h-3.5 text-teal-400 shrink-0" />
-                <span>100% Local Pahadi Drivers & Guides</span>
+                <span>100% Verified Guides & Premium Stays</span>
               </div>
             </div>
           </div>
@@ -282,8 +282,8 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
           <div className="lg:col-span-5 space-y-3 sm:space-y-4">
             <p className="text-xs sm:text-base lg:text-lg text-slate-200/90 leading-relaxed font-light backdrop-blur-md bg-slate-950/40 p-3 sm:p-5 rounded-2xl border border-white/10 shadow-lg">
               {lang === 'hi'
-                ? 'हिमाचल प्रदेश और उत्तराखंड में हिमालय की छुट्टी पैकेज, निश्चित रूट कैब, पवित्र चार धाम यात्रा और पहाड़ी साहसिक यात्राएं।'
-                : 'Himalayan holiday packages, fixed-route cab rentals, sacred Char Dham circuits, and mountain adventures across Himachal Pradesh and Uttarakhand.'}
+                ? 'दुनिया भर की खूबसूरत यात्राएं, घरेलू और अंतर्राष्ट्रीय हॉलिडे पैकेज, कस्टमाइज्ड ट्रिप और लक्जरी टूर — वैलीविस्टा के साथ।'
+                : 'Discover the world, experience different cultures, and create unforgettable journeys. Worldwide holiday packages, domestic India tours, and luxury getaways with ValleyVista.'}
             </p>
 
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
@@ -296,7 +296,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               </button>
 
               <a
-                href="https://wa.me/917619917057?text=Hi%20HimYatra!%20I%20want%20to%20plan%20a%20trip%20to%20Himachal/Uttarakhand."
+                href="https://wa.me/917619917057?text=Hi%20ValleyVista!%20I%20want%20to%20plan%20a%20holiday%20trip.%20Please%20guide%20me."
                 target="_blank"
                 rel="noreferrer"
                 className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base flex items-center gap-2 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"

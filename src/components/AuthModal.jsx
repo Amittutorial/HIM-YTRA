@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { 
   X, User, Mail, ShieldCheck, Sparkles, CheckCircle2, 
   ArrowRight, LogOut, Calendar, MapPin, Compass, AlertCircle,
-  RefreshCw, Check, Lock, Eye, EyeOff, UserPlus, LogIn
+  RefreshCw, Check, Lock, Eye, EyeOff, UserPlus, LogIn, Download
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { generateBookingConfirmationPDF } from '../lib/pdfGenerator';
 import { 
   sendEmailOtp, 
   verifyEmailOtp, 
@@ -69,8 +70,12 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
         loadUserData(e.detail);
       }
     };
+    window.addEventListener('valleyvista-auth-changed', handleAuthChange);
     window.addEventListener('himyatra-auth-changed', handleAuthChange);
-    return () => window.removeEventListener('himyatra-auth-changed', handleAuthChange);
+    return () => {
+      window.removeEventListener('valleyvista-auth-changed', handleAuthChange);
+      window.removeEventListener('himyatra-auth-changed', handleAuthChange);
+    };
   }, []);
 
   // Load history if user is logged in
@@ -198,7 +203,7 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
       );
       setUser(res.user);
       confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-      setSuccessMsg(`🎉 Account created! Welcome to HimYatra, @${res.user.username}.`);
+      setSuccessMsg(`🎉 Account created! Welcome to ValleyVista, @${res.user.username}.`);
       loadUserData(res.user);
     } catch (err) {
       setError(err.message || 'Invalid verification code.');
@@ -464,7 +469,7 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
                   <div className="py-8 text-center bg-slate-950/40 rounded-2xl border border-white/5 space-y-2 p-4">
                     <Compass className="w-8 h-8 text-slate-500 mx-auto" />
                     <p className="text-sm font-semibold text-slate-300">No bookings found yet under @{user.username}</p>
-                    <p className="text-xs text-slate-500 max-w-md mx-auto">Every tour reservation you make on HimYatra automatically links to your username.</p>
+                    <p className="text-xs text-slate-500 max-w-md mx-auto">Every tour reservation you make on ValleyVista automatically links to your username.</p>
                     <button
                       type="button"
                       onClick={() => {
@@ -516,22 +521,34 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
                             <span>{b.adults_count || 1} Adults, {b.children_count || 0} Children</span>
                           </div>
 
-                          {(!b.utr_reference && b.status !== 'token_paid') && onOpenPayment && (
+                          <div className="flex items-center gap-2">
                             <button
                               type="button"
-                              onClick={() => {
-                                onClose();
-                                onOpenPayment({
-                                  bookingRef: b.booking_reference,
-                                  amount: b.advance_token || 2000,
-                                  packageName: b.package_title
-                                });
-                              }}
-                              className="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-2 py-1 rounded-lg transition"
+                              onClick={() => generateBookingConfirmationPDF(b, 'save')}
+                              className="text-[10px] font-bold text-slate-950 bg-teal-400 hover:bg-teal-300 px-2.5 py-1 rounded-lg transition inline-flex items-center gap-1 cursor-pointer shadow-sm"
+                              title="Download official booking confirmation & e-ticket PDF"
                             >
-                              Verify Advance Payment →
+                              <Download className="w-3 h-3" />
+                              <span>Download PDF</span>
                             </button>
-                          )}
+
+                            {(!b.utr_reference && b.status !== 'token_paid') && onOpenPayment && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  onClose();
+                                  onOpenPayment({
+                                    bookingRef: b.booking_reference,
+                                    amount: b.advance_token || 2000,
+                                    packageName: b.package_title
+                                  });
+                                }}
+                                className="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-2 py-1 rounded-lg transition"
+                              >
+                                Verify Advance →
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -579,7 +596,7 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
                       <span>Set or Update Account Password</span>
                     </h4>
                     <p className="text-xs text-slate-400 mt-1">
-                      Set a password so you can instantly log in to your HimYatra account on any phone, laptop, or desktop computer.
+                      Set a password so you can instantly log in to your ValleyVista account on any phone, laptop, or desktop computer.
                     </p>
                   </div>
 
