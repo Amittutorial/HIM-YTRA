@@ -68,7 +68,7 @@ export default function CharDhamSection({ onOpenBooking }) {
 
         <div className="flex items-center gap-3">
           <a
-            href="https://wa.me/917619917057?text=Hi%20ValleyVista!%20I%20want%20to%20plan%20Char%20Dham%20Yatra%202026.%20Please%20guide%20me."
+            href="https://wa.me/917619917057?text=Hi%20HimYatra!%20I%20want%20to%20plan%20Char%20Dham%20Yatra%202026.%20Please%20guide%20me."
             target="_blank"
             rel="noreferrer"
             className="px-5 py-3 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-emerald-500/20 transition cursor-pointer"

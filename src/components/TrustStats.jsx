@@ -55,8 +55,8 @@ export default function TrustStats() {
         {stats.map((stat, i) => {
           const Icon = stat.icon;
           return (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="p-3.5 sm:p-6 rounded-2xl sm:rounded-3xl backdrop-blur-xl bg-slate-900/60 border border-white/10 hover:border-teal-500/30 transition-all hover:-translate-y-1 group"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 mb-3 sm:mb-4 group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-slate-950 transition duration-300">
@@ -76,21 +76,21 @@ export default function TrustStats() {
         })}
       </div>
 
-      {/* Why Choose ValleyVista Card */}
+      {/* Why Choose HimYatra Card */}
       <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-slate-900/90 via-slate-950 to-teal-950/40 border border-teal-500/20 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5 space-y-4">
             <span className="text-xs font-bold uppercase tracking-widest text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">
-              Why ValleyVista
+              Why HimYatra
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-white font-['Outfit'] leading-tight">
               We Don’t Just Book Trips. <br />
               <span className="text-teal-400">We Create Unforgettable Journeys.</span>
             </h2>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              With worldwide network reach and regional operations across India and abroad, ValleyVista was founded by passionate travel specialists. "From Everywhere. To Everywhere." Discover the world, experience different cultures, and create unforgettable journeys with verified stays and 24/7 dedicated support.
+              With worldwide network reach and regional operations across India and abroad, HimYatra was founded by passionate travel specialists. "From Everywhere. To Everywhere." Discover the world, experience different cultures, and create unforgettable journeys with verified stays and 24/7 dedicated support.
             </p>
           </div>
 

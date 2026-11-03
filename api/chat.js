@@ -1,5 +1,5 @@
 // Vercel Serverless Function — POST /api/chat
-// Proxies conversation to Claude API if configured, otherwise serves smart ValleyVista travel knowledge engine.
+// Proxies conversation to Claude API if configured, otherwise serves smart HimYatra travel knowledge engine.
 // Never exposes keys to frontend and never crashes or leaves visitors with an error.
 
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
@@ -28,7 +28,7 @@ function sanitize(str) {
     .slice(0, MAX_MSG_LENGTH);
 }
 
-const SYSTEM_PROMPT = `You are the ValleyVista Assistant on the ValleyVista worldwide travel website (From Everywhere. To Everywhere.). ValleyVista offers domestic India and worldwide holiday packages, custom itineraries, fixed-rate cab rentals, spiritual circuits (like Char Dham), honeymoon specials, and adventure trips.
+const SYSTEM_PROMPT = `You are the HimYatra Assistant on the HimYatra website (Premium Himalayan & All Destination Tours). HimYatra offers domestic India and Himalayan holiday packages, custom itineraries, fixed-rate cab rentals, spiritual circuits (like Char Dham), honeymoon specials, and adventure trips.
 
 Your job: help visitors choose packages, understand routes, plan trips, and contact the team.
 CRITICAL LANGUAGE RULE:
@@ -79,7 +79,7 @@ function fallbackSmartReply(text) {
   // Honeymoon
   if (/(honeymoon|couple|romantic|candle|shadi|shaadi|wedding|anniversary)/i.test(q)) {
     if (isEn) {
-      return `💖 **ValleyVista Romantic & Honeymoon Specials!**
+      return `💖 **HimYatra Romantic & Honeymoon Specials!**
 Congratulations on your special journey! Here are our 3 most celebrated honeymoon packages:
 
 1. **Kashmir Paradise (6D/5N — ₹14,999/person)**: Private sunset Shikara on Dal Lake, romantic luxury houseboat stay, candlelight dinner & snow gondola in Gulmarg!
@@ -90,7 +90,7 @@ Congratulations on your special journey! Here are our 3 most celebrated honeymoo
 :::PACKAGE_CARD:::{"title":"Magical Himachal: Shimla, Kullu & Manali","duration":"6D / 5N","price":"₹13,499","pkgId":"pkg-himachal-magic"}:::END:::
 :::PACKAGE_CARD:::{"title":"Royal Rajputana: Jaipur Pink City & Udaipur","duration":"6D / 5N","price":"₹13,999","pkgId":"pkg-rajasthan-royalty"}:::END:::`;
     }
-    return `💖 **ValleyVista Romantic & Honeymoon Specials!**
+    return `💖 **HimYatra Romantic & Honeymoon Specials!**
 Congratulations on your special journey! Humare top 3 curated honeymoon packages hain:
 
 1. **Kashmir Paradise (6D/5N — ₹14,999/person)** — Dal Lake private shikara ride, romantic houseboat stay, candle-light dinner, and Gulmarg snow gondola!
@@ -104,7 +104,7 @@ Congratulations on your special journey! Humare top 3 curated honeymoon packages
 
   // Help / Contact
   if (/(help|contact|phone|call|email|gmail|whatsapp|founder|amit)/i.test(q)) {
-    return `📞 **ValleyVista Direct Contact & Support Desk**
+    return `📞 **HimYatra Direct Contact & Support Desk**
 • 👤 **Founder:** Amit Verma (+91 76199 17057)
 • 👤 **Co-Founder:** Abhishek Verma (+91 7408989182)
 • 📱 **Direct Call & WhatsApp:** +91 76199 17057
@@ -114,7 +114,7 @@ Congratulations on your special journey! Humare top 3 curated honeymoon packages
 
   // General greeting / fallback
   if (isEn) {
-    return `Hello! 🙏 Welcome to **ValleyVista**! (From Everywhere. To Everywhere.)
+    return `Hello! 🙏 Welcome to **HimYatra**! (Premium Himalayan & All Destination Tours)
 I am your personal AI Travel Assistant. How can I help you today?
 • 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
 • 🛕 **Char Dham & Kedarnath Yatra 2026**
@@ -125,7 +125,7 @@ I am your personal AI Travel Assistant. How can I help you today?
 :::PACKAGE_CARD:::{"title":"Kashmir Paradise: Srinagar, Gulmarg & Houseboat","duration":"6D / 5N","price":"₹14,999","pkgId":"pkg-kashmir-paradise"}:::END:::`;
   }
 
-  return `Namaste! 🙏 Welcome to **ValleyVista**! (From Everywhere. To Everywhere.)
+  return `Namaste! 🙏 Welcome to **HimYatra**! (Premium Himalayan & All Destination Tours)
 Main aapki travel planning mein madad kar sakta hoon:
 • 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
 • 🛕 **Char Dham & Kedarnath Yatra 2026**

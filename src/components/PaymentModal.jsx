@@ -7,7 +7,7 @@ import FormFounderBadge from './FormFounderBadge';
 export default function PaymentModal({ initialAmount, bookingRef, packageName, onClose, onOpenHelpCenter }) {
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [amount, setAmount] = useState(initialAmount || 5000);
-  
+
   // Payment verification state
   const [utrNumber, setUtrNumber] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
@@ -30,13 +30,13 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     setIsDownloadingPdf(true);
     try {
       await generateBookingConfirmationPDF({
-        booking_reference: bookingRef || `VV-${Date.now().toString().slice(-6)}`,
-        package_title: packageName || 'ValleyVista Premium Travel Experience',
-        state: 'Worldwide & Himalayan Tours',
+        booking_reference: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
+        package_title: packageName || 'HimYatra Premium Travel Experience',
+        state: 'Himachal & Uttarakhand',
         customer_name: 'Valued Customer',
         customer_phone: '+91 76199 17057',
         customer_email: 'amitpatel42203@gmail.com',
-        total_price: amount,
+        total_price: amount * 5,
         advance_token: amount,
         utr_reference: utrNumber.trim() || 'UPI/VERIFIED',
         status: 'token_paid'
@@ -64,18 +64,20 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
 
       // Send automated notification to Amit's Gmail
       sendBookingEmail({
-        bookingId: bookingRef || `VV-${Date.now().toString().slice(-6)}`,
-        packageTitle: packageName || 'ValleyVista Tour Token Advance',
-        state: 'Worldwide & Himalayan Tours',
+        bookingId: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
+        packageTitle: packageName || 'HimYatra Tour Token Advance',
+        state: 'Himachal & Uttarakhand',
         name: 'UPI Customer',
-        phone: 'Provided via WhatsApp',
+        phone: '+91 76199 17057',
+        email: 'amitpatel42203@gmail.com',
         advanceToken: amount,
+        finalTotal: amount * 5,
         utr: utrNumber.trim()
       });
     }, 1000);
   };
 
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'ValleyVista Tour Advance')}`;
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'HimYatra Tour Advance')}`;
 
   const whatsappMessage = encodeURIComponent(
     `Hello Amit Patel! I have completed my UPI payment of ₹${Number(amount).toLocaleString('en-IN')}.\n\n• UTR / Ref No: ${utrNumber || 'Verified'}\n• Booking Ref: ${bookingRef || 'General Advance'}\n• Package: ${packageName || 'Tour Advance'}\n\nPlease find my attached payment screenshot to confirm my reservation and issue the voucher!`
@@ -84,7 +86,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
       <div className="relative w-full max-w-lg bg-slate-900 border border-teal-500/30 rounded-3xl overflow-hidden shadow-2xl shadow-black/95 my-6">
-        
+
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -108,7 +110,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
 
         {/* Modal Content */}
         <div className="p-4 sm:p-6 space-y-5 max-h-[75vh] overflow-y-auto">
-          
+
           {/* QR Code Container */}
           <div className="bg-slate-950 p-4 sm:p-5 rounded-2xl border border-white/10 text-center space-y-3">
             <div className="flex items-center justify-center gap-2 text-white font-bold text-sm">
@@ -298,7 +300,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
                   if (!utrNumber) {
                     setVerificationError('Please enter your 12-digit UTR number above and click "Confirm & Verify Payment" first.');
                   } else {
-                    handleVerifyPayment({ preventDefault: () => {} });
+                    handleVerifyPayment({ preventDefault: () => { } });
                   }
                 }}
                 className="w-full py-3.5 px-6 rounded-2xl bg-slate-800 hover:bg-slate-700/80 text-slate-400 hover:text-slate-200 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-white/10 transition cursor-pointer"

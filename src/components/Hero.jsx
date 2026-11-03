@@ -175,15 +175,14 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
   return (
     <section id="hero" className="relative pt-24 sm:pt-28 lg:pt-32 pb-8 px-3 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
       {/* Outer ambient blur glow behind the framed hero container */}
-      <div className={`absolute inset-x-12 top-28 bottom-12 rounded-[40px] blur-3xl -z-10 pointer-events-none transition-colors duration-700 ${
-        theme === 'light'
-          ? 'bg-gradient-to-r from-sky-400/25 via-teal-400/20 to-emerald-400/25'
-          : 'bg-gradient-to-r from-teal-500/20 via-emerald-600/15 to-cyan-500/20'
-      }`} />
+      <div className={`absolute inset-x-12 top-28 bottom-12 rounded-[40px] blur-3xl -z-10 pointer-events-none transition-colors duration-700 ${theme === 'light'
+        ? 'bg-gradient-to-r from-sky-400/25 via-teal-400/20 to-emerald-400/25'
+        : 'bg-gradient-to-r from-teal-500/20 via-emerald-600/15 to-cyan-500/20'
+        }`} />
 
       {/* Main Framed Hero Card Container */}
       <div className="relative min-h-[560px] sm:min-h-[640px] lg:min-h-[720px] rounded-[24px] sm:rounded-[38px] overflow-hidden border border-white/20 shadow-2xl shadow-black/80 flex flex-col justify-between p-4 sm:p-12 lg:p-16 transition-all duration-700">
-        
+
         {/* Dynamic Background Images with Smooth Cross-Fade Transitions */}
         {REGION_BACKGROUNDS.map((bg) => {
           const isActive = activeRegion === bg.id;
@@ -191,11 +190,10 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
           return (
             <div
               key={bg.id}
-              className={`absolute inset-0 bg-cover ${bg.bgPosition || 'bg-center'} transition-all duration-1000 ease-in-out ${
-                isActive
-                  ? 'opacity-100 scale-100 z-0'
-                  : 'opacity-0 scale-105 pointer-events-none -z-10'
-              }`}
+              className={`absolute inset-0 bg-cover ${bg.bgPosition || 'bg-center'} transition-all duration-1000 ease-in-out ${isActive
+                ? 'opacity-100 scale-100 z-0'
+                : 'opacity-0 scale-105 pointer-events-none -z-10'
+                }`}
               style={{ backgroundImage: `url(${bgUrl})` }}
             >
               {/* Overlays: dark vs light mode handling */}
@@ -234,11 +232,10 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               <button
                 key={bg.id}
                 onClick={() => onSelectRegion?.(bg.id)}
-                className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs transition-all duration-300 cursor-pointer font-bold whitespace-nowrap shrink-0 ${
-                  activeRegion === bg.id
-                    ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-lg shadow-teal-400/40 scale-105 ring-2 ring-teal-200/50'
-                    : 'text-slate-300 hover:text-white hover:bg-white/10'
-                }`}
+                className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs transition-all duration-300 cursor-pointer font-bold whitespace-nowrap shrink-0 ${activeRegion === bg.id
+                  ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 font-black shadow-lg shadow-teal-400/40 scale-105 ring-2 ring-teal-200/50'
+                  : 'text-slate-300 hover:text-white hover:bg-white/10'
+                  }`}
               >
                 {bg.name}
               </button>
@@ -248,7 +245,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
 
         {/* Hero Middle Content: Headline on Left, Atmospheric Subtitle on Right */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end my-auto py-6 sm:py-12 lg:py-16">
-          
+
           {/* Left Column: Bold Typography matching reference */}
           <div className="lg:col-span-7 space-y-3 sm:space-y-4">
             <div className="inline-flex items-center gap-2 text-teal-300 font-semibold text-xs sm:text-sm tracking-wider uppercase bg-teal-500/10 px-3.5 py-1.5 rounded-full border border-teal-500/20 backdrop-blur-md">
@@ -261,7 +258,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-400">
                 Journeys Worldwide
               </span> <br />
-              <span className="text-white/95">by ValleyVista</span>
+              <span className="text-white/95">by HimYatra</span>
             </h1>
 
             {/* Quick trust metrics */}
@@ -283,7 +280,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
             <p className="text-xs sm:text-base lg:text-lg text-slate-200/90 leading-relaxed font-light backdrop-blur-md bg-slate-950/40 p-3 sm:p-5 rounded-2xl border border-white/10 shadow-lg">
               {lang === 'hi'
                 ? 'दुनिया भर की खूबसूरत यात्राएं, घरेलू और अंतर्राष्ट्रीय हॉलिडे पैकेज, कस्टमाइज्ड ट्रिप और लक्जरी टूर — वैलीविस्टा के साथ।'
-                : 'Discover the world, experience different cultures, and create unforgettable journeys. Worldwide holiday packages, domestic India tours, and luxury getaways with ValleyVista.'}
+                : 'Discover the world, experience different cultures, and create unforgettable journeys. Worldwide holiday packages, domestic India tours, and luxury getaways with HimYatra.'}
             </p>
 
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
@@ -296,7 +293,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               </button>
 
               <a
-                href="https://wa.me/917619917057?text=Hi%20ValleyVista!%20I%20want%20to%20plan%20a%20holiday%20trip.%20Please%20guide%20me."
+                href="https://wa.me/917619917057?text=Hi%20HimYatra!%20I%20want%20to%20plan%20a%20holiday%20trip.%20Please%20guide%20me."
                 target="_blank"
                 rel="noreferrer"
                 className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base flex items-center gap-2 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"

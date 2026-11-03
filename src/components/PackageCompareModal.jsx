@@ -174,7 +174,7 @@ export default function PackageCompareModal({ isOpen, onClose, onBookPackage, in
                       {lang === 'hi' ? 'अभी बुक करें' : 'Book Now'}
                     </button>
                     <a
-                      href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I am comparing "${pkg.title}" (₹${pkg.price}). Please share full details.`)}`}
+                      href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I am comparing "${pkg.title}" (₹${pkg.price}). Please share full details.`)}`}
                       target="_blank"
                       rel="noreferrer"
                       className="w-full py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5"

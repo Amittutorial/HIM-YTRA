@@ -15,7 +15,7 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
               <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-emerald-400/60 shadow-md shadow-emerald-500/20 shrink-0 bg-slate-900">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="ValleyVista Worldwide"
+                  alt="HimYatra Worldwide"
                   className="w-full h-full object-cover object-center scale-110"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -29,7 +29,7 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
             </div>
 
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-sm">
-              ValleyVista is a premier worldwide travel company. Dedicated to crafting memorable, safe, and authentic journeys across domestic India and international destinations. From Everywhere. To Everywhere.
+              HimYatra is a premier worldwide travel company. Dedicated to crafting memorable, safe, and authentic journeys across domestic India and international destinations. From Everywhere. To Everywhere.
             </p>
 
             <div className="flex flex-wrap items-center gap-2 pt-2">
@@ -159,7 +159,7 @@ export default function Footer({ onSelectState, onOpenBooking, onOpenPayment, on
           {/* Copyright Row */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-400 text-xs">
             <div>
-              © {new Date().getFullYear()} ValleyVista Travels Private Limited. All Rights Reserved. From Everywhere. To Everywhere.
+              © {new Date().getFullYear()} HimYatra Travels Private Limited. All Rights Reserved. From Everywhere. To Everywhere.
             </div>
             <div className="flex items-center gap-4 text-[11px]">
               <a href="#about" className="hover:text-white transition">About Us</a>

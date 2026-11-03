@@ -367,7 +367,7 @@ export default function CabRentalCalculator({ onOpenBooking }) {
           {/* Action Buttons */}
           <div className="space-y-3">
             <a
-              href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I want to book a cab:
+              href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I want to book a cab:
 📍 Route: ${currentRoute.from} to ${currentRoute.to}
 🚗 Vehicle: ${vehicleDetails[vehicleType]?.name}
 📅 Date: ${pickupDate}

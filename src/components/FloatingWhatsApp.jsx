@@ -5,8 +5,8 @@ export default function FloatingWhatsApp({ activePackage = null }) {
   const [openPopup, setOpenPopup] = useState(false);
 
   const defaultMsg = activePackage
-    ? `Hi ValleyVista! I am interested in "${activePackage.title}" (₹${activePackage.price || activePackage.discountedPrice}/person). Please share details!`
-    : 'Hi ValleyVista! I want to plan a tour. Please guide me!';
+    ? `Hi HimYatra! I am interested in "${activePackage.title}" (₹${activePackage.price || activePackage.discountedPrice}/person). Please share details!`
+    : 'Hi HimYatra! I want to plan a tour. Please guide me!';
 
   const quickQuestions = [
     'Honeymoon packages quote for couple?',
@@ -26,7 +26,7 @@ export default function FloatingWhatsApp({ activePackage = null }) {
                 VV
               </div>
               <div>
-                <div className="text-xs font-bold">ValleyVista Travel Desk</div>
+                <div className="text-xs font-bold">HimYatra Travel Desk</div>
                 <div className="text-[10px] text-emerald-400 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span>Online • Avg reply: 5 mins</span>
@@ -53,7 +53,7 @@ export default function FloatingWhatsApp({ activePackage = null }) {
             {quickQuestions.map((q, i) => (
               <a
                 key={i}
-                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! ${q}`)}`}
+                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! ${q}`)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="w-full text-left p-2 rounded-xl bg-slate-950/70 hover:bg-emerald-950/40 border border-white/5 hover:border-emerald-500/30 text-[11px] text-slate-200 hover:text-emerald-300 transition block truncate"

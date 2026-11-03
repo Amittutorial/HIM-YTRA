@@ -24,10 +24,10 @@ export default function Navbar({
 
   useEffect(() => {
     const handleAuth = (e) => setCurrentUser(e.detail);
-    window.addEventListener('valleyvista-auth-changed', handleAuth);
+    window.addEventListener('himyatra-auth-changed', handleAuth);
     window.addEventListener('himyatra-auth-changed', handleAuth);
     return () => {
-      window.removeEventListener('valleyvista-auth-changed', handleAuth);
+      window.removeEventListener('himyatra-auth-changed', handleAuth);
       window.removeEventListener('himyatra-auth-changed', handleAuth);
     };
   }, []);
@@ -128,7 +128,7 @@ export default function Navbar({
               <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full overflow-hidden border-2 border-emerald-400/70 shadow-lg shadow-emerald-500/25 group-hover:scale-105 group-hover:border-emerald-300 transition shrink-0 bg-slate-900 relative">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="ValleyVista Worldwide"
+                  alt="HimYatra Worldwide"
                   className="w-full h-full object-cover object-center scale-110 group-hover:scale-125 transition duration-300"
                   onError={(e) => {
                     e.target.onerror = null;

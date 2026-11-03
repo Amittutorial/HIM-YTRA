@@ -33,7 +33,7 @@ import { TOUR_PACKAGES, DESTINATIONS } from './data/travelData';
 export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('valleyvista-theme') || localStorage.getItem('himyatra-theme') || 'dark';
+    return localStorage.getItem('himyatra-theme') || localStorage.getItem('himyatra-theme') || 'dark';
   });
 
   const [activeRegion, setActiveRegion] = useState('himachal');
@@ -46,7 +46,7 @@ export default function App() {
   const [preAppliedCoupon, setPreAppliedCoupon] = useState('');
 
   // Modals & Enhanced Features State
-  const [lang, setLang] = useState(() => localStorage.getItem('valleyvista-lang') || localStorage.getItem('himyatra-lang') || 'en');
+  const [lang, setLang] = useState(() => localStorage.getItem('himyatra-lang') || localStorage.getItem('himyatra-lang') || 'en');
   const t = useMemo(() => createTranslator(lang), [lang]);
   const [quizModalOpen, setQuizModalOpen] = useState(false);
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
@@ -62,7 +62,7 @@ export default function App() {
 
   // Synchronize theme with html and body classes
   useEffect(() => {
-    localStorage.setItem('valleyvista-theme', theme);
+    localStorage.setItem('himyatra-theme', theme);
     localStorage.setItem('himyatra-theme', theme);
     const root = document.documentElement;
     if (theme === 'light') {
@@ -88,9 +88,9 @@ export default function App() {
         const match = TOUR_PACKAGES.find(p => p.id === pkgId);
         if (match) {
           setViewingPackage(match);
-          document.title = `${match.title} (${match.duration}) — ValleyVista Packages`;
+          document.title = `${match.title} (${match.duration}) — HimYatra Packages`;
           const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with ValleyVista.`);
+          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with HimYatra.`);
         }
       }
 
@@ -99,7 +99,7 @@ export default function App() {
         const matchDest = DESTINATIONS.find(d => d.id === destId || d.searchKeyword?.toLowerCase() === destId.toLowerCase());
         if (matchDest) {
           handleSelectDestination(matchDest);
-          document.title = `${matchDest.name} Tours & Sightseeing — ValleyVista`;
+          document.title = `${matchDest.name} Tours & Sightseeing — HimYatra`;
           const el = document.getElementById('destinations');
           setTimeout(() => el?.scrollIntoView({ behavior: 'smooth' }), 300);
         }
@@ -140,7 +140,7 @@ export default function App() {
   const toggleLanguage = () => {
     setLang((prev) => {
       const next = prev === 'en' ? 'hi' : 'en';
-      localStorage.setItem('valleyvista-lang', next);
+      localStorage.setItem('himyatra-lang', next);
       localStorage.setItem('himyatra-lang', next);
       return next;
     });
@@ -151,9 +151,9 @@ export default function App() {
     if (pkg) {
       const newUrl = `${window.location.pathname}?pkg=${encodeURIComponent(pkg.id)}`;
       window.history.pushState({ pkgId: pkg.id }, '', newUrl);
-      document.title = `${pkg.title} (${pkg.duration}) — ValleyVista Packages`;
+      document.title = `${pkg.title} (${pkg.duration}) — HimYatra Packages`;
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with ValleyVista.`);
+      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with HimYatra.`);
     }
   };
 
@@ -162,7 +162,7 @@ export default function App() {
     const currentParams = new URLSearchParams(window.location.search);
     if (currentParams.has('pkg')) {
       window.history.pushState({}, '', window.location.pathname);
-      document.title = 'ValleyVista | Worldwide Travel, Tours & Holiday Experiences';
+      document.title = 'HimYatra | Worldwide Travel, Tours & Holiday Experiences';
     }
   };
 

@@ -162,6 +162,23 @@ app.post('/api/road-alerts', (req, res) => {
   }
 });
 
+// Send Email API (Local fallback route)
+app.post('/api/send-email', (req, res) => {
+  try {
+    const { type, booking, inquiry } = req.body || {};
+    console.log(`📬 [LOCAL SERVER] /api/send-email received ${type} notification`);
+    res.json({
+      success: true,
+      delivered: true,
+      ownerSent: true,
+      customerSent: true,
+      message: 'Local server simulated email dispatch'
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Get recent bookings (helper to verify)
 app.get('/api/bookings', (req, res) => {
   try {

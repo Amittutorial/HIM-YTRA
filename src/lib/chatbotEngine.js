@@ -1,7 +1,7 @@
-// ValleyVista AI Travel Assistant Engine
+// HimYatra AI Travel Assistant Engine
 // Comprehensive bilingual (English & Hindi) knowledge base & natural language response engine for worldwide & domestic travel
 
-export const VALLEYVISTA_PACKAGES = [
+export const HIMYATRA_PACKAGES = [
   {
     id: 'pkg-kashmir-paradise',
     title: 'Kashmir Paradise: Srinagar, Gulmarg & Houseboat',
@@ -124,7 +124,7 @@ export const VALLEYVISTA_PACKAGES = [
   }
 ];
 
-export const HIMYATRA_PACKAGES = VALLEYVISTA_PACKAGES;
+export const VALLEYVISTA_PACKAGES = HIMYATRA_PACKAGES;
 
 export const CONTACT_INFO = {
   founder: 'Amit Verma',
@@ -189,7 +189,7 @@ export function getSmartAssistantResponse(userQuery, langChoice = null) {
   // 1. GREETINGS & CASUAL
   if (/^(hi|hello|hii|heyy|heya|namaste|pranam|hola|good morning|good evening|good afternoon|kaise ho|kya haal)(\s|$|[!?.])/i.test(q)) {
     if (isEn) {
-      return `Hello! 🙏 Welcome to **ValleyVista**! (From Everywhere. To Everywhere.)
+      return `Hello! 🙏 Welcome to **HimYatra**! (From Everywhere. To Everywhere.)
 I am your personal AI Travel Guide. How can I help you today?
 • 💑 **Honeymoon Specials** (Kashmir, Manali, Udaipur)
 • 🛕 **Char Dham & Kedarnath Yatra 2026** (Dates, Registration & Helicopter)
@@ -199,7 +199,7 @@ I am your personal AI Travel Guide. How can I help you today?
 
 Tell me your destination preference, travel month, or budget, and I'll recommend the best packages instantly!`;
     }
-    return `Namaste! 🙏 Welcome to **ValleyVista**! (From Everywhere. To Everywhere.)
+    return `Namaste! 🙏 Welcome to **HimYatra**! (From Everywhere. To Everywhere.)
 Main aapka personal AI Travel Guide hoon.
 
 Aap kahan ghoomna chahte hain?
@@ -215,13 +215,13 @@ Bataiye, aapka travel month, destination ya budget kya hai? Main turant aapke li
   // 2. HONEYMOON PACKAGES
   if (/(honeymoon|couple|romantic|candle|candlelight|shadi|shaadi|wedding|anniversary|patni|biwi|wife|husband)/i.test(q)) {
     const honeymoonPkgs = [
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
     ].filter(Boolean);
 
     if (isEn) {
-      return `💖 **ValleyVista Romantic & Honeymoon Specials!**
+      return `💖 **HimYatra Romantic & Honeymoon Specials!**
 Congratulations on your special journey! Here are our 3 most celebrated honeymoon packages:
 
 1. **Kashmir Paradise (6D/5N — ₹14,999/person)**: Private sunset Shikara on Dal Lake, romantic luxury houseboat stay, candlelight dinner & snow gondola in Gulmarg!
@@ -239,7 +239,7 @@ Tap **"View Details"** below to see full day-by-day itineraries or connect on Wh
 ${formatCards(honeymoonPkgs)}`;
     }
 
-    return `💖 **ValleyVista Romantic & Honeymoon Specials!**
+    return `💖 **HimYatra Romantic & Honeymoon Specials!**
 Congratulations on your special journey! Humare best 3 curated honeymoon packages hain:
 
 1. **Kashmir Paradise (6D/5N — ₹14,999/person)** — Dal Lake private shikara ride, sunset candle-light dinner on a heritage cedar houseboat, and snow gondola in Gulmarg!
@@ -260,14 +260,14 @@ ${formatCards(honeymoonPkgs)}`;
   // 3. CHAR DHAM / KEDARNATH / BADRINATH / SPIRITUAL
   if (/(char\s*dham|chardham|kedarnath|badrinath|gangotri|yamunotri|do\s*dham|dham|darshan|helicopter|heli|yatra|shiva|jyotirlinga)/i.test(q)) {
     const spiritualPkgs = [
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-chardham-complete'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-kedarnath-badrinath'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-ayodhya-kashi')
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-chardham-complete'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-kedarnath-badrinath'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-ayodhya-kashi')
     ].filter(Boolean);
 
     if (isEn) {
       return `🛕 **Sacred Devbhoomi Char Dham Yatra 2026**
-Har Har Mahadev! ValleyVista provides complete, comfortable, and spiritually fulfilling pilgrimage arrangements:
+Har Har Mahadev! HimYatra provides complete, comfortable, and spiritually fulfilling pilgrimage arrangements:
 
 📌 **Key 2026 Yatra Highlights:**
 • **Season:** Portals (Kapat) open in May (Akshaya Tritiya) and close around Diwali / Bhai Dooj (November).
@@ -282,7 +282,7 @@ ${formatCards(spiritualPkgs)}`;
     }
 
     return `🛕 **Sacred Devbhoomi Char Dham Yatra 2026**
-Har Har Mahadev! ValleyVista ensures a seamless, comfortable, and deeply spiritual pilgrimage for you and your family:
+Har Har Mahadev! HimYatra ensures a seamless, comfortable, and deeply spiritual pilgrimage for you and your family:
 
 📌 **Key Yatra Details & Assistance:**
 • **Season:** Kapat May (Akshaya Tritiya) mein khulte hain aur Diwali/Bhai Dooj tak khule rehte hain.
@@ -299,7 +299,7 @@ ${formatCards(spiritualPkgs)}`;
   // 4. CAB RENTALS / TAXI FARES / VEHICLE
   if (/(cab|taxi|rental|fare|rate|price|kiraya|car|innova|ertiga|sedan|dzire|tempo|traveller|delhi to|chandigarh to|haridwar to)/i.test(q)) {
     if (isEn) {
-      return `🚖 **ValleyVista Verified Fixed-Route Cab Rentals**
+      return `🚖 **HimYatra Verified Fixed-Route Cab Rentals**
 We provide dedicated, sanitized private vehicles with **expert local chauffeurs**. All rates are all-inclusive with **zero hidden charges** (Fuel, toll taxes, state permits, and driver night allowances included!).
 
 📋 **Popular Fixed Route One-Way Fares:**
@@ -310,7 +310,7 @@ We provide dedicated, sanitized private vehicles with **expert local chauffeurs*
 • **Chandigarh ➔ Manali:** Sedan **₹3,500** | SUV **₹5,500**
 • **Delhi ➔ Dharamshala:** Sedan **₹5,000** | SUV **₹7,000** | Tempo **₹11,000**
 
-✨ **Why Choose ValleyVista Cabs?**
+✨ **Why Choose HimYatra Cabs?**
 1. 100% verified drivers experienced in mountain and highway terrain.
 2. Luggage carrier & clean air-conditioned vehicles.
 3. Punctual doorstep pickup from airport, station, or hotel.
@@ -318,7 +318,7 @@ We provide dedicated, sanitized private vehicles with **expert local chauffeurs*
 You can also use our **Cab Calculator** tool on the website or message us to book instantly!`;
     }
 
-    return `🚖 **ValleyVista Verified Fixed-Route Cab Rentals**
+    return `🚖 **HimYatra Verified Fixed-Route Cab Rentals**
 Hum provide karte hain **private, verified drivers** ke saath fully sanitized vehicles, bina kisi hidden charges ke (All state tax, toll tax, fuel, and driver night allowances included!).
 
 📋 **Popular Fixed Route One-Way Fares:**
@@ -329,7 +329,7 @@ Hum provide karte hain **private, verified drivers** ke saath fully sanitized ve
 • **Chandigarh ➔ Manali:** Sedan **₹3,500** | SUV **₹5,500**
 • **Delhi ➔ Dharamshala:** Sedan **₹5,000** | SUV **₹7,000** | Tempo **₹11,000**
 
-✨ **ValleyVista Cabs ke Fayde:**
+✨ **HimYatra Cabs ke Fayde:**
 1. Certified hilly and highway route drivers.
 2. Clean AC cabs with carrier.
 3. On-time doorstep pickup from airport or railway station.
@@ -340,9 +340,9 @@ Aap website par **"Cab Rentals"** section mein online route calculator bhi use k
   // 5. SPITI VALLEY / LADAKH / RAW ADVENTURE
   if (/(spiti|ladakh|leh|pangong|chandratal|kaza|4x4|biking|bullet|hikkim|chicham|tabo|nubra|khardung)/i.test(q)) {
     const advPkgs = [
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-ladakh-pangong'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat')
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-ladakh-pangong'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat')
     ].filter(Boolean);
 
     if (isEn) {
@@ -366,7 +366,7 @@ ${formatCards(advPkgs)}`;
     }
 
     return `🏔️ **High Altitude Spiti & Ladakh 4x4 Expeditions**
-Himalayas ke sabse thrilling trans-Himalayan desert circuits ke liye ValleyVista offer karta hai dedicated high-clearance 4x4 SUVs aur certified mountain drivers:
+Himalayas ke sabse thrilling trans-Himalayan desert circuits ke liye HimYatra offer karta hai dedicated high-clearance 4x4 SUVs aur certified mountain drivers:
 
 ✨ **Spiti Valley Highlights:**
 • 1000-year-old Key & Tabo Monasteries
@@ -387,13 +387,13 @@ ${formatCards(advPkgs)}`;
   // 6. FAMILY HOLIDAYS
   if (/(family|parents|bachhe|kids|children|elderly|senior citizen|safe|peaceful|parivar)/i.test(q)) {
     const familyPkgs = [
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
     ].filter(Boolean);
 
     if (isEn) {
-      return `👨‍👩‍👧‍👦 **ValleyVista Family Vacation Packages**
+      return `👨‍👩‍👧‍👦 **HimYatra Family Vacation Packages**
 For family holidays, comfort, hygienic food, gentle driving, and an easy pace are top priorities:
 
 🌟 **Top Family Recommendations:**
@@ -406,7 +406,7 @@ All family packages include spacious rooms, pure-veg options, and senior/child-f
 ${formatCards(familyPkgs)}`;
     }
 
-    return `👨‍👩‍👧‍👦 **ValleyVista Family Vacation Packages**
+    return `👨‍👩‍👧‍👦 **HimYatra Family Vacation Packages**
 Family trip ke liye sabse important hota hai **comfort, safe driving, hygienic food, aur easy-paced itineraries**:
 
 🌟 **Top Family Recommendations:**
@@ -467,9 +467,9 @@ Aap kis month mein travel plan kar rahe hain? Bataiye, main specific weather upd
   // 8. TREKS & SUMMITS / ADVENTURE SPORTS
   if (/(trek|trekking|hiking|summit|tungnath|chandrashila|triund|kheerganga|paragliding|rafting|skiing)/i.test(q)) {
     const trekPkgs = [
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit')
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit')
     ].filter(Boolean);
 
     if (isEn) {
@@ -504,13 +504,13 @@ ${formatCards(trekPkgs)}`;
   // 9. BUDGET / CHEAP / LOW PRICE
   if (/(budget|cheap|sasta|low price|kam paise|discount|offer|under 5000|under 10000|under 15000)/i.test(q)) {
     const budgetPkgs = [
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-amritsar-golden-heritage'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie')
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-amritsar-golden-heritage'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie')
     ].filter(Boolean);
 
     if (isEn) {
-      return `💰 **ValleyVista Value & Budget Packages (Under ₹10,000 per person)**
+      return `💰 **HimYatra Value & Budget Packages (Under ₹10,000 per person)**
 Affordable travel without compromising on hygiene or safety! We maintain our own verified vehicle fleet and direct hotel partnerships:
 
 1. **Sacred Amritsar Heritage (3D/2N):** Starting at just **₹4,999/person**! (Golden Temple + Wagah Border + Food Walk)
@@ -522,7 +522,7 @@ ${formatCards(budgetPkgs)}
 Use coupon code **HIM1000** for an additional discount on custom bookings!`;
     }
 
-    return `💰 **ValleyVista Value & Budget Packages (Under ₹10,000 per person)**
+    return `💰 **HimYatra Value & Budget Packages (Under ₹10,000 per person)**
 Quality se compromise kiye bina affordable travel! Hum direct local hoteliers aur verified fleet maintain karte hain:
 
 1. **Sacred Amritsar Heritage (3D/2N):** Starting at just **₹4,999/person**!
@@ -537,7 +537,7 @@ Coupon code **HIM1000** use karne par custom bookings par extra discount bhi ava
   // 10. INCLUSIONS & EXCLUSIONS
   if (/(inclusion|exclusion|kya milega|hotel|food|meals|breakfast|dinner|khana|stay)/i.test(q)) {
     if (isEn) {
-      return `🏨 **What is Included in ValleyVista Tour Packages?**
+      return `🏨 **What is Included in HimYatra Tour Packages?**
 
 ✅ **All Inclusions:**
 • **Hotels & Stays:** 3-Star & 4-Star sanitized mountain view rooms, valley resorts, or luxury houseboats.
@@ -551,7 +551,7 @@ Coupon code **HIM1000** use karne par custom bookings par extra discount bhi ava
 • Personal shopping, train/air tickets (unless requested), lunches, and entry tickets for special adventure activities (paragliding/rafting).`;
     }
 
-    return `🏨 **What is Included in ValleyVista Packages?**
+    return `🏨 **What is Included in HimYatra Packages?**
 
 ✅ **All Inclusions:**
 • **Hotels & Stays:** 3-Star & 4-Star sanitized mountain view rooms, valley resorts, or luxury houseboats.
@@ -568,7 +568,7 @@ Coupon code **HIM1000** use karne par custom bookings par extra discount bhi ava
   // 11. BOOKING PROCESS, ADVANCE & REFUND POLICY
   if (/(how to book|booking kaise|advance|payment|refund|cancellation|cancel|policy|upi|card|netbanking)/i.test(q)) {
     if (isEn) {
-      return `💳 **ValleyVista Booking & Cancellation Policy**
+      return `💳 **HimYatra Booking & Cancellation Policy**
 
 🔹 **Easy 3-Step Booking:**
 1. **Choose Package / Custom Plan:** Confirm your dates, destination, and traveler count.
@@ -582,7 +582,7 @@ Coupon code **HIM1000** use karne par custom bookings par extra discount bhi ava
 • **Free Rescheduling:** Date modification at zero extra charge subject to hotel availability.`;
     }
 
-    return `💳 **ValleyVista Booking & Cancellation Policy**
+    return `💳 **HimYatra Booking & Cancellation Policy**
 
 🔹 **Easy 3-Step Booking:**
 1. **Choose Package / Custom Plan:** Apni dates, destination, aur traveler count confirm karein.
@@ -599,7 +599,7 @@ Coupon code **HIM1000** use karne par custom bookings par extra discount bhi ava
   // 12. CONTACT / FOUNDER / TALK TO HUMAN / HELP
   if (/(human|person|talk|call|phone|number|mobile|whatsapp|contact|support|agent|owner|founder|amit verma|office|help|email|gmail)/i.test(q)) {
     if (isEn) {
-      return `📞 **ValleyVista Direct Contact & Support Desk**
+      return `📞 **HimYatra Direct Contact & Support Desk**
 You can directly reach out to our founder and travel specialists:
 
 • 👤 **Founder & Lead Specialist:** Amit Verma
@@ -612,7 +612,7 @@ You can directly reach out to our founder and travel specialists:
 Tap **"Talk to Human on WhatsApp"** below to start an instant direct chat! 🙏`;
     }
 
-    return `📞 **ValleyVista Direct Contact & Support Desk**
+    return `📞 **HimYatra Direct Contact & Support Desk**
 Aap direct humare founder aur travel experts se baat kar sakte hain:
 
 • 👤 **Founder & Lead Specialist:** Amit Verma
@@ -628,9 +628,9 @@ Neeche diya gaya **"Talk to Human on WhatsApp"** button dabayein, aur hum turant
   // 13. PLAN MY TRIP / CUSTOM ITINERARY
   if (/(plan|custom|build|itinerary|confused|help me choose|suggest|recommend)/i.test(q)) {
     const featuredPkgs = [
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
-      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-chardham-complete')
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
+      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-chardham-complete')
     ].filter(Boolean);
 
     if (isEn) {
@@ -686,7 +686,7 @@ ${formatCards(featuredPkgs)}`;
   const matchedDest = destinationKeywords.filter(d => q.includes(d.key));
   if (matchedDest.length > 0) {
     const matchedPkgs = matchedDest
-      .map(m => VALLEYVISTA_PACKAGES.find(p => p.id === m.id))
+      .map(m => HIMYATRA_PACKAGES.find(p => p.id === m.id))
       .filter((p, index, self) => p && self.findIndex(t => t.id === p.id) === index)
       .slice(0, 3);
 
@@ -710,14 +710,14 @@ Aap **"View Details"** dabakar complete day-by-day plan dekh sakte hain ya direc
 
   // 15. DEFAULT HELPFUL FALLBACK
   const samplePkgs = [
-    VALLEYVISTA_PACKAGES[0],
-    VALLEYVISTA_PACKAGES[1],
-    VALLEYVISTA_PACKAGES[3]
+    HIMYATRA_PACKAGES[0],
+    HIMYATRA_PACKAGES[1],
+    HIMYATRA_PACKAGES[3]
   ];
 
   if (isEn) {
     return `Thank you for reaching out! 🙏
-At **ValleyVista** (From Everywhere. To Everywhere.), we curate domestic and worldwide tour packages, fixed-rate cab rentals, and stays across India and top global destinations.
+At **HimYatra** (From Everywhere. To Everywhere.), we curate domestic and worldwide tour packages, fixed-rate cab rentals, and stays across India and top global destinations.
 
 You can ask me questions like:
 • *"Show me honeymoon packages for couple"*
@@ -734,7 +734,7 @@ Tap **"Talk to Human on WhatsApp"** for personal quotes!`;
   }
 
   return `Thank you for reaching out! 🙏
-ValleyVista par hum worldwide holidays aur domestic packages, fixed cab rentals, aur verified stays organize karte hain.
+HimYatra par hum worldwide holidays aur domestic packages, fixed cab rentals, aur verified stays organize karte hain.
 
 Aap mujhse pooch sakte hain:
 • *"Show me honeymoon packages for couple"*

@@ -68,7 +68,7 @@ export default function HelpCenterModal({ onClose, onOpenPayment, onOpenBooking 
             <Sparkles className="w-3.5 h-3.5" /> 24/7 Concierge & Traveler Support
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-white font-['Outfit'] tracking-tight">
-            ValleyVista Help Center
+            HimYatra Help Center
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
             Everything you need for booking, payments, cancellations, permits, E-Tickets, and 24/7 global travel support.
@@ -97,7 +97,7 @@ export default function HelpCenterModal({ onClose, onOpenPayment, onOpenBooking 
                 <Phone className="w-3.5 h-3.5" /> Call Founder
               </a>
               <a
-                href={`https://wa.me/917619917057?text=${encodeURIComponent('Hello Amit Verma! I need assistance regarding my ValleyVista holiday booking.')}`}
+                href={`https://wa.me/917619917057?text=${encodeURIComponent('Hello Amit Verma! I need assistance regarding my HimYatra holiday booking.')}`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-md shadow-emerald-500/20"

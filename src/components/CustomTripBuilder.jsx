@@ -24,11 +24,11 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
   const himachalSpots = ['Manali', 'Solang & Atal Tunnel', 'Shimla & Kufri', 'Spiti Valley', 'Kasol & Parvati', 'Jibhi & Tirthan', 'Dharamshala', 'Dalhousie'];
   const uttarakhandSpots = ['Rishikesh', 'Kedarnath Dham', 'Badrinath Dham', 'Auli Ski Slopes', 'Mussoorie', 'Nainital Lake', 'Jim Corbett Safari', 'Chopta Tungnath'];
 
-  const availableSpots = selectedRegion === 'Himachal Pradesh' 
-    ? himachalSpots 
-    : selectedRegion === 'Uttarakhand' 
-    ? uttarakhandSpots 
-    : [...himachalSpots.slice(0, 4), ...uttarakhandSpots.slice(0, 4)];
+  const availableSpots = selectedRegion === 'Himachal Pradesh'
+    ? himachalSpots
+    : selectedRegion === 'Uttarakhand'
+      ? uttarakhandSpots
+      : [...himachalSpots.slice(0, 4), ...uttarakhandSpots.slice(0, 4)];
 
   const toggleSpot = (spot) => {
     if (selectedSpots.includes(spot)) {
@@ -95,7 +95,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
   return (
     <section id="custom-planner" className="py-16 sm:py-24 px-4 sm:px-8 max-w-7xl mx-auto">
       <div className="rounded-[36px] bg-gradient-to-br from-slate-900 via-slate-950 to-teal-950/60 border border-teal-500/30 p-6 sm:p-12 shadow-2xl relative overflow-hidden">
-        
+
         {/* Glow backdrop */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-teal-500/10 blur-[100px] pointer-events-none" />
 
@@ -141,7 +141,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
 
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <a
-                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I just created a custom ${durationDays}-day trip for ${selectedSpots.join(', ')} with ${travelersCount} travelers starting from ${pickupCity}. Please share the itinerary!`)}`}
+                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I just created a custom ${durationDays}-day trip for ${selectedSpots.join(', ')} with ${travelersCount} travelers starting from ${pickupCity}. Please share the itinerary!`)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
@@ -160,10 +160,10 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
           </div>
         ) : (
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             {/* Left Steps Form (8 cols) */}
             <div className="lg:col-span-8 space-y-6">
-              
+
               {/* Step 1: Choose Region */}
               <div className="p-5 sm:p-6 rounded-2xl bg-slate-950/70 border border-white/10 space-y-3">
                 <label className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
@@ -184,11 +184,10 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
                         else if (r.id === 'Uttarakhand') setSelectedSpots(['Kedarnath Dham', 'Rishikesh']);
                         else setSelectedSpots(['Manali', 'Rishikesh']);
                       }}
-                      className={`p-3.5 rounded-xl text-left border transition cursor-pointer ${
-                        selectedRegion === r.id
-                          ? 'bg-teal-500/20 border-teal-400 text-white'
-                          : 'bg-slate-900 border-white/5 text-slate-300 hover:border-white/20'
-                      }`}
+                      className={`p-3.5 rounded-xl text-left border transition cursor-pointer ${selectedRegion === r.id
+                        ? 'bg-teal-500/20 border-teal-400 text-white'
+                        : 'bg-slate-900 border-white/5 text-slate-300 hover:border-white/20'
+                        }`}
                     >
                       <div className="font-bold text-sm">{r.label}</div>
                       <div className="text-[11px] text-slate-400 mt-0.5">{r.sub}</div>
@@ -213,11 +212,10 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
                         key={spot}
                         type="button"
                         onClick={() => toggleSpot(spot)}
-                        className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer ${
-                          isSelected
-                            ? 'bg-teal-400 text-slate-950 font-bold shadow-md shadow-teal-500/20'
-                            : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-white/5'
-                        }`}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer ${isSelected
+                          ? 'bg-teal-400 text-slate-950 font-bold shadow-md shadow-teal-500/20'
+                          : 'bg-slate-900 text-slate-300 hover:bg-slate-800 border border-white/5'
+                          }`}
                       >
                         {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                         <span>{spot}</span>
@@ -391,7 +389,7 @@ export default function CustomTripBuilder({ onOpenBookingWithCustom, onOpenHelpC
 
                   {/* Send on WhatsApp Button */}
                   <a
-                    href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! I want a custom quote:
+                    href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! I want a custom quote:
 📍 Region: ${selectedRegion}
 🏔️ Spots: ${selectedSpots.join(', ')}
 ⏱️ Duration: ${durationDays} Days

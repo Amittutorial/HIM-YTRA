@@ -127,7 +127,7 @@ export default function LiveTripTrackingModal({ isOpen, onClose, tripId = 'HY-TR
                 <Phone className="w-3.5 h-3.5" /> Call Driver ({tripData.driverPhone})
               </a>
               <a
-                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi ValleyVista! Regarding Trip ${currentTripId}:`)}`}
+                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HimYatra! Regarding Trip ${currentTripId}:`)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs flex items-center gap-1.5 border border-white/10"

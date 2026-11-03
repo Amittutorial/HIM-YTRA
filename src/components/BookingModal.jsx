@@ -218,7 +218,7 @@ export default function BookingModal({ initialPackage, preAppliedCode, onClose, 
                     Your Himalayan Adventure Is Officially Booked.
                   </h2>
                   <p className="text-sm text-slate-300 mt-1 max-w-lg mx-auto">
-                    Congratulations, <strong className="text-white">{name || 'Valued Traveler'}</strong>! Your booking is confirmed with ValleyVista under reference:
+                    Congratulations, <strong className="text-white">{name || 'Valued Traveler'}</strong>! Your booking is confirmed with HimYatra under reference:
                   </p>
                   <div className="inline-flex items-center gap-2 mt-3 px-5 py-2.5 rounded-2xl bg-slate-950 border border-emerald-400/50 font-mono text-xl font-bold text-emerald-300 tracking-wider shadow-inner">
                     <span>Ref:</span>

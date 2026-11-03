@@ -115,7 +115,7 @@ export default function InquireModal({ onClose, onOpenHelpCenter }) {
               </div>
               <div className="pt-1">
                 <a
-                  href={`https://wa.me/91${rawPhone}?text=Hi%20ValleyVista!%20I%20want%20to%20inquire%20about%20a%20tour%20package.`}
+                  href={`https://wa.me/91${rawPhone}?text=Hi%20HimYatra!%20I%20want%20to%20inquire%20about%20a%20tour%20package.`}
                   target="_blank"
                   rel="noreferrer"
                   className="w-full block py-1.5 px-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold text-center transition"

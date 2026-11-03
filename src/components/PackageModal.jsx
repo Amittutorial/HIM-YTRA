@@ -23,12 +23,15 @@ import {
   Clock,
   ArrowLeft,
   Mail,
-  Building
+  Building,
+  FileText
 } from 'lucide-react';
+import { generatePackageItineraryPDF } from '../lib/pdfGenerator';
 
 export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t = (k) => k }) {
   const [activeTab, setActiveTab] = useState('itinerary');
   const [expandedDay, setExpandedDay] = useState(0);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   // Keyboard shortcut: Esc to close modal
   useEffect(() => {
@@ -42,14 +45,22 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
   if (!pkg) return null;
 
   // Print & Save as Official PDF
-  const handlePrint = () => {
-    const origTitle = document.title;
-    const cleanPkgTitle = (pkg.title || 'Package').replace(/[^a-zA-Z0-9]/g, '_');
-    document.title = `ValleyVista_Official_Itinerary_${cleanPkgTitle}_Voucher`;
-    window.print();
-    setTimeout(() => {
-      document.title = origTitle;
-    }, 1500);
+  const handlePrint = async () => {
+    setIsGeneratingPdf(true);
+    try {
+      await generatePackageItineraryPDF(pkg);
+    } catch (err) {
+      console.warn('PDF direct generation notice, fallback to print:', err);
+      const origTitle = document.title;
+      const cleanPkgTitle = (pkg.title || 'Package').replace(/[^a-zA-Z0-9]/g, '_');
+      document.title = `HimYatra_Official_Itinerary_${cleanPkgTitle}_Voucher`;
+      window.print();
+      setTimeout(() => {
+        document.title = origTitle;
+      }, 1500);
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   const todayDate = new Date().toLocaleDateString('en-IN', {
@@ -187,41 +198,37 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
           <div className="flex items-center gap-3 sm:gap-6 overflow-x-auto scrollbar-none py-1">
             <button
               onClick={() => setActiveTab('itinerary')}
-              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${
-                activeTab === 'itinerary'
-                  ? 'border-teal-400 text-teal-400 font-bold'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
+              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${activeTab === 'itinerary'
+                ? 'border-teal-400 text-teal-400 font-bold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
             >
               Day-by-Day Plan ({pkg.days || pkg.itinerary?.length || 5} {lang === 'hi' ? 'दिन' : 'Days'})
             </button>
             <button
               onClick={() => setActiveTab('inclusions')}
-              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${
-                activeTab === 'inclusions'
-                  ? 'border-teal-400 text-teal-400 font-bold'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
+              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${activeTab === 'inclusions'
+                ? 'border-teal-400 text-teal-400 font-bold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
             >
               Inclusions & Exclusions
             </button>
             <button
               onClick={() => setActiveTab('altitude')}
-              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${
-                activeTab === 'altitude'
-                  ? 'border-teal-400 text-teal-400 font-bold'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
+              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${activeTab === 'altitude'
+                ? 'border-teal-400 text-teal-400 font-bold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
             >
               Altitude & Safety
             </button>
             <button
               onClick={() => setActiveTab('policy')}
-              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${
-                activeTab === 'policy'
-                  ? 'border-teal-400 text-teal-400 font-bold'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
-              }`}
+              className={`pb-2.5 border-b-2 transition cursor-pointer whitespace-nowrap ${activeTab === 'policy'
+                ? 'border-teal-400 text-teal-400 font-bold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+                }`}
             >
               Pickup & Cancellation
             </button>
@@ -229,11 +236,21 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
 
           <button
             onClick={handlePrint}
-            className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-1.5 border border-white/10 transition cursor-pointer"
+            disabled={isGeneratingPdf}
+            className="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-white text-xs font-bold flex items-center gap-1.5 border border-teal-500/30 transition cursor-pointer disabled:opacity-50"
             title="Download PDF or Print Itinerary"
           >
-            <Printer className="w-3.5 h-3.5 text-teal-400" />
-            <span>{lang === 'hi' ? 'प्रिंट / पीडीएफ' : 'Print / PDF Itinerary'}</span>
+            {isGeneratingPdf ? (
+              <>
+                <Download className="w-3.5 h-3.5 animate-bounce text-emerald-400" />
+                <span>{lang === 'hi' ? 'पीडीएफ बन रहा है...' : 'Downloading PDF...'}</span>
+              </>
+            ) : (
+              <>
+                <Download className="w-3.5 h-3.5 text-teal-400" />
+                <span>{lang === 'hi' ? 'डाउनलोड पीडीएफ / प्रिंट' : 'Download Itinerary PDF'}</span>
+              </>
+            )}
           </button>
         </div>
 
@@ -341,7 +358,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
                   <span>High Altitude Health & Acclimatization Advice</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  This tour covers altitudes up to {pkg.altitude || '3,000m+'}. Keep yourself hydrated with at least 3 liters of water daily. Avoid smoking and alcohol on day 1. If you experience headache or nausea, inform your ValleyVista travel pilot immediately.
+                  This tour covers altitudes up to {pkg.altitude || '3,000m+'}. Keep yourself hydrated with at least 3 liters of water daily. Avoid smoking and alcohol on day 1. If you experience headache or nausea, inform your HimYatra travel pilot immediately.
                 </p>
               </div>
 
@@ -416,7 +433,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
             {/* WhatsApp Inquiry */}
             <a
               href={`https://wa.me/917619917057?text=${encodeURIComponent(
-                `Hi ValleyVista! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice || pkg.price}/person). Please share available dates and itinerary!`
+                `Hi HimYatra! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice || pkg.price}/person). Please share available dates and itinerary!`
               )}`}
               target="_blank"
               rel="noreferrer"
@@ -452,7 +469,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-teal-600 shrink-0">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="ValleyVista Logo"
+                  alt="HimYatra Logo"
                   className="w-full h-full object-cover scale-105"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -462,7 +479,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               </div>
               <div>
                 <h1 className="text-2xl font-black text-slate-900 tracking-tight font-['Outfit']">
-                  VALLEYVISTA WORLDWIDE JOURNEYS
+                  HIMYATRA WORLDWIDE JOURNEYS
                 </h1>
                 <p className="text-xs font-bold uppercase tracking-wider text-teal-800">
                   Worldwide Travel, Tours & Holiday Experiences
@@ -479,7 +496,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
 
             {/* Official Contact Box */}
             <div className="text-right text-xs space-y-1 text-slate-700 shrink-0">
-              <div className="font-bold text-slate-900">ValleyVista Central Operations Desk</div>
+              <div className="font-bold text-slate-900">HimYatra Central Operations Desk</div>
               <div>📞 <strong>Helpline:</strong> +91 76199 17057</div>
               <div>💬 <strong>WhatsApp:</strong> +91 76199 17057</div>
               <div>✉️ <strong>Official Email:</strong> amitpatel42203@gmail.com</div>
@@ -609,14 +626,14 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               ⚠️ Mountain Travel & Altitude Advisory:
             </div>
             <p className="text-slate-700 text-[11px] leading-relaxed">
-              ValleyVista dedicated vehicles carry certified mountain first-aid kits and emergency assistance contacts. Travelers are advised to drink adequate water, carry layered warm woolens, and follow the pilot’s guidance on mountain passes.
+              HimYatra dedicated vehicles carry certified mountain first-aid kits and emergency assistance contacts. Travelers are advised to drink adequate water, carry layered warm woolens, and follow the pilot’s guidance on mountain passes.
             </p>
           </div>
 
           {/* Transparent Cancellation & Refund Policy */}
           <div className="border border-slate-200 rounded-xl p-4 bg-slate-50 text-xs text-slate-700 space-y-1.5 break-inside-avoid">
             <div className="font-bold text-slate-900 text-[11px] uppercase tracking-wider">
-              ValleyVista Standard Booking & Refund Policy:
+              HimYatra Standard Booking & Refund Policy:
             </div>
             <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600">
               <div>• <strong>Booking Token:</strong> 30% advance deposit confirms private cab & hotel vouchers.</div>
@@ -630,13 +647,13 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               OFFICIAL AUTHENTICATION, CORPORATE SEAL & FOUNDER SIGNATURE
              ══════════════════════════════════════════════════════════════════ */}
           <div className="border-t-2 border-slate-300 pt-5 mt-6 grid grid-cols-3 gap-6 items-end break-inside-avoid">
-            
+
             {/* Column 1: Corporate Seal / Stamp */}
             <div className="flex flex-col items-center justify-center text-center">
               <div className="w-24 h-24 rounded-full border-4 border-dashed border-teal-800 p-1 flex items-center justify-center relative shadow-inner">
                 <div className="w-full h-full rounded-full border border-teal-700 flex flex-col items-center justify-center p-1 bg-teal-50/40">
                   <span className="text-[7.5px] font-black uppercase tracking-tight text-teal-900">
-                    ★ VALLEYVISTA ★
+                    ★ HIMYATRA ★
                   </span>
                   <span className="text-[6.5px] font-extrabold uppercase text-slate-700 leading-tight">
                     WORLDWIDE TRAVEL
@@ -656,7 +673,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
 
             {/* Column 2: Company Verification & Direct Support */}
             <div className="text-center text-xs space-y-1">
-              <div className="font-extrabold text-slate-900">ValleyVista Worldwide Journeys</div>
+              <div className="font-extrabold text-slate-900">HimYatra Worldwide Journeys</div>
               <div className="text-[11px] text-slate-600">Tourism Reg. VV/TOUR/2026/891</div>
               <div className="text-[11px] text-slate-600">
                 Direct Help: <strong>+91 76199 17057</strong>
@@ -701,7 +718,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
                   Founder & Managing Director
                 </div>
                 <div className="text-[9px] text-slate-500">
-                  ValleyVista Worldwide Travels Pvt. Ltd.
+                  HimYatra Worldwide Travels Pvt. Ltd.
                 </div>
               </div>
             </div>
@@ -710,7 +727,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
 
           {/* Bottom Copyright & Verification Notice */}
           <div className="border-t border-slate-200 pt-3 text-center text-[10px] text-slate-500">
-            This document is a certified itinerary voucher issued by ValleyVista Worldwide Journeys. To re-verify your booking, email <strong>amitpatel42203@gmail.com</strong> or call <strong>+91 76199 17057</strong>.
+            This document is a certified itinerary voucher issued by HimYatra Worldwide Journeys. To re-verify your booking, email <strong>amitpatel42203@gmail.com</strong> or call <strong>+91 76199 17057</strong>.
           </div>
 
         </div>

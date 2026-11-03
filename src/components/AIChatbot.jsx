@@ -17,10 +17,13 @@ import {
   ArrowLeft,
   Mail,
   MapPin,
-  Languages
+  Languages,
+  FileText,
+  Download
 } from 'lucide-react';
 import { TOUR_PACKAGES } from '../data/travelData';
-import { getSmartAssistantResponse, VALLEYVISTA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
+import { getSmartAssistantResponse, HIMYATRA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
+import { generatePackageItineraryPDF } from '../lib/pdfGenerator';
 
 /* ─── Package card parser ─── */
 function parsePackageCards(text) {
@@ -148,18 +151,20 @@ function renderInlineMarkdown(text) {
 
 /* ─── Interactive Mini Package Card (Instant Open without Page Reload) ─── */
 function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
+
   // Find full tour package with complete itinerary, hotelStay, meals, etc.
   const fullPkg = useMemo(() => {
     const pkgId = data.pkgId || data.id;
     return (
       TOUR_PACKAGES.find((p) => p.id === pkgId) ||
-      VALLEYVISTA_PACKAGES.find((p) => p.id === pkgId) ||
+      HIMYATRA_PACKAGES.find((p) => p.id === pkgId) ||
       data
     );
   }, [data]);
 
   const whatsappMsg = encodeURIComponent(
-    `Hi ValleyVista! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
+    `Hi HimYatra! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
   );
 
   // Instantly open details modal & minimize chat so user immediately sees the package modal!
@@ -176,9 +181,22 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
       window.dispatchEvent(new PopStateEvent('popstate'));
     }
 
-    // Automatically minimize chat so the full modal is front and center!
     if (onMinimizeChat) {
       onMinimizeChat();
+    }
+  };
+
+  // Direct Itinerary PDF generation & download
+  const handleDownloadPdf = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDownloadingPdf(true);
+    try {
+      await generatePackageItineraryPDF(fullPkg);
+    } catch (err) {
+      console.warn('Chatbot direct PDF download error:', err);
+    } finally {
+      setIsDownloadingPdf(false);
     }
   };
 
@@ -198,7 +216,7 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
       {/* Badge & Title */}
       <div>
         <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 mb-1">
-          {fullPkg.badge || data.badge || 'ValleyVista Special'}
+          {fullPkg.badge || data.badge || 'HimYatra Special'}
         </span>
         <h4 className="font-bold text-sm text-white leading-snug group-hover:text-teal-300 transition-colors">
           {fullPkg.title || data.title}
@@ -222,25 +240,45 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
         </div>
       </div>
 
-      {/* Action Buttons: Instant View Details & Direct WhatsApp */}
-      <div className="grid grid-cols-2 gap-2 pt-1">
+      {/* Action Buttons: Instant View Details, Direct PDF Download & WhatsApp */}
+      <div className="grid grid-cols-3 gap-1.5 pt-1">
         <button
           type="button"
           onClick={handleOpenDetails}
-          className="text-xs font-bold py-2 px-2.5 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 flex items-center justify-center gap-1.5 transition cursor-pointer shadow-md shadow-teal-500/20 active:scale-95"
+          className="text-[11px] font-bold py-2 px-1 rounded-xl bg-teal-400 hover:bg-teal-300 text-slate-950 flex items-center justify-center gap-1 transition cursor-pointer shadow-md shadow-teal-500/20 active:scale-95"
           title="Instant open full package itinerary modal"
         >
-          <span>View Details</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <span>Details</span>
+          <ArrowRight className="w-3 h-3 shrink-0" />
+        </button>
+
+        <button
+          type="button"
+          onClick={handleDownloadPdf}
+          disabled={isDownloadingPdf}
+          className="text-[11px] font-bold py-2 px-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-teal-300 hover:text-white flex items-center justify-center gap-1 transition border border-teal-500/30 cursor-pointer shadow-md active:scale-95 disabled:opacity-50"
+          title="Download Official Itinerary PDF"
+        >
+          {isDownloadingPdf ? (
+            <>
+              <Download className="w-3 h-3 animate-bounce text-emerald-400 shrink-0" />
+              <span>PDF...</span>
+            </>
+          ) : (
+            <>
+              <FileText className="w-3 h-3 text-teal-400 shrink-0" />
+              <span>PDF</span>
+            </>
+          )}
         </button>
 
         <a
           href={`https://wa.me/917619917057?text=${whatsappMsg}`}
           target="_blank"
           rel="noreferrer"
-          className="text-xs font-semibold py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1.5 transition shadow-md shadow-emerald-900/30 active:scale-95 text-center"
+          className="text-[11px] font-semibold py-2 px-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white flex items-center justify-center gap-1 transition shadow-md shadow-emerald-900/30 active:scale-95 text-center"
         >
-          <Phone className="w-3.5 h-3.5" />
+          <Phone className="w-3 h-3 shrink-0" />
           <span>WhatsApp</span>
         </a>
       </div>
@@ -264,7 +302,7 @@ function TypingIndicator() {
           />
         ))}
       </div>
-      <span className="text-[11px] text-teal-300 font-medium">ValleyVista AI...</span>
+      <span className="text-[11px] text-teal-300 font-medium">HimYatra AI...</span>
     </div>
   );
 }
@@ -282,7 +320,7 @@ function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage, onMini
             <div className="w-5 h-5 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center">
               <Compass className="w-3.5 h-3.5 text-teal-400" />
             </div>
-            <span className="text-[11px] font-bold text-teal-400">ValleyVista Assistant</span>
+            <span className="text-[11px] font-bold text-teal-400">HimYatra Assistant</span>
           </div>
         )}
 
@@ -361,12 +399,12 @@ export default function AIChatbot({ onSelectPackage, onBookPackage }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const WELCOME_EN = `Hello! 🙏 I am your **ValleyVista AI Travel Assistant**.
+  const WELCOME_EN = `Hello! 🙏 I am your **HimYatra AI Travel Assistant**.
 Ask me anything about worldwide holiday packages, domestic India tours, honeymoon specials, Char Dham 2026, fixed cab rentals, or custom itineraries!
 
 I can generate tailor-made itineraries and pricing instantly. Where would you like to travel?`;
 
-  const WELCOME_HI = `Namaste! 🙏 Main **ValleyVista Assistant** hoon.
+  const WELCOME_HI = `Namaste! 🙏 Main **HimYatra Assistant** hoon.
 Worldwide holidays, domestic tours, honeymoon packages, fixed-route cabs, ya Char Dham Yatra ke bare mein kuch bhi poochiye!
 
 Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta hoon. Aap kahan ghoomna chahte hain?`;
@@ -547,7 +585,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
       .slice(-3)
       .join(' | ');
     const text = encodeURIComponent(
-      `Hi ValleyVista Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a holiday trip'}. Please assist me!`
+      `Hi HimYatra Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a holiday trip'}. Please assist me!`
     );
     window.open(`https://wa.me/917619917057?text=${text}`, '_blank');
   };
@@ -600,7 +638,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             </div>
             <div className="text-xs text-left">
               <div className="font-bold flex items-center gap-1.5">
-                <span>ValleyVista Assistant</span>
+                <span>HimYatra Assistant</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <div className="text-[10px] text-teal-300">Click to resume conversation</div>
@@ -706,7 +744,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-300 ring-1 ring-slate-950 animate-pulse" />
               </div>
               <div>
-                <div className="text-xs font-bold leading-tight">ValleyVista AI Assistant</div>
+                <div className="text-xs font-bold leading-tight">HimYatra AI Assistant</div>
                 <div className="text-[10px] text-teal-100 flex items-center gap-1">
                   <span>Worldwide Travel Specialist</span>
                   <span>•</span>
@@ -799,7 +837,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
                 maxLength={500}
                 disabled={isTyping}
-                aria-label="Ask ValleyVista AI"
+                aria-label="Ask HimYatra AI"
               />
               <button
                 type="submit"
@@ -859,7 +897,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             }}
             className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
             aria-label="Open AI Mountain Guide"
-            title="Chat with ValleyVista AI Assistant"
+            title="Chat with HimYatra AI Assistant"
           >
             <Compass className="w-6 h-6 sm:w-7 sm:h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
 
