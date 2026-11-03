@@ -2,46 +2,92 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F6B55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m8 3 4 8 5-5 5 15H2L8 3z'/></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HimYatra | Worldwide Travel, Tours & Holiday Experiences</title>
-    <meta name="description" content="Discover unforgettable journeys with HimYatra. Explore domestic and international destinations, customized holidays, adventure trips, family vacations, and premium travel experiences." />
-    <link rel="canonical" href="https://him-ytra.vercel.app/" />
+    
+    <!-- Official Site Name & Branding (Instructs Google Search, Bing, Social to display HimYatra) -->
+    <title>HimYatra — Premium Tours & Travels | Founder Amit Verma +91 76199 17057</title>
+    <meta name="description" content="HimYatra official travel portal. Founder: Amit Verma (+91 76199 17057). Discover handpicked Himalayan holiday packages, cab rentals, spiritual circuits, and adventure tours across Himachal Pradesh and Uttarakhand with HimYatra." />
+    <meta name="author" content="Amit Verma (+91 76199 17057)" />
+    <meta name="application-name" content="HimYatra" />
+    <meta name="apple-mobile-web-app-title" content="HimYatra" />
     <meta name="theme-color" content="#12372F" />
+    <link rel="canonical" href="https://him-ytra.vercel.app/" />
 
-    <!-- Open Graph / Social Media Sharing (1200x630) -->
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/mountain-logo.jpg" />
+
+    <!-- Open Graph / Social Media Sharing (Google, WhatsApp, Facebook) -->
+    <meta property="og:site_name" content="HimYatra" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://him-ytra.vercel.app/" />
-    <meta property="og:title" content="HimYatra | Worldwide Travel, Tours & Holiday Experiences" />
-    <meta property="og:description" content="Discover unforgettable journeys with HimYatra. Explore domestic and international destinations, customized holidays, adventure trips, and luxury vacations. From Everywhere. To Everywhere." />
+    <meta property="og:title" content="HimYatra — Premium Tours & Travels | Founder Amit Verma +91 76199 17057" />
+    <meta property="og:description" content="HimYatra official travel portal. Founder: Amit Verma (+91 76199 17057). Handpicked Himalayan holiday packages, cab rentals, Char Dham Yatra, and custom itineraries." />
     <meta property="og:image" content="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&h=630&q=85" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="HimYatra Worldwide Travel Tours & Holiday Experiences" />
+    <meta property="og:image:alt" content="HimYatra Premium Himalayan & All Destination Tours" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="HimYatra | Worldwide Travel, Tours & Holiday Experiences" />
-    <meta name="twitter:description" content="Discover unforgettable journeys with HimYatra. Explore domestic and international destinations, customized holidays, adventure trips, and luxury vacations." />
+    <meta name="twitter:title" content="HimYatra — Premium Tours & Travels | Founder Amit Verma +91 76199 17057" />
+    <meta name="twitter:description" content="HimYatra official travel portal. Founder: Amit Verma (+91 76199 17057). Handpicked Himalayan holiday packages, cab rentals, Char Dham Yatra, and custom itineraries." />
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&h=630&q=85" />
 
-    <!-- JSON-LD Structured Data Schema (TravelAgency & TouristTrip) -->
+    <!-- Google Search Mandated WebSite Schema for Site Name Display -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "HimYatra",
+      "alternateName": [
+        "HimYatra Tours & Travels",
+        "HimYatra Travel",
+        "HimYatra • Amit Verma (+91 76199 17057)"
+      ],
+      "url": "https://him-ytra.vercel.app/"
+    }
+    </script>
+
+    <!-- JSON-LD Structured Data Schema (TravelAgency with Founder Credentials) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TravelAgency",
-      "name": "HimYatra Worldwide Tours & Travels",
-      "image": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&h=630&q=85",
+      "name": "HimYatra Tours & Travels",
+      "alternateName": "HimYatra",
+      "image": "https://him-ytra.vercel.app/mountain-logo.jpg",
       "url": "https://him-ytra.vercel.app/",
       "telephone": "+917619917057",
       "email": "amitpatel42203@gmail.com",
       "priceRange": "₹4,999 - ₹95,000",
-      "slogan": "From Everywhere. To Everywhere.",
+      "slogan": "Premium Himalayan & All Destination Tours & Travels",
+      "founder": {
+        "@type": "Person",
+        "name": "Amit Verma",
+        "telephone": "+917619917057",
+        "email": "amitpatel42203@gmail.com",
+        "jobTitle": "Founder & Managing Director"
+      },
+      "employee": [
+        {
+          "@type": "Person",
+          "name": "Amit Verma",
+          "telephone": "+917619917057",
+          "jobTitle": "Founder & Managing Director"
+        },
+        {
+          "@type": "Person",
+          "name": "Abhishek Verma",
+          "telephone": "+917408989182",
+          "jobTitle": "Co-Founder & Operations Director"
+        }
+      ],
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "HimYatra Headquarters, The Mall Road",
-        "addressLocality": "Shimla & Global Operations",
-        "addressRegion": "Himachal Pradesh & Worldwide",
+        "addressLocality": "Shimla & Rishikesh Operations",
+        "addressRegion": "Himachal Pradesh & Uttarakhand",
         "postalCode": "171001",
         "addressCountry": "IN"
       },
@@ -62,26 +108,27 @@
         "https://wa.me/917619917057"
       ],
       "areaServed": [
-        { "@type": "Country", "name": "India" },
-        { "@type": "Place", "name": "Worldwide" }
+        { "@type": "State", "name": "Himachal Pradesh" },
+        { "@type": "State", "name": "Uttarakhand" },
+        { "@type": "Country", "name": "India" }
       ],
       "makesOffer": [
         {
           "@type": "Offer",
-          "name": "Global & Himalayan Holiday Experiences",
-          "price": "14499",
+          "name": "Himachal & Uttarakhand Holiday Experiences",
+          "price": "13499",
           "priceCurrency": "INR"
         },
         {
           "@type": "Offer",
-          "name": "Sacred Pilgrimage & Cultural Expeditions",
+          "name": "Complete Char Dham & Kedarnath Yatra 2026",
           "price": "24999",
           "priceCurrency": "INR"
         },
         {
           "@type": "Offer",
-          "name": "Luxury Honeymoon & Worldwide Beach Vacations",
-          "price": "19999",
+          "name": "Luxury Honeymoon & Mountain Cab Rentals",
+          "price": "14999",
           "priceCurrency": "INR"
         }
       ]
@@ -91,12 +138,13 @@
     {
       "@context": "https://schema.org",
       "@type": "TouristTrip",
-      "name": "Worldwide Travel, Tours & Holiday Experiences",
-      "description": "Comprehensive domestic and international tours, luxury vacations, customized itineraries, and authentic cultural journeys across the world with HimYatra.",
+      "name": "HimYatra Premium Himalayan & All Destination Tours",
+      "description": "Handpicked holiday packages, verified hotel stays, fixed-rate cab rentals, and dedicated 24/7 mountain support by Founder Amit Verma (+91 76199 17057).",
       "touristType": ["Families", "Adventure Travelers", "Couples", "Pilgrims", "Solo Explorers"],
       "provider": {
         "@type": "TravelAgency",
         "name": "HimYatra",
+        "telephone": "+917619917057",
         "url": "https://him-ytra.vercel.app/"
       }
     }

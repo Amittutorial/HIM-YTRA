@@ -58,7 +58,13 @@ TOUR_PACKAGES.forEach((pkg) => {
   <title>${pageTitle}</title>
   <meta name="description" content="${metaDesc.replace(/"/g, '&quot;')}" />
   <link rel="canonical" href="${canonicalUrl}" />
-  <meta name="theme-color" content="#0d9488" />
+  <meta name="theme-color" content="#12372F" />
+  <meta name="application-name" content="HimYatra" />
+  <meta name="apple-mobile-web-app-title" content="HimYatra" />
+  <meta name="author" content="Amit Verma (+91 76199 17057)" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/mountain-logo.jpg" />
+  <meta property="og:site_name" content="HimYatra" />
 
   <!-- Open Graph / Facebook / WhatsApp (1200x630) -->
   <meta property="og:type" content="website" />
@@ -93,7 +99,12 @@ TOUR_PACKAGES.forEach((pkg) => {
     },
     "provider": {
       "@type": "TravelAgency",
-      "name": "HimYatra Worldwide Tours & Travels",
+      "name": "HimYatra Tours & Travels",
+      "founder": {
+        "@type": "Person",
+        "name": "Amit Verma",
+        "telephone": "+917619917057"
+      },
       "telephone": "+917619917057",
       "url": "https://him-ytra.vercel.app/"
     }
@@ -217,7 +228,13 @@ DESTINATIONS.forEach((dest) => {
   <title>${pageTitle}</title>
   <meta name="description" content="${metaDesc.replace(/"/g, '&quot;')}" />
   <link rel="canonical" href="${canonicalUrl}" />
-  <meta name="theme-color" content="#0d9488" />
+  <meta name="theme-color" content="#12372F" />
+  <meta name="application-name" content="HimYatra" />
+  <meta name="apple-mobile-web-app-title" content="HimYatra" />
+  <meta name="author" content="Amit Verma (+91 76199 17057)" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/mountain-logo.jpg" />
+  <meta property="og:site_name" content="HimYatra" />
 
   <!-- Open Graph / Facebook / WhatsApp (1200x630) -->
   <meta property="og:type" content="website" />
