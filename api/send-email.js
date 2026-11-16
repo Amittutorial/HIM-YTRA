@@ -1,12 +1,12 @@
 // Vercel Serverless Function — POST /api/send-email
-// Enterprise Transactional Email Dispatcher with Dual-Email Support, Spam Protection,
-// SMTP (Gmail App Password) / Resend integration, and Database Fallback.
-// Never exposes credentials to frontend code.
+// Enterprise Transactional Email System with Dual Delivery (Resend / SMTP Nodemailer),
+// 10 Full Transactional Templates, Rate Limiting, Spam Honeypot, and Fallback Logging.
+// Never exposes secrets to frontend.
 
 import nodemailer from 'nodemailer';
 
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
-const RATE_LIMIT_MAX = 15; // max 15 emails per min per IP
+const RATE_LIMIT_MAX = 20; // max 20 emails per min per IP
 const ipRequests = new Map();
 
 function isRateLimited(ip) {
@@ -29,8 +29,8 @@ const CO_FOUNDER_NAME = 'Abhishek Verma';
 const CO_FOUNDER_PHONE = '+91 7408989182';
 const SITE_URL = 'https://him-ytra.vercel.app';
 
-// Email styling helper
-function buildEmailContainer(title, subtitle, bodyHtml) {
+// Primary Email Shell with Luxury HimYatra / Valley Vista Styling
+export function buildEmailContainer(title, subtitle, bodyHtml) {
   return `
 <!DOCTYPE html>
 <html>
@@ -46,7 +46,7 @@ function buildEmailContainer(title, subtitle, bodyHtml) {
         <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; max-width: 100%;">
           <!-- Header Banner -->
           <tr>
-            <td style="background: linear-gradient(135deg, #12372F 0%, #1F6B55 100%); padding: 32px 28px; text-align: left;">
+            <td style="background: linear-gradient(135deg, #12372F 0%, #1F6B55 100%); padding: 30px 28px; text-align: left;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td>
@@ -135,14 +135,12 @@ function createTransporter() {
     port,
     secure,
     auth: { user, pass },
-    tls: {
-      rejectUnauthorized: false
-    }
+    tls: { rejectUnauthorized: false }
   });
 }
 
 // Send via Resend SDK if key exists
-async function sendViaResend({ to, subject, html, fromName }) {
+export async function sendViaResend({ to, subject, html, fromName }) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return null;
 
@@ -163,11 +161,52 @@ async function sendViaResend({ to, subject, html, fromName }) {
   }
 }
 
+// Universal Sender: Attempts Resend first, then SMTP
+export async function sendEmail({ to, subject, html, fromName = 'HimYatra' }) {
+  if (!to || !/^\S+@\S+\.\S+$/.test(to)) {
+    return { success: false, error: 'Invalid recipient email' };
+  }
+
+  // 1. Try Resend
+  const resendResult = await sendViaResend({ to, subject, html, fromName });
+  if (resendResult?.success) {
+    return resendResult;
+  }
+
+  // 2. Try SMTP Nodemailer
+  const transporter = createTransporter();
+  if (transporter) {
+    try {
+      const fromAddress = process.env.SMTP_FROM || `"${fromName}" <${process.env.SMTP_USER || process.env.GMAIL_USER}>`;
+      const info = await transporter.sendMail({
+        from: fromAddress,
+        to,
+        subject,
+        html
+      });
+      return { success: true, provider: 'smtp', messageId: info.messageId };
+    } catch (err) {
+      console.error('SMTP sendMail error:', err.message);
+      return { success: false, error: err.message };
+    }
+  }
+
+  console.warn(`[EMAIL QUEUED/SIMULATED] To: ${to} | Subject: ${subject}`);
+  return {
+    success: false,
+    simulated: true,
+    error: 'No email credentials configured. Please set RESEND_API_KEY or SMTP_USER/GMAIL_APP_PASSWORD in environment variables.'
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// MAIN SERVERLESS HANDLER
+// ═══════════════════════════════════════════════════════════════════════
 export default async function handler(req, res) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -188,19 +227,119 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
-    // 1. Honeypot check (Spam protection)
+    // Spam honeypot detection
     if (body.bot_trap || body.honeypot || body._gotcha) {
       console.warn('Spam bot detected via honeypot field');
       return res.status(200).json({ success: true, message: 'Message received' });
     }
 
-    const type = body.type || 'inquiry'; // 'booking' | 'inquiry' | 'custom_trip'
+    const type = body.type || 'inquiry';
     const ownerEmail = process.env.OWNER_EMAIL || DEFAULT_OWNER_GMAIL;
-    const transporter = createTransporter();
 
-    // ══════════════════════════════════════════════════════════════════════
-    // A. BOOKING SUBMISSION (Sends TWO emails: to Owner & to Customer)
-    // ══════════════════════════════════════════════════════════════════════
+    // ──────────────────────────────────────────────────────────────────
+    // 1. WELCOME EMAIL (After registration)
+    // ──────────────────────────────────────────────────────────────────
+    if (type === 'welcome') {
+      const email = body.email;
+      const username = body.username || 'Traveler';
+      const subject = `🎉 Welcome to HimYatra, @${username}! Your Himalayan Adventures Await`;
+      const html = buildEmailContainer(
+        'Welcome to HimYatra Family',
+        'Official Account Registration',
+        `
+        <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>@${username}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          Welcome to <strong>HimYatra</strong>! Your verified travel account has been successfully created. You can now effortlessly browse handpicked tour packages, book dedicated hill cabs, customize itineraries, and manage reservations directly from your personal dashboard.
+        </p>
+        <div style="background-color: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 18px; margin: 20px 0;">
+          <h3 style="margin: 0 0 8px 0; color: #166534; font-size: 15px;">🌟 Your Member Benefits:</h3>
+          <ul style="margin: 0; padding-left: 20px; font-size: 13px; color: #15803d; line-height: 20px;">
+            <li>Priority access to peak season snow and Char Dham permits.</li>
+            <li>Direct 24/7 mountain support line with Founder Amit Verma.</li>
+            <li>Instant booking voucher & official itinerary PDF downloads.</li>
+            <li>Flat 15% promotional coupon for your first trip: <strong style="color: #0f172a;">HIMPEAKS15</strong></li>
+          </ul>
+        </div>
+        <p style="text-align: center; margin: 25px 0 10px 0;">
+          <a href="${SITE_URL}" style="display: inline-block; background-color: #12372F; color: #ffffff; padding: 12px 24px; border-radius: 10px; font-size: 13px; font-weight: 700; text-decoration: none;">
+            Explore Tour Packages →
+          </a>
+        </p>
+        `
+      );
+
+      const result = await sendEmail({ to: email, subject, html, fromName: 'HimYatra Team' });
+      return res.status(200).json({ success: true, delivered: result.success, provider: result.provider });
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // 2. EMAIL OTP VERIFICATION
+    // ──────────────────────────────────────────────────────────────────
+    if (type === 'otp') {
+      const { email, username, otpCode, purpose = 'Account Verification' } = body;
+      const subject = `🔐 HimYatra Security Code: ${otpCode} (Valid for 5 Mins)`;
+      const html = buildEmailContainer(
+        'One-Time Security Passcode',
+        'Email Verification & Authentication',
+        `
+        <p style="font-size: 14px; color: #334155; margin-top: 0;">Hello <strong>${username || 'Valued Traveler'}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          Use the one-time passcode below to complete your <strong>${purpose}</strong> on HimYatra:
+        </p>
+        <div style="background: linear-gradient(135deg, #12372F 0%, #1F6B55 100%); border-radius: 12px; padding: 24px; text-align: center; margin: 22px 0;">
+          <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #C6A15B; font-weight: 700; display: block; margin-bottom: 6px;">
+            ONE-TIME PASSCODE (OTP)
+          </span>
+          <span style="font-size: 36px; font-weight: 900; letter-spacing: 8px; color: #ffffff; font-family: monospace;">
+            ${otpCode}
+          </span>
+          <span style="display: block; font-size: 12px; color: #a7f3d0; margin-top: 8px;">
+            ⏱️ Expires in 5 minutes • Single use only
+          </span>
+        </div>
+        <div style="background-color: #fefce8; border: 1px solid #fef08a; padding: 12px 16px; border-radius: 8px; font-size: 12px; color: #713f12;">
+          🛡️ <strong>Security Tip:</strong> Never share this OTP with anyone. HimYatra representatives will never call or ask for your password or verification code.
+        </div>
+        `
+      );
+
+      const result = await sendEmail({ to: email, subject, html, fromName: 'HimYatra Security' });
+      return res.status(200).json({ success: true, delivered: result.success, provider: result.provider });
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // 3. PASSWORD RESET EMAIL
+    // ──────────────────────────────────────────────────────────────────
+    if (type === 'password_reset') {
+      const { email, username, resetOtp } = body;
+      const subject = `🔑 HimYatra Password Reset Code: ${resetOtp}`;
+      const html = buildEmailContainer(
+        'Password Reset Request',
+        'Account Security Center',
+        `
+        <p style="font-size: 14px; color: #334155; margin-top: 0;">Dear <strong>@${username || 'Traveler'}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          We received a request to reset the password for your HimYatra account. Enter this 6-digit verification code to choose a new password:
+        </p>
+        <div style="background-color: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0;">
+          <span style="font-size: 32px; font-weight: 900; letter-spacing: 6px; color: #12372F; font-family: monospace;">
+            ${resetOtp}
+          </span>
+          <div style="font-size: 12px; color: #64748b; margin-top: 6px;">Valid for 10 minutes</div>
+        </div>
+        <p style="font-size: 12px; color: #94a3b8;">
+          If you did not request a password reset, please ignore this email or reach out to our team at +91 76199 17057 immediately.
+        </p>
+        `
+      );
+
+      const result = await sendEmail({ to: email, subject, html, fromName: 'HimYatra Security' });
+      return res.status(200).json({ success: true, delivered: result.success, provider: result.provider });
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // 4. BOOKING CONFIRMATION EMAIL (Dual: Owner + Customer)
+    // ──────────────────────────────────────────────────────────────────
     if (type === 'booking') {
       const booking = body.booking || body;
       const bookingRef = booking.bookingId || booking.booking_reference || `HY-${Date.now().toString().slice(-6)}`;
@@ -209,18 +348,18 @@ export default async function handler(req, res) {
       const custPhone = booking.phone || booking.customer_phone || 'Not provided';
       const custEmail = (booking.email || booking.customer_email || '').trim();
       const travelDate = booking.travelDate || booking.travel_date || 'Flexible / To be confirmed';
-      const travelers = `${booking.adults || 1} Adults, ${booking.children || 0} Children`;
+      const travelers = `${booking.adults || booking.adults_count || 1} Adults, ${booking.children || booking.children_count || 0} Children`;
       const pickup = booking.pickupCity || booking.pickup_city || 'Delhi / Chandigarh';
       const vehicle = booking.vehicleTier || booking.vehicle_tier || 'Private Dedicated Cab';
       const hotel = booking.hotelTier || booking.hotel_tier || 'Handpicked Mountain View Hotel';
       const totalAmount = parseFloat(booking.finalTotal || booking.total_price) || 0;
       const advancePaid = parseFloat(booking.advanceToken || booking.advance_token) || 0;
       const remainingBalance = Math.max(0, totalAmount - advancePaid);
-      const isPaid = Boolean(booking.utr || booking.utr_reference);
-      const utr = booking.utr || booking.utr_reference || 'Pending Token Screenshot';
+      const isPaid = Boolean(booking.utr || booking.utr_reference || booking.paymentId);
+      const utr = booking.utr || booking.utr_reference || booking.paymentId || 'Pending Token Verification';
 
-      // ── 1. OWNER EMAIL HTML ──
-      const ownerSubject = `🔔 [NEW HIMYATRA BOOKING] ${pkgTitle} | Ref: ${bookingRef} | Advance: ₹${advancePaid.toLocaleString('en-IN')} | ${custName}`;
+      // 1. Owner Admin Notification Email
+      const ownerSubject = `🔔 [NEW BOOKING] ${pkgTitle} | Ref: ${bookingRef} | Advance: ₹${advancePaid.toLocaleString('en-IN')} | ${custName}`;
       const ownerHtml = buildEmailContainer(
         'New Confirmed Booking Alert',
         'Customer Booking & Advance Payment Notification',
@@ -228,12 +367,12 @@ export default async function handler(req, res) {
         <div style="background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px;">
           <h2 style="margin: 0 0 6px 0; font-size: 16px; color: #065f46;">🎉 New Reservation Received!</h2>
           <p style="margin: 0; font-size: 13px; color: #047857;">
-            ${custName} has submitted a booking reservation for <strong>${pkgTitle}</strong> with Reference ID <strong>${bookingRef}</strong>.
+            ${custName} has submitted a booking reservation for <strong>${pkgTitle}</strong> (Ref: <strong>${bookingRef}</strong>).
           </p>
         </div>
 
-        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #12372F; margin: 20px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
-          1. Customer Identity & Contact
+        <h3 style="font-size: 14px; text-transform: uppercase; color: #12372F; margin: 18px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+          1. Customer Contact Information
         </h3>
         <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 13px;">
           <tr><td width="38%" style="color: #64748b;">Customer Full Name:</td><td style="font-weight: 700; color: #0f172a;">${custName}</td></tr>
@@ -241,8 +380,8 @@ export default async function handler(req, res) {
           <tr><td style="color: #64748b;">Email Address:</td><td style="font-weight: 600;"><a href="mailto:${custEmail || DEFAULT_OWNER_GMAIL}" style="color: #1F6B55; text-decoration: none;">${custEmail || 'Not provided'}</a></td></tr>
         </table>
 
-        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #12372F; margin: 24px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
-          2. Vacation & Itinerary Details
+        <h3 style="font-size: 14px; text-transform: uppercase; color: #12372F; margin: 20px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+          2. Vacation Itinerary Details
         </h3>
         <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 13px;">
           <tr><td width="38%" style="color: #64748b;">Booking Reference:</td><td style="font-weight: 700; color: #12372F;">${bookingRef}</td></tr>
@@ -255,31 +394,30 @@ export default async function handler(req, res) {
           <tr><td style="color: #64748b;">Special Requests:</td><td>${booking.specialRequests || 'None'}</td></tr>
         </table>
 
-        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #12372F; margin: 24px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+        <h3 style="font-size: 14px; text-transform: uppercase; color: #12372F; margin: 20px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
           3. Payment Breakdown & Verification
         </h3>
         <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 13px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
           <tr><td width="50%" style="color: #475569;">Total Package Tariff:</td><td style="font-weight: 800; font-size: 15px; color: #0f172a;">₹${totalAmount.toLocaleString('en-IN')}</td></tr>
           <tr><td style="color: #047857; font-weight: 600;">20% Advance Token Paid:</td><td style="font-weight: 800; font-size: 15px; color: #047857;">₹${advancePaid.toLocaleString('en-IN')}</td></tr>
           <tr><td style="color: #b45309; font-weight: 600;">Balance Due on Arrival:</td><td style="font-weight: 800; font-size: 15px; color: #b45309;">₹${remainingBalance.toLocaleString('en-IN')}</td></tr>
-          <tr><td style="color: #475569;">Payment Status:</td><td style="font-weight: 700; color: ${isPaid ? '#047857' : '#d97706'};">${isPaid ? '✅ Advance Verified via UPI' : '⏳ Token Payment Pending'}</td></tr>
-          <tr><td style="color: #475569;">UPI / UTR Transaction ID:</td><td style="font-family: monospace; font-weight: 700;">${utr}</td></tr>
-          <tr><td style="color: #475569;">Submission Timestamp:</td><td>${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td></tr>
+          <tr><td style="color: #475569;">Payment Status:</td><td style="font-weight: 700; color: ${isPaid ? '#047857' : '#d97706'};">${isPaid ? '✅ Advance Verified' : '⏳ Token Payment Pending'}</td></tr>
+          <tr><td style="color: #475569;">UTR / Gateway ID:</td><td style="font-family: monospace; font-weight: 700;">${utr}</td></tr>
         </table>
         `
       );
 
-      // ── 2. CUSTOMER CONFIRMATION EMAIL HTML ──
-      const customerSubject = `🏔️ Booking Confirmed! Ref: ${bookingRef} - ${pkgTitle} | HimYatra`;
-      const customerHtml = buildEmailContainer(
-        'Your HimYatra Booking is Confirmed',
+      // 2. Customer Confirmation Email
+      const custSubject = `🏔️ Booking Confirmed: Ref ${bookingRef} — ${pkgTitle} | HimYatra`;
+      const custHtml = buildEmailContainer(
+        'Your Booking is Confirmed',
         'Official E-Ticket & Vacation Confirmation Voucher',
         `
         <p style="font-size: 15px; line-height: 22px; color: #0f172a; margin-top: 0;">
           Dear <strong>${custName}</strong>,
         </p>
         <p style="font-size: 14px; line-height: 22px; color: #334155;">
-          Thank you for choosing <strong>HimYatra</strong>! We are thrilled to confirm your Himalayan holiday reservation for <strong>${pkgTitle}</strong>. Your personalized itinerary, hotel accommodation, and dedicated private vehicle are being scheduled.
+          Thank you for choosing <strong>HimYatra</strong>! We are delighted to confirm your mountain vacation reservation for <strong>${pkgTitle}</strong>. Your dedicated private cab, verified stays, and sightseeing plan are secured.
         </p>
 
         <!-- Booking ID Card -->
@@ -297,14 +435,14 @@ export default async function handler(req, res) {
               </div>
             </td>
             <td align="right">
-              <a href="${SITE_URL}/?track=${encodeURIComponent(bookingRef)}" style="display: inline-block; background-color: #12372F; color: #ffffff; padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">
-                View Live Booking
+              <a href="${SITE_URL}/?track=${encodeURIComponent(bookingRef)}" style="display: inline-block; background-color: #12372F; color: #ffffff; padding: 10px 18px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">
+                View Live Trip Status →
               </a>
             </td>
           </tr>
         </table>
 
-        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #12372F; margin: 22px 0 8px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+        <h3 style="font-size: 14px; text-transform: uppercase; color: #12372F; margin: 20px 0 8px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
           Tour Summary
         </h3>
         <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 13px;">
@@ -316,84 +454,216 @@ export default async function handler(req, res) {
           <tr><td style="color: #64748b;">Hotel Tier:</td><td>${hotel}</td></tr>
         </table>
 
-        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #12372F; margin: 22px 0 8px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
-          Payment Breakdown
+        <h3 style="font-size: 14px; text-transform: uppercase; color: #12372F; margin: 20px 0 8px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">
+          Payment Summary
         </h3>
         <table width="100%" cellpadding="8" cellspacing="0" style="font-size: 13px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
           <tr><td width="55%" style="color: #475569;">Total Tour Cost:</td><td style="font-weight: 800; font-size: 15px; color: #0f172a;">₹${totalAmount.toLocaleString('en-IN')}</td></tr>
           <tr><td style="color: #047857; font-weight: 600;">Advance Token Paid:</td><td style="font-weight: 800; font-size: 15px; color: #047857;">₹${advancePaid.toLocaleString('en-IN')}</td></tr>
-          <tr><td style="color: #b45309; font-weight: 600;">Remaining Balance Due on Arrival:</td><td style="font-weight: 800; font-size: 15px; color: #b45309;">₹${remainingBalance.toLocaleString('en-IN')}</td></tr>
+          <tr><td style="color: #b45309; font-weight: 600;">Balance Due on Arrival:</td><td style="font-weight: 800; font-size: 15px; color: #b45309;">₹${remainingBalance.toLocaleString('en-IN')}</td></tr>
           <tr><td style="color: #475569;">Transaction Reference / UTR:</td><td style="font-family: monospace; font-weight: 600;">${utr}</td></tr>
         </table>
 
         <div style="background-color: #fefce8; border: 1px solid #fef08a; padding: 12px 16px; border-radius: 8px; margin-top: 18px; font-size: 12px; color: #713f12; line-height: 18px;">
           📌 <strong>Important Instructions:</strong>
           <ul style="margin: 6px 0 0 0; padding-left: 18px;">
-            <li>Please carry valid Govt Photo ID proof (Aadhaar / Passport) for all travelers.</li>
+            <li>Please carry valid Govt Photo ID proof (Aadhaar / Passport) for all guests.</li>
             <li>Driver contact details will be shared on WhatsApp 24 hours prior to travel.</li>
-            <li>For any immediate questions or customized changes, contact Founder <strong>${FOUNDER_NAME}</strong> directly at <strong>${FOUNDER_PHONE}</strong>.</li>
+            <li>Direct Helpline: Founder <strong>${FOUNDER_NAME}</strong> at <strong>${FOUNDER_PHONE}</strong>.</li>
           </ul>
         </div>
         `
       );
 
-      // Dispatch Owner Email
-      let ownerResult = null;
-      let customerResult = null;
-
-      // Try Resend first
-      ownerResult = await sendViaResend({ to: ownerEmail, subject: ownerSubject, html: ownerHtml, fromName: 'HimYatra Bookings' });
-
-      // Fallback to Nodemailer SMTP
-      if (!ownerResult && transporter) {
-        try {
-          const info = await transporter.sendMail({
-            from: `"HimYatra Bookings" <${process.env.SMTP_USER || process.env.GMAIL_USER}>`,
-            to: ownerEmail,
-            subject: ownerSubject,
-            html: ownerHtml
-          });
-          ownerResult = { success: true, provider: 'smtp', messageId: info.messageId };
-        } catch (e) {
-          console.error('SMTP owner send error:', e.message);
-        }
+      // Send to Owner
+      const ownerRes = await sendEmail({ to: ownerEmail, subject: ownerSubject, html: ownerHtml, fromName: 'HimYatra Bookings' });
+      // Send to Customer
+      let custRes = null;
+      if (custEmail) {
+        custRes = await sendEmail({ to: custEmail, subject: custSubject, html: custHtml, fromName: 'HimYatra Travel Desk' });
       }
-
-      // Dispatch Customer Email (if valid customer email provided)
-      if (custEmail && /^\S+@\S+\.\S+$/.test(custEmail)) {
-        customerResult = await sendViaResend({ to: custEmail, subject: customerSubject, html: customerHtml, fromName: 'HimYatra Travel Desk' });
-        if (!customerResult && transporter) {
-          try {
-            const info = await transporter.sendMail({
-              from: `"HimYatra Travel Desk" <${process.env.SMTP_USER || process.env.GMAIL_USER}>`,
-              to: custEmail,
-              subject: customerSubject,
-              html: customerHtml
-            });
-            customerResult = { success: true, provider: 'smtp', messageId: info.messageId };
-          } catch (e) {
-            console.error('SMTP customer send error:', e.message);
-          }
-        }
-      }
-
-      const delivered = Boolean(ownerResult);
 
       return res.status(200).json({
         success: true,
-        delivered,
-        ownerSent: Boolean(ownerResult),
-        customerSent: Boolean(customerResult),
         bookingRef,
-        message: delivered
-          ? 'Booking confirmation dispatched successfully'
-          : 'Booking recorded securely in database. Add SMTP_USER and SMTP_PASS in Vercel to enable live Gmail forwarding.'
+        ownerSent: Boolean(ownerRes?.success),
+        customerSent: Boolean(custRes?.success)
       });
     }
 
-    // ══════════════════════════════════════════════════════════════════════
-    // B. INQUIRY / CONTACT / CALLBACK REQUEST
-    // ══════════════════════════════════════════════════════════════════════
+    // ──────────────────────────────────────────────────────────────────
+    // 5. BOOKING CANCELLATION EMAIL
+    // ──────────────────────────────────────────────────────────────────
+    if (type === 'booking_cancellation') {
+      const { bookingRef, customerName, customerEmail, packageTitle, refundAmount = 0, reason = 'Customer requested' } = body;
+      const subject = `⚠️ Booking Cancelled: Ref ${bookingRef} | HimYatra`;
+      const html = buildEmailContainer(
+        'Booking Cancellation Notice',
+        'Official Refund & Status Update',
+        `
+        <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>${customerName || 'Traveler'}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          This is to confirm that your booking reservation <strong>${bookingRef}</strong> for <strong>${packageTitle || 'Tour Package'}</strong> has been cancelled as per your request.
+        </p>
+        <div style="background-color: #fff1f2; border: 1px solid #fecdd3; border-radius: 12px; padding: 16px; margin: 20px 0;">
+          <h4 style="margin: 0 0 6px 0; color: #9f1239; font-size: 14px;">Cancellation Details:</h4>
+          <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 13px;">
+            <tr><td width="40%" style="color: #64748b;">Booking Reference:</td><td style="font-weight: 700;">${bookingRef}</td></tr>
+            <tr><td style="color: #64748b;">Cancellation Reason:</td><td>${reason}</td></tr>
+            <tr><td style="color: #64748b;">Refund Eligible Amount:</td><td style="font-weight: 700; color: #047857;">₹${refundAmount.toLocaleString('en-IN')}</td></tr>
+            <tr><td style="color: #64748b;">Refund Processing:</td><td>3–5 business days to original payment method</td></tr>
+          </table>
+        </div>
+        <p style="font-size: 13px; color: #64748b;">
+          If this cancellation was made in error or if you wish to reschedule your dates with ZERO cancellation fee, please contact Founder Amit Verma at +91 76199 17057 immediately.
+        </p>
+        `
+      );
+
+      // Notify customer
+      if (customerEmail) {
+        await sendEmail({ to: customerEmail, subject, html, fromName: 'HimYatra Support' });
+      }
+      // Notify admin
+      await sendEmail({
+        to: ownerEmail,
+        subject: `⚠️ [CANCELLATION ALERT] ${bookingRef} cancelled by ${customerName}`,
+        html,
+        fromName: 'HimYatra Alerts'
+      });
+
+      return res.status(200).json({ success: true, message: 'Cancellation notifications dispatched' });
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // 6. PAYMENT CONFIRMATION RECEIPT EMAIL
+    // ──────────────────────────────────────────────────────────────────
+    if (type === 'payment_confirmation') {
+      const { bookingRef, customerName, customerEmail, packageTitle, amountPaid, paymentId, remainingBalance = 0 } = body;
+      const subject = `💳 Payment Receipt: ₹${amountPaid.toLocaleString('en-IN')} Received for Ref ${bookingRef} | HimYatra`;
+      const html = buildEmailContainer(
+        'Payment Receipt & Voucher',
+        'Official Financial Confirmation',
+        `
+        <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>${customerName}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          We have successfully received your payment of <strong>₹${amountPaid.toLocaleString('en-IN')}</strong> for booking reference <strong>${bookingRef}</strong> (${packageTitle}).
+        </p>
+        <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 18px; margin: 20px 0;">
+          <h4 style="margin: 0 0 10px 0; color: #166534; font-size: 14px;">Transaction Receipt:</h4>
+          <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 13px;">
+            <tr><td width="45%" style="color: #64748b;">Amount Received:</td><td style="font-weight: 800; font-size: 16px; color: #15803d;">₹${amountPaid.toLocaleString('en-IN')}</td></tr>
+            <tr><td style="color: #64748b;">Transaction / Payment ID:</td><td style="font-family: monospace; font-weight: 700;">${paymentId}</td></tr>
+            <tr><td style="color: #64748b;">Remaining Due on Arrival:</td><td style="font-weight: 700; color: #b45309;">₹${remainingBalance.toLocaleString('en-IN')}</td></tr>
+            <tr><td style="color: #64748b;">Payment Status:</td><td style="color: #15803d; font-weight: 700;">VERIFIED & ACTIVE</td></tr>
+          </table>
+        </div>
+        <p style="text-align: center; margin: 20px 0;">
+          <a href="${SITE_URL}/?track=${encodeURIComponent(bookingRef)}" style="display: inline-block; background-color: #12372F; color: #ffffff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
+            Download Official PDF Voucher →
+          </a>
+        </p>
+        `
+      );
+
+      if (customerEmail) {
+        await sendEmail({ to: customerEmail, subject, html, fromName: 'HimYatra Billing' });
+      }
+      return res.status(200).json({ success: true, message: 'Payment receipt dispatched' });
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // 7. BOOKING STATUS UPDATE EMAIL
+    // ──────────────────────────────────────────────────────────────────
+    if (type === 'status_update') {
+      const { bookingRef, customerName, customerEmail, packageTitle, oldStatus, newStatus, adminNote } = body;
+      const subject = `📍 Status Update: Ref ${bookingRef} is now "${newStatus.toUpperCase()}" | HimYatra`;
+      const html = buildEmailContainer(
+        'Tour Status Update',
+        'Real-Time Reservation Progress',
+        `
+        <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>${customerName}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          The status of your tour booking <strong>${bookingRef}</strong> (${packageTitle}) has been updated by our operations desk:
+        </p>
+        <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin: 20px 0; text-align: center;">
+          <span style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; display: block; margin-bottom: 6px;">
+            NEW CURRENT STATUS
+          </span>
+          <span style="display: inline-block; background: #12372F; color: #34d399; padding: 8px 24px; border-radius: 30px; font-size: 16px; font-weight: 800;">
+            ${newStatus.toUpperCase()}
+          </span>
+          ${adminNote ? `<p style="margin: 14px 0 0 0; font-size: 13px; color: #475569;"><strong>Note from Tour Operations:</strong> ${adminNote}</p>` : ''}
+        </div>
+        <p style="text-align: center;">
+          <a href="${SITE_URL}/?track=${encodeURIComponent(bookingRef)}" style="display: inline-block; background-color: #1F6B55; color: #ffffff; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
+            Track Booking Live Online →
+          </a>
+        </p>
+        `
+      );
+
+      if (customerEmail) {
+        await sendEmail({ to: customerEmail, subject, html, fromName: 'HimYatra Operations' });
+      }
+      return res.status(200).json({ success: true, message: 'Status update email dispatched' });
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // 8. CUSTOM TRIP INQUIRY CONFIRMATION EMAIL
+    // ──────────────────────────────────────────────────────────────────
+    if (type === 'custom_trip') {
+      const trip = body.trip || body;
+      const name = trip.contactName || trip.name || 'Traveler';
+      const phone = trip.contactPhone || trip.phone || 'Not provided';
+      const email = trip.email || '';
+      const region = trip.selectedRegion || trip.region || 'Himalayas';
+      const spots = Array.isArray(trip.selectedSpots) ? trip.selectedSpots.join(', ') : 'Custom Route';
+      const duration = trip.durationDays || 5;
+      const guests = trip.travelersCount || 2;
+      const budget = trip.estimatedPrice || 'Custom Quote';
+
+      const subject = `✨ Custom Trip Request: ${name} (${region} - ${duration} Days) | HimYatra`;
+      const html = buildEmailContainer(
+        'Custom Trip Itinerary Request',
+        'Bespoke Vacation Planning Desk',
+        `
+        <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>${name}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          We have received your custom tour requirements for <strong>${region}</strong>. Our holiday designer will review your preferences and share a personalized day-by-day plan with cab and hotel quotes on WhatsApp within 2 hours.
+        </p>
+        <div style="background-color: #f0fdfa; border: 1px solid #99f6e4; border-radius: 12px; padding: 16px; margin: 18px 0;">
+          <h4 style="margin: 0 0 8px 0; color: #115e59; font-size: 14px;">Your Trip Preferences:</h4>
+          <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 13px;">
+            <tr><td width="40%" style="color: #64748b;">Target Region:</td><td style="font-weight: 700;">${region}</td></tr>
+            <tr><td style="color: #64748b;">Places to Visit:</td><td>${spots}</td></tr>
+            <tr><td style="color: #64748b;">Duration:</td><td>${duration} Days</td></tr>
+            <tr><td style="color: #64748b;">Guests:</td><td>${guests} Travelers</td></tr>
+            <tr><td style="color: #64748b;">Estimated Budget:</td><td style="font-weight: 700; color: #047857;">₹${budget}</td></tr>
+            <tr><td style="color: #64748b;">Contact Mobile:</td><td>${phone}</td></tr>
+          </table>
+        </div>
+        `
+      );
+
+      // Customer acknowledgment
+      if (email) {
+        await sendEmail({ to: email, subject: `Trip Plan Received: ${region} (${duration} Days) | HimYatra`, html, fromName: 'HimYatra Custom Desk' });
+      }
+      // Admin notification
+      await sendEmail({
+        to: ownerEmail,
+        subject: `🔔 [CUSTOM TRIP INQUIRY] ${name} | ${region} | 📞 ${phone}`,
+        html,
+        fromName: 'HimYatra Leads'
+      });
+
+      return res.status(200).json({ success: true, message: 'Custom trip inquiry registered' });
+    }
+
+    // ──────────────────────────────────────────────────────────────────
+    // 9 & 10. GENERAL INQUIRY / CALLBACK REQUEST (Customer + Admin)
+    // ──────────────────────────────────────────────────────────────────
     const inquiry = body.inquiry || body;
     const name = inquiry.name || 'Website Visitor';
     const phone = inquiry.phone || 'Not provided';
@@ -405,8 +675,8 @@ export default async function handler(req, res) {
     const message = inquiry.message || 'Interested in package and custom quote';
     const source = inquiry.source || 'Website Contact Form';
 
-    const subject = `📬 [NEW HIMYATRA INQUIRY] ${name} | 📞 ${phone} | ${destination}`;
-    const html = buildEmailContainer(
+    const adminSubject = `📬 [NEW INQUIRY] ${name} | 📞 ${phone} | ${destination}`;
+    const adminHtml = buildEmailContainer(
       'New Customer Inquiry',
       'Direct Travel Desk Inquiry & Callback Request',
       `
@@ -426,7 +696,6 @@ export default async function handler(req, res) {
         <tr><td style="color: #64748b;">Planned Travel Date:</td><td>${travelDate}</td></tr>
         <tr><td style="color: #64748b;">Number of Guests:</td><td>${travelers}</td></tr>
         <tr><td style="color: #64748b;" valign="top">Inquiry Message:</td><td style="font-weight: 500; color: #334155;">${message}</td></tr>
-        <tr><td style="color: #64748b;">Submission Timestamp:</td><td>${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td></tr>
       </table>
 
       <div style="margin-top: 20px; padding: 12px; background-color: #f1f5f9; border-radius: 8px; text-align: center;">
@@ -437,39 +706,31 @@ export default async function handler(req, res) {
       `
     );
 
-    let sent = false;
-    let provider = null;
-
-    // Resend
-    const resendResult = await sendViaResend({ to: ownerEmail, subject, html, fromName: 'HimYatra Inquiries' });
-    if (resendResult) {
-      sent = true;
-      provider = 'resend';
+    // Customer confirmation
+    if (email) {
+      const custAckHtml = buildEmailContainer(
+        'We Have Received Your Inquiry',
+        'HimYatra Travel Desk',
+        `
+        <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Hello <strong>${name}</strong>,</p>
+        <p style="font-size: 14px; line-height: 22px; color: #334155;">
+          Thank you for inquiring about travels to <strong>${destination}</strong>. Our holiday concierge has logged your message. Founder Amit Verma or our senior travel desk will contact you via WhatsApp / call shortly with package options and cab quotes.
+        </p>
+        <p style="font-size: 13px; color: #64748b;">
+          Need immediate assistance? Call or WhatsApp us anytime at <strong>+91 76199 17057</strong>.
+        </p>
+        `
+      );
+      await sendEmail({ to: email, subject: `Inquiry Received: ${destination} Tours | HimYatra`, html: custAckHtml, fromName: 'HimYatra Concierge' });
     }
 
-    // Nodemailer
-    if (!sent && transporter) {
-      try {
-        const info = await transporter.sendMail({
-          from: `"HimYatra Inquiries" <${process.env.SMTP_USER || process.env.GMAIL_USER}>`,
-          to: ownerEmail,
-          subject,
-          html
-        });
-        sent = true;
-        provider = 'smtp';
-      } catch (e) {
-        console.error('SMTP inquiry send error:', e.message);
-      }
-    }
+    const adminRes = await sendEmail({ to: ownerEmail, subject: adminSubject, html: adminHtml, fromName: 'HimYatra Inquiries' });
 
     return res.status(200).json({
       success: true,
-      delivered: sent,
-      provider,
-      message: sent
-        ? 'Inquiry dispatched to owner email'
-        : 'Inquiry saved securely. Add SMTP_USER and SMTP_PASS in Vercel to forward directly to your Gmail inbox.'
+      delivered: Boolean(adminRes?.success),
+      provider: adminRes?.provider,
+      message: 'Inquiry processed successfully'
     });
 
   } catch (err) {

@@ -320,14 +320,14 @@ export async function sendEmailOtp(email, username) {
   // 2. Dispatch real email directly to customer's Gmail using FormSubmit API
   try {
     const emailPayload = {
-      _subject: `🔐 HimYatra Login Verification Code: ${otpCode}`,
+      _subject: `🔐 Valley Vista Login Verification Code: ${otpCode}`,
       _template: 'box',
       _captcha: 'false',
       'Greetings': `Hello ${cleanUsername}!`,
-      'Your HimYatra Security OTP': `👉 ${otpCode} 👈`,
+      'Your Valley Vista Security OTP': `👉 ${otpCode} 👈`,
       'Valid For': '10 Minutes',
-      'Purpose': 'Login & access your Himalayan bookings, itineraries, and trip manager',
-      'Security Note': 'Do not share this code with anyone. HimYatra will never ask for your OTP.',
+      'Purpose': 'Login & access your travel bookings, itineraries, and trip manager',
+      'Security Note': 'Do not share this code with anyone. Valley Vista will never ask for your OTP.',
       'Founder Helpline': 'Amit Verma (+91 76199 17057)'
     };
 

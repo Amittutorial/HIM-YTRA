@@ -164,7 +164,7 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
   }, [data]);
 
   const whatsappMsg = encodeURIComponent(
-    `Hi HimYatra! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
+    `Hi Valley Vista! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
   );
 
   // Instantly open details modal & minimize chat so user immediately sees the package modal!
@@ -216,7 +216,7 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
       {/* Badge & Title */}
       <div>
         <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 mb-1">
-          {fullPkg.badge || data.badge || 'HimYatra Special'}
+          {fullPkg.badge || data.badge || 'Valley Vista Special'}
         </span>
         <h4 className="font-bold text-sm text-white leading-snug group-hover:text-teal-300 transition-colors">
           {fullPkg.title || data.title}
@@ -302,7 +302,7 @@ function TypingIndicator() {
           />
         ))}
       </div>
-      <span className="text-[11px] text-teal-300 font-medium">HimYatra AI...</span>
+      <span className="text-[11px] text-teal-300 font-medium">Valley Vista AI...</span>
     </div>
   );
 }
@@ -320,7 +320,7 @@ function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage, onMini
             <div className="w-5 h-5 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center">
               <Compass className="w-3.5 h-3.5 text-teal-400" />
             </div>
-            <span className="text-[11px] font-bold text-teal-400">HimYatra Assistant</span>
+            <span className="text-[11px] font-bold text-teal-400">Valley Vista Assistant</span>
           </div>
         )}
 
@@ -382,11 +382,19 @@ function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage, onMini
 /* ══════════════════════════════════════════════════════════════════
    Main AIChatbot Component
    ══════════════════════════════════════════════════════════════════ */
-export default function AIChatbot({ onSelectPackage, onBookPackage }) {
+export default function AIChatbot({ onSelectPackage, onBookPackage, isAnyModalOpen = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [showInviteChip, setShowInviteChip] = useState(true);
+
+  // Auto-dismiss floating invitation pill after 6 seconds so it never blocks page elements or form inputs
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowInviteChip(false);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Language mode: 'auto' | 'en' | 'hi'
   const [preferredLang, setPreferredLang] = useState('auto');
@@ -399,12 +407,12 @@ export default function AIChatbot({ onSelectPackage, onBookPackage }) {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const WELCOME_EN = `Hello! 🙏 I am your **HimYatra AI Travel Assistant**.
+  const WELCOME_EN = `Hello! 🙏 I am your **Valley Vista AI Travel Assistant**.
 Ask me anything about worldwide holiday packages, domestic India tours, honeymoon specials, Char Dham 2026, fixed cab rentals, or custom itineraries!
 
 I can generate tailor-made itineraries and pricing instantly. Where would you like to travel?`;
 
-  const WELCOME_HI = `Namaste! 🙏 Main **HimYatra Assistant** hoon.
+  const WELCOME_HI = `Namaste! 🙏 Main **Valley Vista Assistant** hoon.
 Worldwide holidays, domestic tours, honeymoon packages, fixed-route cabs, ya Char Dham Yatra ke bare mein kuch bhi poochiye!
 
 Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta hoon. Aap kahan ghoomna chahte hain?`;
@@ -585,7 +593,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
       .slice(-3)
       .join(' | ');
     const text = encodeURIComponent(
-      `Hi HimYatra Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a holiday trip'}. Please assist me!`
+      `Hi Valley Vista Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a holiday trip'}. Please assist me!`
     );
     window.open(`https://wa.me/917619917057?text=${text}`, '_blank');
   };
@@ -638,7 +646,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             </div>
             <div className="text-xs text-left">
               <div className="font-bold flex items-center gap-1.5">
-                <span>HimYatra Assistant</span>
+                <span>Valley Vista Assistant</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <div className="text-[10px] text-teal-300">Click to resume conversation</div>
@@ -744,7 +752,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-300 ring-1 ring-slate-950 animate-pulse" />
               </div>
               <div>
-                <div className="text-xs font-bold leading-tight">HimYatra AI Assistant</div>
+                <div className="text-xs font-bold leading-tight">Valley Vista AI Assistant</div>
                 <div className="text-[10px] text-teal-100 flex items-center gap-1">
                   <span>Worldwide Travel Specialist</span>
                   <span>•</span>
@@ -837,7 +845,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
                 maxLength={500}
                 disabled={isTyping}
-                aria-label="Ask HimYatra AI"
+                aria-label="Ask Valley Vista AI"
               />
               <button
                 type="submit"
@@ -856,10 +864,10 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
         </div>
       )}
 
-      {/* ── Single Floating Launch Button ── */}
-      {!isOpen && (
-        <div className="fixed bottom-16 right-3.5 sm:bottom-20 md:bottom-6 sm:right-5 z-[9998] flex items-center gap-2.5">
-          {/* Desktop Only Invitation Chip (Hidden on mobile/tablets to prevent covering form inputs or buttons) */}
+      {/* ── Single Floating Launch Button (Hidden when any modal is open to prevent UI collisions) ── */}
+      {!isOpen && !isAnyModalOpen && (
+        <div className="fixed bottom-20 right-3.5 sm:bottom-24 sm:right-5 md:bottom-8 md:right-6 z-30 flex items-center gap-2.5">
+          {/* Desktop Only Invitation Chip (Auto-dismisses & hidden on smaller devices) */}
           {showInviteChip && (
             <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-teal-500/40 text-white shadow-xl backdrop-blur-md hover:border-teal-400 transition animate-in fade-in duration-300">
               <button
@@ -895,15 +903,15 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
               setIsOpen(true);
               setIsMinimized(false);
             }}
-            className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
+            className="relative w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
             aria-label="Open AI Mountain Guide"
-            title="Chat with HimYatra AI Assistant"
+            title="Chat with Valley Vista AI Assistant"
           >
-            <Compass className="w-6 h-6 sm:w-7 sm:h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
+            <Compass className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
 
             {/* Glowing Online Notification Dot */}
-            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-emerald-400 rounded-full border-2 border-slate-950 flex items-center justify-center">
-              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-200 animate-ping" />
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 sm:w-3.5 sm:h-3.5 bg-emerald-400 rounded-full border-2 border-slate-950 flex items-center justify-center">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-ping" />
             </span>
           </button>
         </div>

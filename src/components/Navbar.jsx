@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle, Sun, Moon, User } from 'lucide-react';
+import { Mountain, Phone, Menu, X, Compass, MapPin, ChevronDown, Sparkles, HelpCircle, Sun, Moon, User, ShieldCheck } from 'lucide-react';
 import { getCurrentUser } from '../lib/supabaseClient';
 
 export default function Navbar({ 
@@ -9,6 +9,7 @@ export default function Navbar({
   onOpenPayment, 
   onOpenHelpCenter, 
   onOpenAuth, 
+  onOpenAdmin,
   onOpenTripQuiz, 
   onOpenLiveTracking, 
   onOpenCompare, 
@@ -24,10 +25,10 @@ export default function Navbar({
 
   useEffect(() => {
     const handleAuth = (e) => setCurrentUser(e.detail);
-    window.addEventListener('himyatra-auth-changed', handleAuth);
+    window.addEventListener('valleyvista-auth-changed', handleAuth);
     window.addEventListener('himyatra-auth-changed', handleAuth);
     return () => {
-      window.removeEventListener('himyatra-auth-changed', handleAuth);
+      window.removeEventListener('valleyvista-auth-changed', handleAuth);
       window.removeEventListener('himyatra-auth-changed', handleAuth);
     };
   }, []);
@@ -97,6 +98,16 @@ export default function Navbar({
         <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
         <button
           type="button"
+          onClick={() => onOpenAdmin?.()}
+          className="font-bold text-amber-400 hover:text-amber-300 transition flex items-center gap-1 cursor-pointer"
+          title="Founder & Operations Command Portal"
+        >
+          <ShieldCheck className="w-3 h-3 text-amber-400" />
+          <span>Admin Command</span>
+        </button>
+        <span className={isLight ? 'text-slate-300' : 'text-slate-600'}>|</span>
+        <button
+          type="button"
           onClick={() => onOpenAuth?.()}
           className={`font-bold transition flex items-center gap-1.5 cursor-pointer px-3 py-0.5 rounded-full border ${
             currentUser
@@ -128,7 +139,7 @@ export default function Navbar({
               <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full overflow-hidden border-2 border-emerald-400/70 shadow-lg shadow-emerald-500/25 group-hover:scale-105 group-hover:border-emerald-300 transition shrink-0 bg-slate-900 relative">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="HimYatra Worldwide"
+                  alt="Valley Vista Worldwide"
                   className="w-full h-full object-cover object-center scale-110 group-hover:scale-125 transition duration-300"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -500,6 +511,18 @@ export default function Navbar({
               <span>
                 {currentUser ? `Account: @${currentUser.username} (${currentUser.total_bookings || 0} Bookings)` : 'Customer Login / My Trips'}
               </span>
+            </button>
+
+            {/* Founder & Admin Command Portal */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAdmin?.();
+              }}
+              className="w-full py-3 px-4 rounded-2xl bg-amber-400/15 border border-amber-400/35 text-amber-300 font-bold text-sm flex items-center justify-center gap-2 transition"
+            >
+              <ShieldCheck className="w-4 h-4 text-amber-400" />
+              <span>Founder Command & Admin Portal</span>
             </button>
 
             {/* Language Toggle in Mobile Menu */}

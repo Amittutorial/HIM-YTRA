@@ -28,6 +28,7 @@ import LiveTripTrackingModal from './components/LiveTripTrackingModal';
 import PackageCompareModal from './components/PackageCompareModal';
 import AIChatbot from './components/AIChatbot';
 import PackageModal from './components/PackageModal';
+import AdminDashboardModal from './components/AdminDashboardModal';
 import { TOUR_PACKAGES, DESTINATIONS } from './data/travelData';
 
 export default function App() {
@@ -53,6 +54,21 @@ export default function App() {
   const [trackingTripId, setTrackingTripId] = useState('VV-TRIP-8821');
   const [compareModalOpen, setCompareModalOpen] = useState(false);
   const [viewingPackage, setViewingPackage] = useState(null);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+
+  // Global Modal Active Check (Prevents floating buttons from covering modals)
+  const isAnyModalOpen = Boolean(
+    bookingModalOpen ||
+    inquireModalOpen ||
+    paymentModalOpen ||
+    helpCenterOpen ||
+    authModalOpen ||
+    viewingPackage ||
+    quizModalOpen ||
+    trackingModalOpen ||
+    compareModalOpen ||
+    adminModalOpen
+  );
 
   // Global filters
   const [selectedState, setSelectedState] = useState('All');
@@ -88,9 +104,9 @@ export default function App() {
         const match = TOUR_PACKAGES.find(p => p.id === pkgId);
         if (match) {
           setViewingPackage(match);
-          document.title = `${match.title} (${match.duration}) — HimYatra Packages`;
+          document.title = `${match.title} (${match.duration}) — Valley Vista Packages`;
           const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with HimYatra.`);
+          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with Valley Vista.`);
         }
       }
 
@@ -99,7 +115,7 @@ export default function App() {
         const matchDest = DESTINATIONS.find(d => d.id === destId || d.searchKeyword?.toLowerCase() === destId.toLowerCase());
         if (matchDest) {
           handleSelectDestination(matchDest);
-          document.title = `${matchDest.name} Tours & Sightseeing — HimYatra`;
+          document.title = `${matchDest.name} Tours & Sightseeing — Valley Vista`;
           const el = document.getElementById('destinations');
           setTimeout(() => el?.scrollIntoView({ behavior: 'smooth' }), 300);
         }
@@ -151,9 +167,9 @@ export default function App() {
     if (pkg) {
       const newUrl = `${window.location.pathname}?pkg=${encodeURIComponent(pkg.id)}`;
       window.history.pushState({ pkgId: pkg.id }, '', newUrl);
-      document.title = `${pkg.title} (${pkg.duration}) — HimYatra Packages`;
+      document.title = `${pkg.title} (${pkg.duration}) — Valley Vista Packages`;
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with HimYatra.`);
+      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with Valley Vista.`);
     }
   };
 
@@ -162,7 +178,7 @@ export default function App() {
     const currentParams = new URLSearchParams(window.location.search);
     if (currentParams.has('pkg')) {
       window.history.pushState({}, '', window.location.pathname);
-      document.title = 'HimYatra | Worldwide Travel, Tours & Holiday Experiences';
+      document.title = 'Valley Vista — Worldwide Travel, Tours & Experiences | Founder Amit Verma +91 76199 17057';
     }
   };
 
@@ -251,6 +267,7 @@ export default function App() {
         onOpenPayment={() => setPaymentModalOpen(true)}
         onOpenHelpCenter={() => setHelpCenterOpen(true)}
         onOpenAuth={() => setAuthModalOpen(true)}
+        onOpenAdmin={() => setAdminModalOpen(true)}
         onOpenTripQuiz={() => setQuizModalOpen(true)}
         onOpenLiveTracking={() => setTrackingModalOpen(true)}
         onOpenCompare={() => setCompareModalOpen(true)}
@@ -260,8 +277,8 @@ export default function App() {
         onToggleLang={toggleLanguage}
       />
 
-      {/* Main Content Sections */}
-      <main className="flex-1 relative z-10">
+      {/* Main Content Sections (with mobile safe-padding for bottom action bar) */}
+      <main className="flex-1 relative z-10 pb-20 lg:pb-0">
         {/* Hero Section (framed card with matching region background) */}
         <Hero
           lang={lang}
@@ -334,7 +351,7 @@ export default function App() {
           t={t}
         />
 
-        {/* Why Choose HimYatra & Trust Credibility */}
+        {/* Why Choose Valley Vista & Trust Credibility */}
         <TrustStats lang={lang} t={t} />
 
         {/* Destinations: Himachal, Uttarakhand, Ayodhya & More */}
@@ -535,10 +552,17 @@ export default function App() {
         />
       )}
 
+      {/* Founder & Admin Executive Command Portal */}
+      <AdminDashboardModal
+        isOpen={adminModalOpen}
+        onClose={() => setAdminModalOpen(false)}
+      />
+
       {/* Premium AI Travel Assistant Chatbot (Honeymoon, Char Dham, Cabs & Custom Itineraries) */}
       <AIChatbot
         onSelectPackage={handleOpenPackageDetails}
         onBookPackage={handleOpenBooking}
+        isAnyModalOpen={isAnyModalOpen}
       />
     </div>
   );

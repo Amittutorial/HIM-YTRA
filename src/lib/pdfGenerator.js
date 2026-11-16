@@ -3,7 +3,7 @@ import QRCode from 'qrcode';
 
 /**
  * ══════════════════════════════════════════════════════════════════════════
- * HIMYATRA LUXURY BOOKING CONFIRMATION & E-TICKET PDF GENERATOR
+ * VALLEY VISTA LUXURY BOOKING CONFIRMATION & E-TICKET PDF GENERATOR
  * ══════════════════════════════════════════════════════════════════════════
  * Visual Style:
  * - A4 Portrait (210mm x 297mm)
@@ -51,146 +51,35 @@ function createSignatureDataUrl(signerName) {
   try {
     const canvas = document.createElement('canvas');
     canvas.width = 520;
-    canvas.height = 150;
+    canvas.height = 140;
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Deep Executive Fountain Pen Blue Ink
+    // Deep Executive Fountain Pen Blue Ink (#0e3a8a)
     ctx.strokeStyle = '#0e3a8a';
     ctx.fillStyle = '#0e3a8a';
-    ctx.lineWidth = 2.8;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 
-    const isAbhishek = signerName.toLowerCase().includes('abhishek');
+    // 1. Render realistic cursive signature text using executive handwriting typography
+    ctx.font = 'italic 50px "Segoe Script", "Brush Script MT", "Dancing Script", "Great Vibes", cursive';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText(signerName, 35, 76);
 
-    if (isAbhishek) {
-      // ── ABHISHEK VERMA EXECUTIVE CALLIGRAPHIC SIGNATURE ──
-      // 1. Capital 'A' with stylish upward flourish
-      ctx.beginPath();
-      ctx.lineWidth = 3.2;
-      ctx.moveTo(35, 105);
-      ctx.bezierCurveTo(45, 80, 60, 30, 75, 22);
-      ctx.bezierCurveTo(80, 20, 88, 55, 95, 115);
-      ctx.stroke();
+    // 2. Dynamic Fountain Pen Flourish Underline (Confident, tapered stroke)
+    ctx.beginPath();
+    ctx.lineWidth = 2.6;
+    ctx.moveTo(30, 92);
+    ctx.bezierCurveTo(140, 102, 280, 98, 420, 78);
+    ctx.stroke();
 
-      // Inner crossbar looping into 'b'
-      ctx.beginPath();
-      ctx.lineWidth = 2.4;
-      ctx.moveTo(60, 75);
-      ctx.bezierCurveTo(75, 68, 98, 70, 112, 32);
-      ctx.bezierCurveTo(118, 18, 126, 45, 122, 105);
-      // 'b' bowl
-      ctx.bezierCurveTo(126, 85, 138, 80, 145, 95);
-      // 'h' ascender & shoulder
-      ctx.bezierCurveTo(148, 45, 155, 32, 160, 40);
-      ctx.bezierCurveTo(162, 70, 160, 105, 168, 85);
-      ctx.bezierCurveTo(175, 75, 182, 85, 185, 102);
-      // 'i' + 'sh'
-      ctx.bezierCurveTo(192, 85, 200, 78, 208, 98);
-      ctx.bezierCurveTo(215, 80, 222, 75, 230, 95);
-      // 'e' + 'k'
-      ctx.bezierCurveTo(238, 82, 245, 80, 250, 92);
-      ctx.bezierCurveTo(258, 45, 265, 30, 270, 42);
-      ctx.bezierCurveTo(272, 70, 270, 102, 278, 88);
-      ctx.stroke();
-
-      // Pen dot for 'i'
-      ctx.beginPath();
-      ctx.arc(196, 62, 2.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 2. Bold Executive 'V' for Verma
-      ctx.beginPath();
-      ctx.lineWidth = 3.4;
-      ctx.moveTo(295, 45);
-      ctx.bezierCurveTo(305, 40, 315, 90, 328, 118);
-      ctx.bezierCurveTo(335, 115, 355, 55, 370, 38);
-      // Fluid cursive finish 'erma'
-      ctx.lineWidth = 2.4;
-      ctx.bezierCurveTo(378, 55, 385, 92, 395, 82);
-      ctx.bezierCurveTo(405, 75, 415, 85, 425, 80);
-      ctx.bezierCurveTo(435, 75, 445, 85, 455, 78);
-      ctx.stroke();
-
-      // 3. Dynamic Executive Underscore Flourish with Taper
-      ctx.beginPath();
-      ctx.lineWidth = 2.6;
-      ctx.moveTo(40, 128);
-      ctx.bezierCurveTo(140, 138, 300, 135, 465, 105);
-      ctx.stroke();
-
-      // Double dot accent
-      ctx.beginPath();
-      ctx.arc(445, 125, 2, 0, Math.PI * 2);
-      ctx.arc(458, 122, 2, 0, Math.PI * 2);
-      ctx.fill();
-
-    } else {
-      // ── AMIT VERMA EXECUTIVE CALLIGRAPHIC SIGNATURE ──
-      // 1. Grand Swash & Capital 'A'
-      ctx.beginPath();
-      ctx.lineWidth = 3.2;
-      ctx.moveTo(35, 110);
-      ctx.bezierCurveTo(50, 85, 68, 35, 82, 22);
-      ctx.bezierCurveTo(88, 18, 96, 48, 102, 115);
-      ctx.stroke();
-
-      // Inner flourish cross-loop transitioning into 'mit'
-      ctx.beginPath();
-      ctx.lineWidth = 2.4;
-      ctx.moveTo(70, 78);
-      ctx.bezierCurveTo(85, 70, 105, 72, 118, 92);
-      // 'm' arches
-      ctx.bezierCurveTo(126, 75, 136, 72, 142, 95);
-      ctx.bezierCurveTo(150, 75, 160, 72, 168, 95);
-      // 'i' stroke
-      ctx.bezierCurveTo(176, 78, 184, 75, 190, 95);
-      // 't' ascender
-      ctx.bezierCurveTo(198, 70, 206, 38, 212, 42);
-      ctx.bezierCurveTo(214, 55, 212, 95, 224, 92);
-      ctx.stroke();
-
-      // 'i' dot
-      ctx.beginPath();
-      ctx.arc(186, 60, 2.2, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 't' dynamic crossbar
-      ctx.beginPath();
-      ctx.lineWidth = 2.2;
-      ctx.moveTo(200, 56);
-      ctx.bezierCurveTo(212, 54, 228, 52, 238, 50);
-      ctx.stroke();
-
-      // 2. Bold Executive 'V' for Verma
-      ctx.beginPath();
-      ctx.lineWidth = 3.6;
-      ctx.moveTo(252, 42);
-      ctx.bezierCurveTo(262, 38, 275, 95, 290, 118);
-      ctx.bezierCurveTo(298, 116, 320, 52, 335, 34);
-      // Cursive 'erma' terminal flourish
-      ctx.lineWidth = 2.4;
-      ctx.bezierCurveTo(342, 52, 352, 90, 362, 80);
-      ctx.bezierCurveTo(372, 72, 382, 85, 395, 82);
-      ctx.bezierCurveTo(408, 75, 420, 82, 435, 76);
-      ctx.stroke();
-
-      // 3. Elegant Executive Underline Flourish
-      ctx.beginPath();
-      ctx.lineWidth = 2.8;
-      ctx.moveTo(40, 126);
-      ctx.bezierCurveTo(150, 138, 310, 134, 455, 108);
-      ctx.stroke();
-
-      // Double dot accent
-      ctx.beginPath();
-      ctx.arc(435, 125, 2.2, 0, Math.PI * 2);
-      ctx.arc(450, 122, 2.2, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    // 3. Executive Accent Dots
+    ctx.beginPath();
+    ctx.arc(432, 85, 2.4, 0, Math.PI * 2);
+    ctx.arc(444, 82, 2.4, 0, Math.PI * 2);
+    ctx.fill();
 
     return canvas.toDataURL('image/png');
   } catch (err) {
@@ -200,7 +89,7 @@ function createSignatureDataUrl(signerName) {
 }
 
 /**
- * Generate official corporate seal stamp data URL for HimYatra
+ * Generate official corporate seal stamp data URL for Valley Vista
  */
 function createCorporateSealDataUrl() {
   if (typeof document === 'undefined') return null;
@@ -239,10 +128,10 @@ function createCorporateSealDataUrl() {
 
     // Central circular badge
     ctx.fillStyle = '#12372F';
-    ctx.font = 'bold 16px Arial, sans-serif';
+    ctx.font = 'bold 15px Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('★ HIMYATRA ★', cx, cy - 36);
+    ctx.fillText('★ VALLEY VISTA ★', cx, cy - 36);
 
     ctx.fillStyle = '#C6A15B';
     ctx.font = 'bold 10px Arial, sans-serif';
@@ -373,26 +262,28 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
     doc.setFontSize(7.5);
     doc.setTextColor(COLOR_TEXT_LIGHT[0], COLOR_TEXT_LIGHT[1], COLOR_TEXT_LIGHT[2]);
     doc.text(
-      `HimYatra Premium Himalayan & All Destination Tours • Official E-Ticket Voucher • Ref: ${bookingRef} • Page ${pageNum} of ${totalPages}`,
+      `Valley Vista Worldwide Tours & Travels • Official E-Ticket Voucher • Ref: ${bookingRef} • Page ${pageNum} of ${totalPages}`,
       pageWidth / 2,
       pageHeight - 10,
       { align: 'center' }
     );
   };
 
-  // Section Header Helper (Prevents ANY text collision dynamically)
+  // Section Header Helper (Guarantees zero overlap between section number and title)
   const drawSectionHeader = (number, title, y) => {
     doc.setFillColor(COLOR_EMERALD[0], COLOR_EMERALD[1], COLOR_EMERALD[2]);
     doc.roundedRect(marginX, y, contentWidth, 5.5, 1.2, 1.2, 'F');
 
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
+    doc.setFontSize(7.8);
     doc.setTextColor(COLOR_GOLD[0], COLOR_GOLD[1], COLOR_GOLD[2]);
-    const numWidth = doc.getTextWidth(number);
-    doc.text(number, marginX + 3.5, y + 4);
+    doc.text(number, marginX + 3.5, y + 3.9);
 
     doc.setTextColor(255, 255, 255);
-    doc.text(title.toUpperCase(), marginX + 3.5 + numWidth + 2.5, y + 4);
+    const numWidth = doc.getTextWidth(number);
+    // Explicit safety gap: ensures title never collides with multi-digit or compound headers like "06 & 07."
+    const titleX = marginX + 3.5 + Math.max(numWidth + 3.5, 18);
+    doc.text(title.toUpperCase(), titleX, y + 3.9);
 
     return y + 6.8;
   };
@@ -413,13 +304,13 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(255, 255, 255);
-  doc.text('HIMYATRA', marginX + 5, currentY + 8.5);
+  doc.text('VALLEY VISTA', marginX + 5, currentY + 8.5);
 
   // Brand Category & Tagline
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
   doc.setTextColor(COLOR_GOLD[0], COLOR_GOLD[1], COLOR_GOLD[2]);
-  doc.text('PREMIUM HIMALAYAN & ALL DESTINATION EXPERIENCES', marginX + 5, currentY + 13.5);
+  doc.text('PREMIUM WORLDWIDE & HIMALAYAN TRAVEL EXPERIENCES', marginX + 5, currentY + 13.5);
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6.5);
@@ -568,33 +459,38 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
 
   // Row 2: 3 Spacious Non-Overlapping Columns for Status, UTR & Date
   const colStatusX = marginX + 3.5;
-  const colUtrX = marginX + 68;
-  const colDateX = marginX + 148;
+  const colUtrX = marginX + 60;
+  const colDateX = marginX + 142;
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(6.2);
   doc.setTextColor(COLOR_TEXT_MUTED[0], COLOR_TEXT_MUTED[1], COLOR_TEXT_MUTED[2]);
-  doc.text('PAYMENT STATUS', colStatusX, currentY + 18);
-  doc.text('GATEWAY / UTR REFERENCE NUMBER', colUtrX, currentY + 18);
-  doc.text('VERIFICATION DATE', colDateX, currentY + 18);
+  doc.text('PAYMENT STATUS', colStatusX, currentY + 17.5);
+  doc.text('GATEWAY / UTR REFERENCE NUMBER', colUtrX, currentY + 17.5);
+  doc.text('TRANSACTION DATE', colDateX, currentY + 17.5);
 
-  // Payment Status (Col 1)
+  // Payment Status (Col 1 — 2 Clean Vertically Stacked Lines, Zero Collision)
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   doc.setTextColor(isPaid ? 22 : 180, isPaid ? 101 : 120, isPaid ? 52 : 20);
-  doc.text(isPaid ? 'PAID & VERIFIED (20% Advance Token)' : 'PENDING PAYMENT', colStatusX, currentY + 23);
+  doc.text(isPaid ? 'PAID & VERIFIED' : 'PENDING PAYMENT', colStatusX, currentY + 22);
 
-  // Gateway / UTR Number (Col 2 — wrapped cleanly up to 74mm so it NEVER collides)
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(5.8);
+  doc.setTextColor(COLOR_TEXT_MUTED[0], COLOR_TEXT_MUTED[1], COLOR_TEXT_MUTED[2]);
+  doc.text(isPaid ? '(20% Advance Token Received)' : '(Pending Gateway Settlement)', colStatusX, currentY + 25.5);
+
+  // Gateway / UTR Number (Col 2 — wrapped cleanly up to 76mm)
   doc.setFont('courier', 'bold');
-  doc.setFontSize(7.5);
+  doc.setFontSize(7.2);
   doc.setTextColor(COLOR_PRIMARY[0], COLOR_PRIMARY[1], COLOR_PRIMARY[2]);
-  doc.text(doc.splitTextToSize(utrRef, 74), colUtrX, currentY + 23);
+  doc.text(doc.splitTextToSize(utrRef, 76), colUtrX, currentY + 22.5);
 
   // Verification Date (Col 3)
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   doc.setTextColor(COLOR_TEXT_DARK[0], COLOR_TEXT_DARK[1], COLOR_TEXT_DARK[2]);
-  doc.text(bookingDate, colDateX, currentY + 23);
+  doc.text(bookingDate, colDateX, currentY + 22.5);
 
   currentY += 28.5;
 
@@ -740,7 +636,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.text(`Direct: ${FOUNDER_INFO.contact} • Verified Email`, marginX + 3.5, currentY + 27);
   doc.text(FOUNDER_INFO.email, marginX + 3.5, currentY + 30.5);
   doc.setFontSize(5.2);
-  doc.text('HimYatra Tours & Travels Private Limited', marginX + 3.5, currentY + 34);
+  doc.text('Valley Vista Worldwide Tours & Travels Pvt Ltd', marginX + 3.5, currentY + 34);
 
   // 2. CO-FOUNDER (Center Column)
   const coFounderX = marginX + authW + 3;
@@ -766,7 +662,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.setFontSize(5.8);
   doc.setTextColor(COLOR_TEXT_MUTED[0], COLOR_TEXT_MUTED[1], COLOR_TEXT_MUTED[2]);
   doc.text(`Direct: ${CO_FOUNDER_INFO.contact} • Verified Exec`, coFounderX + 3.5, currentY + 27);
-  doc.text('Operations Desk, HimYatra HQ', coFounderX + 3.5, currentY + 30.5);
+  doc.text('Operations Desk, Valley Vista HQ', coFounderX + 3.5, currentY + 30.5);
   doc.setFontSize(5.2);
   doc.text('Executive Management Board Verified', coFounderX + 3.5, currentY + 34);
 
@@ -815,7 +711,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
   doc.setTextColor(COLOR_GOLD[0], COLOR_GOLD[1], COLOR_GOLD[2]);
-  doc.text('THANK YOU FOR CHOOSING HIMYATRA!', pageWidth / 2, currentY + 4, { align: 'center' });
+  doc.text('THANK YOU FOR CHOOSING VALLEY VISTA!', pageWidth / 2, currentY + 4, { align: 'center' });
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6);
@@ -826,7 +722,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   drawPageBorderAndDecor(1, 1);
 
   // 3. Return requested format
-  const cleanFileName = `HimYatra_Booking_Confirmation_${bookingRef}.pdf`;
+  const cleanFileName = `ValleyVista_Booking_Confirmation_${bookingRef}.pdf`;
 
   if (returnType === 'blob') {
     return {
@@ -879,7 +775,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   const price = pkg.discountedPrice ? `INR ${pkg.discountedPrice.toLocaleString('en-IN')}` : pkg.price || 'INR 13,999';
   const state = pkg.state || 'Himachal Pradesh & Uttarakhand';
   const cleanTitle = pkgTitle.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30);
-  const cleanFileName = `HimYatra_Itinerary_${cleanTitle}.pdf`;
+  const cleanFileName = `ValleyVista_Itinerary_${cleanTitle}.pdf`;
 
   // Draw Border Helper
   const drawPageBorder = (pageNum, totalPages) => {
@@ -895,7 +791,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
     doc.setFontSize(7.5);
     doc.setTextColor(COLOR_TEXT_LIGHT[0], COLOR_TEXT_LIGHT[1], COLOR_TEXT_LIGHT[2]);
     doc.text(
-      `HimYatra Official Tour Itinerary & Vacation Guide • Page ${pageNum} of ${totalPages} • 24/7 Helpline: +91 76199 17057`,
+      `Valley Vista Official Tour Itinerary & Vacation Guide • Page ${pageNum} of ${totalPages} • 24/7 Helpline: +91 76199 17057`,
       pageWidth / 2,
       pageHeight - 10,
       { align: 'center' }
@@ -929,7 +825,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(255, 255, 255);
-  doc.text('HIMYATRA', marginX + 5, currentY + 8.5);
+  doc.text('VALLEY VISTA', marginX + 5, currentY + 8.5);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
@@ -1124,7 +1020,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   doc.setTextColor(COLOR_TEXT_MUTED[0], COLOR_TEXT_MUTED[1], COLOR_TEXT_MUTED[2]);
   doc.text(`Direct Helpline: ${FOUNDER_INFO.contact}`, marginX + 4, currentY + 26);
   doc.text(FOUNDER_INFO.email, marginX + 4, currentY + 29.5);
-  doc.text('HimYatra Tours & Travels Private Limited', marginX + 4, currentY + 33);
+  doc.text('Valley Vista Worldwide Tours & Travels Pvt Ltd', marginX + 4, currentY + 33);
 
   // Corporate Seal in Center
   const corporateSealImg = createCorporateSealDataUrl();

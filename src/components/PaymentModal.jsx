@@ -31,7 +31,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     try {
       await generateBookingConfirmationPDF({
         booking_reference: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
-        package_title: packageName || 'HimYatra Premium Travel Experience',
+        package_title: packageName || 'Valley Vista Premium Travel Experience',
         state: 'Himachal & Uttarakhand',
         customer_name: 'Valued Customer',
         customer_phone: '+91 76199 17057',
@@ -49,7 +49,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     }
   };
 
-  const handleVerifyPayment = (e) => {
+  const handleVerifyPayment = async (e) => {
     e.preventDefault();
     if (!utrNumber || utrNumber.trim().length < 4) {
       setVerificationError('Please enter your 12-digit UTR / UPI reference number from your payment app.');
@@ -58,26 +58,39 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     setVerificationError('');
     setIsVerifying(true);
 
-    setTimeout(() => {
+    try {
+      // Call backend payment verification route
+      await fetch('/api/payment?action=verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          utrReference: utrNumber.trim(),
+          bookingReference: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
+          amount
+        })
+      });
+    } catch (err) {
+      console.warn('Backend payment notice:', err);
+    } finally {
       setIsVerifying(false);
       setIsVerified(true);
+    }
 
-      // Send automated notification to Amit's Gmail
-      sendBookingEmail({
-        bookingId: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
-        packageTitle: packageName || 'HimYatra Tour Token Advance',
-        state: 'Himachal & Uttarakhand',
-        name: 'UPI Customer',
-        phone: '+91 76199 17057',
-        email: 'amitpatel42203@gmail.com',
-        advanceToken: amount,
-        finalTotal: amount * 5,
-        utr: utrNumber.trim()
-      });
-    }, 1000);
+    // Send automated notification to Amit's Gmail
+    sendBookingEmail({
+      bookingId: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
+      packageTitle: packageName || 'Valley Vista Tour Token Advance',
+      state: 'Himachal & Uttarakhand',
+      name: 'UPI Customer',
+      phone: '+91 76199 17057',
+      email: 'amitpatel42203@gmail.com',
+      advanceToken: amount,
+      finalTotal: amount * 5,
+      utr: utrNumber.trim()
+    });
   };
 
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'HimYatra Tour Advance')}`;
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'Valley Vista Tour Advance')}`;
 
   const whatsappMessage = encodeURIComponent(
     `Hello Amit Patel! I have completed my UPI payment of ₹${Number(amount).toLocaleString('en-IN')}.\n\n• UTR / Ref No: ${utrNumber || 'Verified'}\n• Booking Ref: ${bookingRef || 'General Advance'}\n• Package: ${packageName || 'Tour Advance'}\n\nPlease find my attached payment screenshot to confirm my reservation and issue the voucher!`

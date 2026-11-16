@@ -53,7 +53,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
       console.warn('PDF direct generation notice, fallback to print:', err);
       const origTitle = document.title;
       const cleanPkgTitle = (pkg.title || 'Package').replace(/[^a-zA-Z0-9]/g, '_');
-      document.title = `HimYatra_Official_Itinerary_${cleanPkgTitle}_Voucher`;
+      document.title = `Valley Vista_Official_Itinerary_${cleanPkgTitle}_Voucher`;
       window.print();
       setTimeout(() => {
         document.title = origTitle;
@@ -358,7 +358,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
                   <span>High Altitude Health & Acclimatization Advice</span>
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  This tour covers altitudes up to {pkg.altitude || '3,000m+'}. Keep yourself hydrated with at least 3 liters of water daily. Avoid smoking and alcohol on day 1. If you experience headache or nausea, inform your HimYatra travel pilot immediately.
+                  This tour covers altitudes up to {pkg.altitude || '3,000m+'}. Keep yourself hydrated with at least 3 liters of water daily. Avoid smoking and alcohol on day 1. If you experience headache or nausea, inform your Valley Vista travel pilot immediately.
                 </p>
               </div>
 
@@ -433,7 +433,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
             {/* WhatsApp Inquiry */}
             <a
               href={`https://wa.me/917619917057?text=${encodeURIComponent(
-                `Hi HimYatra! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice || pkg.price}/person). Please share available dates and itinerary!`
+                `Hi Valley Vista! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice || pkg.price}/person). Please share available dates and itinerary!`
               )}`}
               target="_blank"
               rel="noreferrer"
@@ -469,7 +469,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-teal-600 shrink-0">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="HimYatra Logo"
+                  alt="Valley Vista Logo"
                   className="w-full h-full object-cover scale-105"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -496,7 +496,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
 
             {/* Official Contact Box */}
             <div className="text-right text-xs space-y-1 text-slate-700 shrink-0">
-              <div className="font-bold text-slate-900">HimYatra Central Operations Desk</div>
+              <div className="font-bold text-slate-900">Valley Vista Central Operations Desk</div>
               <div>📞 <strong>Helpline:</strong> +91 76199 17057</div>
               <div>💬 <strong>WhatsApp:</strong> +91 76199 17057</div>
               <div>✉️ <strong>Official Email:</strong> amitpatel42203@gmail.com</div>
@@ -626,14 +626,14 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               ⚠️ Mountain Travel & Altitude Advisory:
             </div>
             <p className="text-slate-700 text-[11px] leading-relaxed">
-              HimYatra dedicated vehicles carry certified mountain first-aid kits and emergency assistance contacts. Travelers are advised to drink adequate water, carry layered warm woolens, and follow the pilot’s guidance on mountain passes.
+              Valley Vista dedicated vehicles carry certified mountain first-aid kits and emergency assistance contacts. Travelers are advised to drink adequate water, carry layered warm woolens, and follow the pilot’s guidance on mountain passes.
             </p>
           </div>
 
           {/* Transparent Cancellation & Refund Policy */}
           <div className="border border-slate-200 rounded-xl p-4 bg-slate-50 text-xs text-slate-700 space-y-1.5 break-inside-avoid">
             <div className="font-bold text-slate-900 text-[11px] uppercase tracking-wider">
-              HimYatra Standard Booking & Refund Policy:
+              Valley Vista Standard Booking & Refund Policy:
             </div>
             <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600">
               <div>• <strong>Booking Token:</strong> 30% advance deposit confirms private cab & hotel vouchers.</div>
@@ -673,7 +673,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
 
             {/* Column 2: Company Verification & Direct Support */}
             <div className="text-center text-xs space-y-1">
-              <div className="font-extrabold text-slate-900">HimYatra Worldwide Journeys</div>
+              <div className="font-extrabold text-slate-900">Valley Vista Worldwide Journeys</div>
               <div className="text-[11px] text-slate-600">Tourism Reg. VV/TOUR/2026/891</div>
               <div className="text-[11px] text-slate-600">
                 Direct Help: <strong>+91 76199 17057</strong>
@@ -718,7 +718,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
                   Founder & Managing Director
                 </div>
                 <div className="text-[9px] text-slate-500">
-                  HimYatra Worldwide Travels Pvt. Ltd.
+                  Valley Vista Worldwide Travels Pvt. Ltd.
                 </div>
               </div>
             </div>
@@ -727,7 +727,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
 
           {/* Bottom Copyright & Verification Notice */}
           <div className="border-t border-slate-200 pt-3 text-center text-[10px] text-slate-500">
-            This document is a certified itinerary voucher issued by HimYatra Worldwide Journeys. To re-verify your booking, email <strong>amitpatel42203@gmail.com</strong> or call <strong>+91 76199 17057</strong>.
+            This document is a certified itinerary voucher issued by Valley Vista Worldwide Journeys. To re-verify your booking, email <strong>amitpatel42203@gmail.com</strong> or call <strong>+91 76199 17057</strong>.
           </div>
 
         </div>

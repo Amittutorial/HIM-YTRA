@@ -1,0 +1,23 @@
+{
+  "name": "Valley Vista — Worldwide Travel, Tours & Experiences",
+  "short_name": "Valley Vista",
+  "description": "Valley Vista official travel portal. Founder: Amit Verma (+91 76199 17057). From Everywhere. To Everywhere. Domestic India and international holiday packages, cab rentals, and custom trips.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#12372F",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/mountain-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
