@@ -1,7 +1,7 @@
-// HimYatra AI Travel Assistant Engine
+// Valley Vista AI Travel Assistant Engine
 // Comprehensive bilingual (English & Hindi) knowledge base & natural language response engine for worldwide & domestic travel
 
-export const HIMYATRA_PACKAGES = [
+export const VALLEYVISTA_PACKAGES = [
   {
     id: 'pkg-kashmir-paradise',
     title: 'Kashmir Paradise: Srinagar, Gulmarg & Houseboat',
@@ -124,7 +124,7 @@ export const HIMYATRA_PACKAGES = [
   }
 ];
 
-export const VALLEYVISTA_PACKAGES = HIMYATRA_PACKAGES;
+export const HIMYATRA_PACKAGES = VALLEYVISTA_PACKAGES;
 
 export const CONTACT_INFO = {
   founder: 'Amit Verma',
@@ -215,9 +215,9 @@ Bataiye, aapka travel month, destination ya budget kya hai? Main turant aapke li
   // 2. HONEYMOON PACKAGES
   if (/(honeymoon|couple|romantic|candle|candlelight|shadi|shaadi|wedding|anniversary|patni|biwi|wife|husband)/i.test(q)) {
     const honeymoonPkgs = [
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
     ].filter(Boolean);
 
     if (isEn) {
@@ -260,9 +260,9 @@ ${formatCards(honeymoonPkgs)}`;
   // 3. CHAR DHAM / KEDARNATH / BADRINATH / SPIRITUAL
   if (/(char\s*dham|chardham|kedarnath|badrinath|gangotri|yamunotri|do\s*dham|dham|darshan|helicopter|heli|yatra|shiva|jyotirlinga)/i.test(q)) {
     const spiritualPkgs = [
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-chardham-complete'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-kedarnath-badrinath'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-ayodhya-kashi')
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-chardham-complete'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-kedarnath-badrinath'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-ayodhya-kashi')
     ].filter(Boolean);
 
     if (isEn) {
@@ -340,9 +340,9 @@ Aap website par **"Cab Rentals"** section mein online route calculator bhi use k
   // 5. SPITI VALLEY / LADAKH / RAW ADVENTURE
   if (/(spiti|ladakh|leh|pangong|chandratal|kaza|4x4|biking|bullet|hikkim|chicham|tabo|nubra|khardung)/i.test(q)) {
     const advPkgs = [
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-ladakh-pangong'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat')
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-ladakh-pangong'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat')
     ].filter(Boolean);
 
     if (isEn) {
@@ -387,9 +387,9 @@ ${formatCards(advPkgs)}`;
   // 6. FAMILY HOLIDAYS
   if (/(family|parents|bachhe|kids|children|elderly|senior citizen|safe|peaceful|parivar)/i.test(q)) {
     const familyPkgs = [
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-rajasthan-royalty')
     ].filter(Boolean);
 
     if (isEn) {
@@ -467,9 +467,9 @@ Aap kis month mein travel plan kar rahe hain? Bataiye, main specific weather upd
   // 8. TREKS & SUMMITS / ADVENTURE SPORTS
   if (/(trek|trekking|hiking|summit|tungnath|chandrashila|triund|kheerganga|paragliding|rafting|skiing)/i.test(q)) {
     const trekPkgs = [
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit')
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-uttarakhand-offbeat'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-spiti-circuit')
     ].filter(Boolean);
 
     if (isEn) {
@@ -504,9 +504,9 @@ ${formatCards(trekPkgs)}`;
   // 9. BUDGET / CHEAP / LOW PRICE
   if (/(budget|cheap|sasta|low price|kam paise|discount|offer|under 5000|under 10000|under 15000)/i.test(q)) {
     const budgetPkgs = [
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-amritsar-golden-heritage'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie')
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-amritsar-golden-heritage'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-jibhi-tirthan-offbeat'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-dharamshala-dalhousie')
     ].filter(Boolean);
 
     if (isEn) {
@@ -628,9 +628,9 @@ Neeche diya gaya **"Talk to Human on WhatsApp"** button dabayein, aur hum turant
   // 13. PLAN MY TRIP / CUSTOM ITINERARY
   if (/(plan|custom|build|itinerary|confused|help me choose|suggest|recommend)/i.test(q)) {
     const featuredPkgs = [
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
-      HIMYATRA_PACKAGES.find(p => p.id === 'pkg-chardham-complete')
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-himachal-magic'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-kashmir-paradise'),
+      VALLEYVISTA_PACKAGES.find(p => p.id === 'pkg-chardham-complete')
     ].filter(Boolean);
 
     if (isEn) {
@@ -686,7 +686,7 @@ ${formatCards(featuredPkgs)}`;
   const matchedDest = destinationKeywords.filter(d => q.includes(d.key));
   if (matchedDest.length > 0) {
     const matchedPkgs = matchedDest
-      .map(m => HIMYATRA_PACKAGES.find(p => p.id === m.id))
+      .map(m => VALLEYVISTA_PACKAGES.find(p => p.id === m.id))
       .filter((p, index, self) => p && self.findIndex(t => t.id === p.id) === index)
       .slice(0, 3);
 
@@ -710,9 +710,9 @@ Aap **"View Details"** dabakar complete day-by-day plan dekh sakte hain ya direc
 
   // 15. DEFAULT HELPFUL FALLBACK
   const samplePkgs = [
-    HIMYATRA_PACKAGES[0],
-    HIMYATRA_PACKAGES[1],
-    HIMYATRA_PACKAGES[3]
+    VALLEYVISTA_PACKAGES[0],
+    VALLEYVISTA_PACKAGES[1],
+    VALLEYVISTA_PACKAGES[3]
   ];
 
   if (isEn) {

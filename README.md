@@ -1,14 +1,14 @@
 
 <div align="center">
 
-# 🌄 HimYatra
-### Explore the Himalayas
+# 🌄 Valley Vista
+### Worldwide Travel, Tours & Holiday Experiences
 
-**Discover Himachal Pradesh & Uttarakhand 🏔️**
+**From Everywhere. To Everywhere. 🏔️**
 
-A travel website for exploring destinations across the Himalayas.
+A premier travel and vacation portal for domestic India, Himalayan circuits, and worldwide holiday experiences.
 
-[![Live Website](https://img.shields.io/badge/🌐_LIVE_WEBSITE-Visit_HimYatra-2563EB?style=for-the-badge)](https://him-ytra.vercel.app/)
+[![Live Website](https://img.shields.io/badge/🌐_LIVE_WEBSITE-Visit_Valley_Vista-2563EB?style=for-the-badge)](https://him-ytra.vercel.app/)
 [![GitHub Repository](https://img.shields.io/badge/GITHUB-View_Repository-181717?style=for-the-badge&logo=github)](https://github.com/Amittutorial/HIM-YTRA)
 
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
@@ -22,7 +22,7 @@ A travel website for exploring destinations across the Himalayas.
 
 ## 📌 About the Project
 
-**HimYatra** is a travel website focused on destinations in **Himachal Pradesh and Uttarakhand**. It provides visitors with a place to explore travel-related content and contact the team for enquiries.
+**Valley Vista** is a comprehensive travel booking platform focused on premium vacation packages across **Himachal Pradesh, Uttarakhand, Kashmir, Rajasthan, Ladakh, and Spiritual Circuits**. It offers live online booking, interactive PDF itineraries, dedicated cab rentals, and 24/7 concierge assistance.
 
 🌐 **Live Website:** https://him-ytra.vercel.app/  
 💻 **Repository:** https://github.com/Amittutorial/HIM-YTRA
@@ -140,7 +140,7 @@ Use only the appropriate publishable/anon key in frontend code. Keep service-rol
 
 The live website is hosted on **Vercel**.
 
-[![Visit HimYatra](https://img.shields.io/badge/EXPLORE_HIMYATRA-Open_Live_Website-2563EB?style=for-the-badge&logo=vercel&logoColor=white)](https://him-ytra.vercel.app/)
+[![Visit Valley Vista](https://img.shields.io/badge/EXPLORE_VALLEY_VISTA-Open_Live_Website-2563EB?style=for-the-badge&logo=vercel&logoColor=white)](https://him-ytra.vercel.app/)
 
 To deploy your own version:
 
@@ -154,11 +154,11 @@ To deploy your own version:
 
 ### Amit Verma
 
-**CSE Student | Web Development Enthusiast**
+**Founder & Managing Director | Web Development Enthusiast**
 
 [![GitHub](https://img.shields.io/badge/GitHub-@Amittutorial-181717?style=for-the-badge&logo=github)](https://github.com/Amittutorial)
 
-[🌄 HimYatra — Live Website](https://him-ytra.vercel.app/)
+[🌄 Valley Vista — Live Website](https://him-ytra.vercel.app/)
 
 *Building ideas into meaningful digital experiences.*
 
@@ -169,11 +169,11 @@ To deploy your own version:
 Have a suggestion or found an issue?
 
 - Open an issue in the [GitHub repository](https://github.com/Amittutorial/HIM-YTRA).
-- Share feedback to help improve HimYatra.
+- Share feedback to help improve Valley Vista.
 
 ## ⭐ Support the Project
 
-If you like HimYatra, visit the live website and consider giving the repository a ⭐ star.
+If you like Valley Vista, visit the live website and consider giving the repository a ⭐ star.
 
 ---
 
@@ -181,7 +181,7 @@ If you like HimYatra, visit the live website and consider giving the repository 
 
 **Made with ❤️ by Amit Verma**
 
-### 🌄 Explore More. Discover HimYatra.
+### 🌄 Explore More. Discover Valley Vista.
 
 </div>
 .

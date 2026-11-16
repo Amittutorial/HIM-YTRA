@@ -1,5 +1,5 @@
 /**
- * HimYatra Hindi / English Translation Dictionary
+ * Valley Vista Hindi / English Translation Dictionary
  * Used by the `lang` state across the app.
  * `t(key)` returns the Hindi or English string for the active language.
  */

@@ -191,17 +191,17 @@ export default async function handler(req, res) {
         `
       );
 
-      sendEmail({ to: ownerEmail, subject: ownerSubject, html: ownerHtml, fromName: 'HimYatra Bookings' }).catch(() => {});
+      sendEmail({ to: ownerEmail, subject: ownerSubject, html: ownerHtml, fromName: 'Valley Vista Bookings' }).catch(() => {});
 
       if (customerEmail) {
-        const custSubject = `🏔️ Booking Confirmed: Ref ${bookingRef} — ${packageTitle} | HimYatra`;
+        const custSubject = `🏔️ Booking Confirmed: Ref ${bookingRef} — ${packageTitle} | Valley Vista`;
         const custHtml = buildEmailContainer(
           'Your Booking is Confirmed',
           'Official E-Ticket & Vacation Confirmation Voucher',
           `
           <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>${customerName}</strong>,</p>
           <p style="font-size: 14px; line-height: 22px; color: #334155;">
-            Thank you for choosing <strong>HimYatra</strong>! Your booking reservation for <strong>${packageTitle}</strong> is confirmed.
+            Thank you for choosing <strong>Valley Vista</strong>! Your booking reservation for <strong>${packageTitle}</strong> is confirmed.
           </p>
           <div style="background-color: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 16px; margin: 18px 0;">
             <div style="font-size: 11px; text-transform: uppercase; color: #166534; font-weight: 700;">Booking Reference ID</div>
@@ -220,7 +220,7 @@ export default async function handler(req, res) {
           </p>
           `
         );
-        sendEmail({ to: customerEmail, subject: custSubject, html: custHtml, fromName: 'HimYatra Travel Desk' }).catch(() => {});
+        sendEmail({ to: customerEmail, subject: custSubject, html: custHtml, fromName: 'Valley Vista Travel Desk' }).catch(() => {});
       }
 
       return res.status(201).json({
@@ -262,7 +262,7 @@ export default async function handler(req, res) {
 
       // If status changed, notify customer via email
       if (updatedBooking && updatedBooking.customer_email && newStatus) {
-        const custSubject = `📍 Tour Update: Ref ${updatedBooking.booking_reference} is now "${newStatus.toUpperCase()}" | HimYatra`;
+        const custSubject = `📍 Tour Update: Ref ${updatedBooking.booking_reference} is now "${newStatus.toUpperCase()}" | Valley Vista`;
         const custHtml = buildEmailContainer(
           'Booking Status Update',
           'Live Reservation Tracking',
@@ -277,7 +277,7 @@ export default async function handler(req, res) {
           ${adminNote ? `<p style="font-size: 13px; color: #475569;"><strong>Operations Note:</strong> ${adminNote}</p>` : ''}
           `
         );
-        sendEmail({ to: updatedBooking.customer_email, subject: custSubject, html: custHtml, fromName: 'HimYatra Operations' }).catch(() => {});
+        sendEmail({ to: updatedBooking.customer_email, subject: custSubject, html: custHtml, fromName: 'Valley Vista Operations' }).catch(() => {});
       }
 
       return res.status(200).json({

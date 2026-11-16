@@ -34,7 +34,7 @@ import { TOUR_PACKAGES, DESTINATIONS } from './data/travelData';
 export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('himyatra-theme') || localStorage.getItem('himyatra-theme') || 'dark';
+    return localStorage.getItem('valleyvista-theme') || localStorage.getItem('himyatra-theme') || 'dark';
   });
 
   const [activeRegion, setActiveRegion] = useState('himachal');
@@ -47,7 +47,7 @@ export default function App() {
   const [preAppliedCoupon, setPreAppliedCoupon] = useState('');
 
   // Modals & Enhanced Features State
-  const [lang, setLang] = useState(() => localStorage.getItem('himyatra-lang') || localStorage.getItem('himyatra-lang') || 'en');
+  const [lang, setLang] = useState(() => localStorage.getItem('valleyvista-lang') || localStorage.getItem('himyatra-lang') || 'en');
   const t = useMemo(() => createTranslator(lang), [lang]);
   const [quizModalOpen, setQuizModalOpen] = useState(false);
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
@@ -78,7 +78,7 @@ export default function App() {
 
   // Synchronize theme with html and body classes
   useEffect(() => {
-    localStorage.setItem('himyatra-theme', theme);
+    localStorage.setItem('valleyvista-theme', theme);
     localStorage.setItem('himyatra-theme', theme);
     const root = document.documentElement;
     if (theme === 'light') {
@@ -156,7 +156,7 @@ export default function App() {
   const toggleLanguage = () => {
     setLang((prev) => {
       const next = prev === 'en' ? 'hi' : 'en';
-      localStorage.setItem('himyatra-lang', next);
+      localStorage.setItem('valleyvista-lang', next);
       localStorage.setItem('himyatra-lang', next);
       return next;
     });

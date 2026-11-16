@@ -64,7 +64,7 @@ export default function RoadWeatherAlerts() {
     const alertInquiry = {
       name: 'WhatsApp Road/Weather Alert Subscriber',
       phone,
-      email: 'whatsapp_alert_signup@himyatra.com',
+      email: 'whatsapp_alert_signup@valleyvista.com',
       destination: routeInterest,
       message: `Customer subscribed for real-time mountain road status and weather alerts for: ${routeInterest}`,
       source: 'Road & Weather Alert Section'

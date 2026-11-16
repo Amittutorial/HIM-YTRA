@@ -131,7 +131,7 @@ module.exports = async function handler(req, res) {
         keyId: razorpayKeyId || 'rzp_test_fallback',
         upiDetails: {
           upiId: 'amitpatel42203@okhdfcbank',
-          merchantName: 'Valley Vista & HimYatra Tours',
+          merchantName: 'Valley Vista Worldwide Tours',
           contact: '+91 76199 17057'
         }
       });

@@ -479,7 +479,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               </div>
               <div>
                 <h1 className="text-2xl font-black text-slate-900 tracking-tight font-['Outfit']">
-                  HIMYATRA WORLDWIDE JOURNEYS
+                  VALLEY VISTA WORLDWIDE JOURNEYS
                 </h1>
                 <p className="text-xs font-bold uppercase tracking-wider text-teal-800">
                   Worldwide Travel, Tours & Holiday Experiences
@@ -653,7 +653,7 @@ export default function PackageModal({ pkg, onClose, onBookNow, lang = 'en', t =
               <div className="w-24 h-24 rounded-full border-4 border-dashed border-teal-800 p-1 flex items-center justify-center relative shadow-inner">
                 <div className="w-full h-full rounded-full border border-teal-700 flex flex-col items-center justify-center p-1 bg-teal-50/40">
                   <span className="text-[7.5px] font-black uppercase tracking-tight text-teal-900">
-                    ★ HIMYATRA ★
+                    ★ VALLEY VISTA ★
                   </span>
                   <span className="text-[6.5px] font-extrabold uppercase text-slate-700 leading-tight">
                     WORLDWIDE TRAVEL

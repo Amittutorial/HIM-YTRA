@@ -22,7 +22,7 @@ import {
   Download
 } from 'lucide-react';
 import { TOUR_PACKAGES } from '../data/travelData';
-import { getSmartAssistantResponse, HIMYATRA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
+import { getSmartAssistantResponse, VALLEYVISTA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
 import { generatePackageItineraryPDF } from '../lib/pdfGenerator';
 
 /* ─── Package card parser ─── */
@@ -158,7 +158,7 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
     const pkgId = data.pkgId || data.id;
     return (
       TOUR_PACKAGES.find((p) => p.id === pkgId) ||
-      HIMYATRA_PACKAGES.find((p) => p.id === pkgId) ||
+      VALLEYVISTA_PACKAGES.find((p) => p.id === pkgId) ||
       data
     );
   }, [data]);

@@ -201,7 +201,7 @@ export default function AdminDashboardModal({ isOpen, onClose }) {
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Amit Verma (+91 76199 17057) • Valley Vista & HimYatra Operations
+                Amit Verma (+91 76199 17057) • Valley Vista Operations
               </p>
             </div>
           </div>
@@ -487,7 +487,7 @@ export default function AdminDashboardModal({ isOpen, onClose }) {
                       <div className="flex items-center gap-3 pt-1 text-xs">
                         {inq.phone && (
                           <a
-                            href={`https://wa.me/${inq.phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(inq.name)}!%20This%20is%20Amit%20Verma%20from%20Valley%20Vista%20%26%20HimYatra.`}
+                            href={`https://wa.me/${inq.phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(inq.name)}!%20This%20is%20Amit%20Verma%20from%20Valley%20Vista.`}
                             target="_blank"
                             rel="noreferrer"
                             className="text-emerald-400 hover:underline flex items-center gap-1 font-semibold"

@@ -382,7 +382,7 @@ Please confirm availability!`)}`}
                 const cabInq = {
                   name: 'Cab Booking Visitor',
                   phone: '+91 76199 17057',
-                  email: 'cab_booking@himyatra.com',
+                  email: 'cab_booking@valleyvista.com',
                   destination: `${currentRoute.from} to ${currentRoute.to}`,
                   travelDate: pickupDate,
                   message: `Fixed Fare Cab Booking: ${vehicleDetails[vehicleType]?.name} (${tripType === 'oneway' ? 'One-Way' : 'Round-Trip'}), Fare: ₹${currentFare}`,

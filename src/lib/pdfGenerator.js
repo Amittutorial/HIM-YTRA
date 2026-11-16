@@ -1067,7 +1067,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
   doc.setTextColor(COLOR_GOLD[0], COLOR_GOLD[1], COLOR_GOLD[2]);
-  doc.text('THANK YOU FOR CHOOSING HIMYATRA!', pageWidth / 2, currentY + 4, { align: 'center' });
+  doc.text('THANK YOU FOR CHOOSING VALLEY VISTA!', pageWidth / 2, currentY + 4, { align: 'center' });
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6);

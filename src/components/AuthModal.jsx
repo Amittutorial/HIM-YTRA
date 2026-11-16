@@ -69,10 +69,10 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
         loadUserData(e.detail);
       }
     };
-    window.addEventListener('himyatra-auth-changed', handleAuthChange);
+    window.addEventListener('valleyvista-auth-changed', handleAuthChange);
     window.addEventListener('himyatra-auth-changed', handleAuthChange);
     return () => {
-      window.removeEventListener('himyatra-auth-changed', handleAuthChange);
+      window.removeEventListener('valleyvista-auth-changed', handleAuthChange);
       window.removeEventListener('himyatra-auth-changed', handleAuthChange);
     };
   }, []);
