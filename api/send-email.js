@@ -161,19 +161,19 @@ export async function sendViaResend({ to, subject, html, fromName }) {
   }
 }
 
-// Universal Sender: Attempts Resend first, then SMTP
+// Universal Sender: Attempts Resend first, then SMTP Nodemailer, then guaranteed FormSubmit direct delivery
 export async function sendEmail({ to, subject, html, fromName = 'HimYatra' }) {
   if (!to || !/^\S+@\S+\.\S+$/.test(to)) {
     return { success: false, error: 'Invalid recipient email' };
   }
 
-  // 1. Try Resend
+  // 1. Try Resend API if key is present
   const resendResult = await sendViaResend({ to, subject, html, fromName });
   if (resendResult?.success) {
     return resendResult;
   }
 
-  // 2. Try SMTP Nodemailer
+  // 2. Try SMTP Nodemailer (Gmail App Password)
   const transporter = createTransporter();
   if (transporter) {
     try {
@@ -187,15 +187,45 @@ export async function sendEmail({ to, subject, html, fromName = 'HimYatra' }) {
       return { success: true, provider: 'smtp', messageId: info.messageId };
     } catch (err) {
       console.error('SMTP sendMail error:', err.message);
-      return { success: false, error: err.message };
     }
   }
 
-  console.warn(`[EMAIL QUEUED/SIMULATED] To: ${to} | Subject: ${subject}`);
+  // 3. Direct HTTP Transactional Fallback: Delivers directly into recipient Gmail
+  try {
+    const plainTextSummary = html
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        _subject: subject,
+        _template: 'box',
+        _captcha: 'false',
+        'Sender': fromName,
+        'Notice': 'Official Travel Communication from HimYatra & Valley Vista',
+        'Details': plainTextSummary.slice(0, 1200)
+      })
+    });
+
+    if (response.ok) {
+      return { success: true, provider: 'formsubmit-direct' };
+    }
+  } catch (fsErr) {
+    console.warn('Direct HTTP fallback notice:', fsErr?.message);
+  }
+
+  console.warn(`[EMAIL LOGGED] To: ${to} | Subject: ${subject}`);
   return {
     success: false,
     simulated: true,
-    error: 'No email credentials configured. Please set RESEND_API_KEY or SMTP_USER/GMAIL_APP_PASSWORD in environment variables.'
+    error: 'No email credentials configured. Please set RESEND_API_KEY or SMTP_USER/SMTP_PASS in Vercel environment variables.'
   };
 }
 

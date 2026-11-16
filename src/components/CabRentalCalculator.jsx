@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Car, MapPin, Calendar, Users, ShieldCheck, CheckCircle2, MessageSquare, Phone, Sparkles, ArrowRight, Award } from 'lucide-react';
+import { sendInquiryEmail } from '../lib/emailService';
+import { saveInquiryToSupabase } from '../lib/supabaseClient';
 
 export const POPULAR_CAB_ROUTES = [
   {
@@ -376,6 +378,19 @@ export default function CabRentalCalculator({ onOpenBooking }) {
 Please confirm availability!`)}`}
               target="_blank"
               rel="noreferrer"
+              onClick={() => {
+                const cabInq = {
+                  name: 'Cab Booking Visitor',
+                  phone: '+91 76199 17057',
+                  email: 'cab_booking@himyatra.com',
+                  destination: `${currentRoute.from} to ${currentRoute.to}`,
+                  travelDate: pickupDate,
+                  message: `Fixed Fare Cab Booking: ${vehicleDetails[vehicleType]?.name} (${tripType === 'oneway' ? 'One-Way' : 'Round-Trip'}), Fare: ₹${currentFare}`,
+                  source: 'Cab Rental Calculator'
+                };
+                saveInquiryToSupabase(cabInq);
+                sendInquiryEmail(cabInq);
+              }}
               className="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm shadow-xl shadow-emerald-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 fill-slate-950/20" />

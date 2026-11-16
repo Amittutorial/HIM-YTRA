@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AlertCircle, CheckCircle2, CloudRain, Sun, CloudSnow, Wind, Send, MessageSquare, PhoneCall, ShieldCheck, Clock } from 'lucide-react';
 import { saveInquiryToSupabase } from '../lib/supabaseClient';
+import { sendInquiryEmail } from '../lib/emailService';
 
 export const MOUNTAIN_ALERTS = [
   {
@@ -60,13 +61,17 @@ export default function RoadWeatherAlerts() {
     if (!phone) return;
     setSubscribed(true);
 
-    saveInquiryToSupabase({
-      name: 'Weather Alert Subscriber',
+    const alertInquiry = {
+      name: 'WhatsApp Road/Weather Alert Subscriber',
       phone,
-      email: 'whatsapp_alert_signup',
-      message: `WhatsApp Weather/Road Alert subscription for: ${routeInterest}`,
+      email: 'whatsapp_alert_signup@himyatra.com',
+      destination: routeInterest,
+      message: `Customer subscribed for real-time mountain road status and weather alerts for: ${routeInterest}`,
       source: 'Road & Weather Alert Section'
-    });
+    };
+
+    saveInquiryToSupabase(alertInquiry);
+    sendInquiryEmail(alertInquiry);
   };
 
   return (

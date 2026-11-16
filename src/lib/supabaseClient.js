@@ -159,15 +159,14 @@ export async function registerWithPasswordAndOtp(email, username, password) {
   const passwordHash = await hashPassword(password, salt);
 
   // Send real OTP to verify Gmail
-  const otpRes = await sendEmailOtp(cleanEmail, cleanUsername);
+  await sendEmailOtp(cleanEmail, cleanUsername);
 
   return {
     success: true,
     email: cleanEmail,
     username: cleanUsername,
     passwordHash,
-    salt,
-    otpCode: otpRes.otpCode
+    salt
   };
 }
 
@@ -317,31 +316,49 @@ export async function sendEmailOtp(email, username) {
     }));
   } catch (_) {}
 
-  // 2. Dispatch real email directly to customer's Gmail using FormSubmit API
+  // 2. Dispatch real email directly to customer's Gmail via /api/send-email serverless route
+  try {
+    fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        type: 'otp',
+        email: cleanEmail,
+        username: cleanUsername,
+        otpCode,
+        purpose: 'Account Verification & Secure Login'
+      })
+    }).catch((err) => console.warn('Serverless OTP send notice:', err));
+  } catch (err) {
+    console.warn('API OTP send non-blocking notice:', err);
+  }
+
+  // Also dispatch via companion direct delivery directly to customer's Gmail inbox
   try {
     const emailPayload = {
-      _subject: `🔐 Valley Vista Login Verification Code: ${otpCode}`,
+      _subject: `🔐 Valley Vista & HimYatra Security Code: ${otpCode}`,
       _template: 'box',
       _captcha: 'false',
       'Greetings': `Hello ${cleanUsername}!`,
-      'Your Valley Vista Security OTP': `👉 ${otpCode} 👈`,
+      'Your Security Verification OTP': `👉 ${otpCode} 👈`,
       'Valid For': '10 Minutes',
-      'Purpose': 'Login & access your travel bookings, itineraries, and trip manager',
-      'Security Note': 'Do not share this code with anyone. Valley Vista will never ask for your OTP.',
-      'Founder Helpline': 'Amit Verma (+91 76199 17057)'
+      'Purpose': 'Secure Account Verification & Access',
+      'Security Note': 'Never share this passcode with anyone. Valley Vista will never ask for your OTP.',
+      'Founder Direct Line': 'Amit Verma (+91 76199 17057)'
     };
 
-    fetch(`https://formsubmit.co/ajax/${cleanEmail}`, {
+    fetch(`https://formsubmit.co/ajax/${encodeURIComponent(cleanEmail)}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
       body: JSON.stringify(emailPayload)
-    }).catch((err) => console.warn('Email gateway notice:', err));
-  } catch (err) {
-    console.warn('FormSubmit dispatch non-blocking notice:', err);
-  }
+    }).catch((err) => console.warn('Email companion notice:', err));
+  } catch (_) {}
 
   // 3. Trigger Supabase native auth OTP as companion channel
   try {
@@ -353,13 +370,10 @@ export async function sendEmailOtp(email, username) {
     }).catch(() => {});
   } catch (_) {}
 
-  console.log(`🔑 [SECURITY OTP DISPATCHED] To: ${cleanEmail} | Code: ${otpCode}`);
-
   return {
     success: true,
     email: cleanEmail,
-    username: cleanUsername,
-    otpCode // Provided for instant visual fallback if email takes longer to deliver
+    username: cleanUsername
   };
 }
 

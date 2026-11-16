@@ -42,7 +42,6 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
   const [otpEmail, setOtpEmail] = useState('');
   const [otpUsername, setOtpUsername] = useState('');
   const [otpCode, setOtpCode] = useState('');
-  const [lastDispatchedOtp, setLastDispatchedOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
@@ -163,10 +162,9 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
     try {
       const res = await registerWithPasswordAndOtp(regEmail, regUsername, regPassword);
       setPendingRegData(res);
-      setLastDispatchedOtp(res.otpCode);
       setMode('register_verify');
       setCountdown(60);
-      setSuccessMsg(`✅ Verification code sent to ${res.email}! Please enter the 6-digit OTP to activate your account.`);
+      setSuccessMsg(`✅ Verification code sent to ${res.email}! Please check your Gmail to activate your account.`);
     } catch (err) {
       setError(err.message || 'Registration failed. Please check inputs.');
     } finally {
@@ -227,11 +225,10 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
 
     setLoading(true);
     try {
-      const res = await sendEmailOtp(otpEmail, otpUsername);
-      setLastDispatchedOtp(res.otpCode);
+      await sendEmailOtp(otpEmail, otpUsername);
       setIsOtpSent(true);
       setCountdown(60);
-      setSuccessMsg(`✅ 6-Digit security OTP sent to ${otpEmail}! Valid for 10 minutes.`);
+      setSuccessMsg(`✅ 6-Digit security code sent to ${otpEmail}! Please check your Gmail.`);
     } catch (err) {
       setError(err.message || 'Could not send OTP.');
     } finally {
@@ -926,12 +923,10 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
                     />
                   </div>
 
-                  {lastDispatchedOtp && (
-                    <div className="text-[11px] text-slate-400 text-center bg-slate-950/60 p-2 rounded-xl border border-white/5">
-                      <span>Email taking a moment? Instant verification code: </span>
-                      <strong className="text-teal-400 font-mono font-bold text-xs">{lastDispatchedOtp}</strong>
-                    </div>
-                  )}
+                  <div className="text-[11px] text-slate-400 text-center bg-slate-950/60 p-2.5 rounded-xl border border-white/5 flex items-center justify-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                    <span>6-Digit OTP sent directly to your Gmail inbox (check Spam if needed).</span>
+                  </div>
 
                   <button
                     type="submit"
@@ -1038,12 +1033,10 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
                         />
                       </div>
 
-                      {lastDispatchedOtp && (
-                        <div className="text-[11px] text-slate-400 text-center bg-slate-950/60 p-2 rounded-xl border border-white/5">
-                          <span>Instant verification code: </span>
-                          <strong className="text-teal-400 font-mono font-bold text-xs">{lastDispatchedOtp}</strong>
-                        </div>
-                      )}
+                      <div className="text-[11px] text-slate-400 text-center bg-slate-950/60 p-2.5 rounded-xl border border-white/5 flex items-center justify-center gap-1.5">
+                        <Mail className="w-3.5 h-3.5 text-teal-400 shrink-0" />
+                        <span>Security code delivered to your Gmail inbox (check Spam if needed).</span>
+                      </div>
 
                       <button
                         type="submit"

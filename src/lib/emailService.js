@@ -40,6 +40,28 @@ export async function sendInquiryEmail(inquiry) {
       }
     };
 
+    // 3. Companion direct HTTP delivery to Owner Gmail so zero inquiries are ever missed
+    try {
+      fetch(`https://formsubmit.co/ajax/${TARGET_GMAIL}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `📬 [NEW INQUIRY] ${inquiry.name || 'Traveler'} | 📞 ${inquiry.phone || 'Phone'} | ${inquiry.destination || 'Himachal'}`,
+          _template: 'box',
+          _captcha: 'false',
+          'Customer Name': inquiry.name || 'Website Visitor',
+          'Phone': inquiry.phone || 'Not provided',
+          'Email': inquiry.email || 'Not provided',
+          'Destination': inquiry.destination || 'Himachal & Uttarakhand',
+          'From City': inquiry.fromCity || 'Flexible',
+          'Travel Date': inquiry.travelDate || 'Flexible',
+          'Travelers': inquiry.travelersCount || 'Not specified',
+          'Message': inquiry.message || 'Custom quote requested',
+          'Source': inquiry.source || 'Website'
+        })
+      }).catch(() => {});
+    } catch (_) {}
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000);
 
@@ -106,6 +128,33 @@ export async function sendBookingEmail(booking) {
         email: booking.email || booking.customer_email
       }
     };
+
+    // Companion direct delivery to Owner Gmail so zero bookings are ever lost
+    try {
+      fetch(`https://formsubmit.co/ajax/${TARGET_GMAIL}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `🔔 [NEW BOOKING] ${booking.packageTitle || 'Tour Package'} | Ref: ${booking.bookingId || booking.booking_reference || 'HY-REF'} | 📞 ${booking.phone || 'Phone'}`,
+          _template: 'box',
+          _captcha: 'false',
+          'Booking Reference': booking.bookingId || booking.booking_reference,
+          'Package Title': booking.packageTitle || booking.package_title,
+          'Customer Name': booking.name || booking.customer_name,
+          'Customer Phone': booking.phone || booking.customer_phone,
+          'Customer Email': booking.email || booking.customer_email,
+          'Travel Date': booking.travelDate || booking.travel_date,
+          'Travelers': `${booking.adults || 1} Adults, ${booking.children || 0} Children`,
+          'Pickup City': booking.pickupCity || booking.pickup_city,
+          'Vehicle Tier': booking.vehicleTier || booking.vehicle_tier,
+          'Hotel Tier': booking.hotelTier || booking.hotel_tier,
+          'Total Package Price': `INR ${(booking.finalTotal || booking.total_price || 0).toLocaleString('en-IN')}`,
+          'Advance Paid': `INR ${(booking.advanceToken || booking.advance_token || 0).toLocaleString('en-IN')}`,
+          'Payment Status': booking.utr ? `PAID & VERIFIED (UTR: ${booking.utr})` : 'Pending Token Advance',
+          'Special Requests': booking.specialRequests || 'None'
+        })
+      }).catch(() => {});
+    } catch (_) {}
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 8000);

@@ -228,3 +228,4 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Internal admin server error.', details: err.message });
   }
 };
+
