@@ -8,7 +8,7 @@
 
 A premier travel and vacation portal for domestic India, Himalayan circuits, and worldwide holiday experiences.
 
-[![Live Website](https://img.shields.io/badge/🌐_LIVE_WEBSITE-Visit_Valley_Vista-2563EB?style=for-the-badge)](https://him-ytra.vercel.app/)
+[![Live Website](https://img.shields.io/badge/🌐_LIVE_WEBSITE-Him_Ytra_Vista-2563EB?style=for-the-badge)](https://him-ytra.vercel.app/)
 [![GitHub Repository](https://img.shields.io/badge/GITHUB-View_Repository-181717?style=for-the-badge&logo=github)](https://github.com/Amittutorial/HIM-YTRA)
 
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
