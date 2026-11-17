@@ -29,7 +29,7 @@ export default function ContactSection({ onOpenHelpCenter }) {
   const offices = [
     {
       city: 'Shimla Head Office (HP)',
-      address: 'Valley Vista Headquarters, Near The Ridge, The Mall, Shimla, Himachal Pradesh 171001',
+      address: 'HIM YTRA Headquarters, Near The Ridge, The Mall, Shimla, Himachal Pradesh 171001',
       phone: '+91 76199 17057',
       timing: '9:00 AM - 9:00 PM IST (Daily)'
     },

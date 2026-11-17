@@ -7,10 +7,10 @@ export default function MobileBottomBar({ onOpenBooking, onOpenAuth, theme = 'da
 
   useEffect(() => {
     const handleAuth = (e) => setCurrentUser(e.detail);
-    window.addEventListener('valleyvista-auth-changed', handleAuth);
+    window.addEventListener('himyatra-auth-changed', handleAuth);
     window.addEventListener('himyatra-auth-changed', handleAuth);
     return () => {
-      window.removeEventListener('valleyvista-auth-changed', handleAuth);
+      window.removeEventListener('himyatra-auth-changed', handleAuth);
       window.removeEventListener('himyatra-auth-changed', handleAuth);
     };
   }, []);

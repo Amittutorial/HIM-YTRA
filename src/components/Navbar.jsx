@@ -25,10 +25,8 @@ export default function Navbar({
 
   useEffect(() => {
     const handleAuth = (e) => setCurrentUser(e.detail);
-    window.addEventListener('valleyvista-auth-changed', handleAuth);
     window.addEventListener('himyatra-auth-changed', handleAuth);
     return () => {
-      window.removeEventListener('valleyvista-auth-changed', handleAuth);
       window.removeEventListener('himyatra-auth-changed', handleAuth);
     };
   }, []);
@@ -139,7 +137,7 @@ export default function Navbar({
               <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full overflow-hidden border-2 border-emerald-400/70 shadow-lg shadow-emerald-500/25 group-hover:scale-105 group-hover:border-emerald-300 transition shrink-0 bg-slate-900 relative">
                 <img
                   src="/mountain-logo.jpg"
-                  alt="Valley Vista Worldwide"
+                  alt="HIM YTRA"
                   className="w-full h-full object-cover object-center scale-110 group-hover:scale-125 transition duration-300"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -151,11 +149,11 @@ export default function Navbar({
                 <span className={`text-lg sm:text-xl xl:text-2xl font-black tracking-tight font-['Outfit'] flex items-center gap-1 ${
                   isLight ? 'text-slate-900' : 'text-white'
                 }`}>
-                  Valley<span className="text-emerald-400">Vista</span>
+                  HIM <span className="text-emerald-400">YTRA</span>
                 </span>
                 <span className={`text-[8.5px] sm:text-[9.5px] -mt-1 tracking-widest uppercase font-semibold ${
                   isLight ? 'text-emerald-700' : 'text-emerald-300/80'
-                }`}>From Everywhere. To Everywhere.</span>
+                }`}>Premium Himalayan Travel Experiences</span>
               </div>
             </a>
 

@@ -31,7 +31,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     try {
       await generateBookingConfirmationPDF({
         booking_reference: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
-        package_title: packageName || 'Valley Vista Premium Travel Experience',
+        package_title: packageName || 'HIM YTRA Premium Travel Experience',
         state: 'Himachal & Uttarakhand',
         customer_name: 'Valued Customer',
         customer_phone: '+91 76199 17057',
@@ -79,7 +79,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     // Send automated notification to Amit's Gmail
     sendBookingEmail({
       bookingId: bookingRef || `HY-${Date.now().toString().slice(-6)}`,
-      packageTitle: packageName || 'Valley Vista Tour Token Advance',
+      packageTitle: packageName || 'HIM YTRA Tour Token Advance',
       state: 'Himachal & Uttarakhand',
       name: 'UPI Customer',
       phone: '+91 76199 17057',
@@ -90,7 +90,7 @@ export default function PaymentModal({ initialAmount, bookingRef, packageName, o
     });
   };
 
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'Valley Vista Tour Advance')}`;
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(bookingRef ? `Booking ${bookingRef}` : 'HIM YTRA Tour Advance')}`;
 
   const whatsappMessage = encodeURIComponent(
     `Hello Amit Patel! I have completed my UPI payment of ₹${Number(amount).toLocaleString('en-IN')}.\n\n• UTR / Ref No: ${utrNumber || 'Verified'}\n• Booking Ref: ${bookingRef || 'General Advance'}\n• Package: ${packageName || 'Tour Advance'}\n\nPlease find my attached payment screenshot to confirm my reservation and issue the voucher!`

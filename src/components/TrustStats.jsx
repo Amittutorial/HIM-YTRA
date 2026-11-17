@@ -76,21 +76,21 @@ export default function TrustStats() {
         })}
       </div>
 
-      {/* Why Choose Valley Vista Card */}
+      {/* Why Choose HIM YTRA Card */}
       <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-slate-900/90 via-slate-950 to-teal-950/40 border border-teal-500/20 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-5 space-y-4">
             <span className="text-xs font-bold uppercase tracking-widest text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">
-              Why Valley Vista
+              Why HIM YTRA
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-white font-['Outfit'] leading-tight">
               We Don’t Just Book Trips. <br />
               <span className="text-teal-400">We Create Unforgettable Journeys.</span>
             </h2>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              With worldwide network reach and regional operations across India and abroad, Valley Vista was founded by passionate travel specialists. "From Everywhere. To Everywhere." Discover the world, experience different cultures, and create unforgettable journeys with verified stays and 24/7 dedicated support.
+              With worldwide network reach and regional operations across India and abroad, HIM YTRA was founded by passionate travel specialists. "From Everywhere. To Everywhere." Discover the world, experience different cultures, and create unforgettable journeys with verified stays and 24/7 dedicated support.
             </p>
           </div>
 

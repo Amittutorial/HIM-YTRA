@@ -69,10 +69,8 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
         loadUserData(e.detail);
       }
     };
-    window.addEventListener('valleyvista-auth-changed', handleAuthChange);
     window.addEventListener('himyatra-auth-changed', handleAuthChange);
     return () => {
-      window.removeEventListener('valleyvista-auth-changed', handleAuthChange);
       window.removeEventListener('himyatra-auth-changed', handleAuthChange);
     };
   }, []);
@@ -201,7 +199,7 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
       );
       setUser(res.user);
       confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-      setSuccessMsg(`🎉 Account created! Welcome to Valley Vista, @${res.user.username}.`);
+      setSuccessMsg(`🎉 Account created! Welcome to HIM YTRA, @${res.user.username}.`);
       loadUserData(res.user);
     } catch (err) {
       setError(err.message || 'Invalid verification code.');
@@ -466,7 +464,7 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
                   <div className="py-8 text-center bg-slate-950/40 rounded-2xl border border-white/5 space-y-2 p-4">
                     <Compass className="w-8 h-8 text-slate-500 mx-auto" />
                     <p className="text-sm font-semibold text-slate-300">No bookings found yet under @{user.username}</p>
-                    <p className="text-xs text-slate-500 max-w-md mx-auto">Every tour reservation you make on Valley Vista automatically links to your username.</p>
+                    <p className="text-xs text-slate-500 max-w-md mx-auto">Every tour reservation you make on HIM YTRA automatically links to your username.</p>
                     <button
                       type="button"
                       onClick={() => {
@@ -593,7 +591,7 @@ export default function AuthModal({ isOpen, onClose, onOpenBooking, onOpenPaymen
                       <span>Set or Update Account Password</span>
                     </h4>
                     <p className="text-xs text-slate-400 mt-1">
-                      Set a password so you can instantly log in to your Valley Vista account on any phone, laptop, or desktop computer.
+                      Set a password so you can instantly log in to your HIM YTRA account on any phone, laptop, or desktop computer.
                     </p>
                   </div>
 

@@ -29,7 +29,7 @@ const CO_FOUNDER_NAME = 'Abhishek Verma';
 const CO_FOUNDER_PHONE = '+91 7408989182';
 const SITE_URL = 'https://him-ytra.vercel.app';
 
-// Primary Email Shell with Luxury Valley Vista Styling
+// Primary Email Shell with Luxury HIM YTRA Styling
 export function buildEmailContainer(title, subtitle, bodyHtml) {
   return `
 <!DOCTYPE html>
@@ -51,10 +51,10 @@ export function buildEmailContainer(title, subtitle, bodyHtml) {
                 <tr>
                   <td>
                     <h1 style="margin: 0; font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">
-                      Valley<span style="color: #34d399;">Vista</span>
+                      HIM <span style="color: #34d399;">YTRA</span>
                     </h1>
                     <p style="margin: 4px 0 0 0; font-size: 11px; color: #C6A15B; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">
-                      ${subtitle || 'Worldwide Travel, Tours & Experiences'}
+                      ${subtitle || 'Premium Himachal & Uttarakhand Tours & Travels'}
                     </p>
                   </td>
                   <td align="right" valign="top">
@@ -85,7 +85,7 @@ export function buildEmailContainer(title, subtitle, bodyHtml) {
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td valign="top" style="font-size: 12px; line-height: 18px; color: #475569;">
-                    <strong style="color: #0f172a; font-size: 13px;">Valley Vista Verified Tour Concierge</strong><br>
+                    <strong style="color: #0f172a; font-size: 13px;">HIM YTRA Verified Tour Concierge</strong><br>
                     <strong>Founder:</strong> ${FOUNDER_NAME} (${FOUNDER_PHONE})<br>
                     <strong>Co-Founder:</strong> ${CO_FOUNDER_NAME} (${CO_FOUNDER_PHONE})<br>
                     <strong>Official Email:</strong> <a href="mailto:${DEFAULT_OWNER_GMAIL}" style="color: #1F6B55; text-decoration: none;">${DEFAULT_OWNER_GMAIL}</a><br>
@@ -104,7 +104,7 @@ export function buildEmailContainer(title, subtitle, bodyHtml) {
           <!-- Footer Legal -->
           <tr>
             <td style="background-color: #0f172a; padding: 16px 28px; text-align: center; color: #94a3b8; font-size: 11px;">
-              © ${new Date().getFullYear()} Valley Vista Tours & Travels. All rights reserved.<br>
+              © ${new Date().getFullYear()} HIM YTRA Tours & Travels. All rights reserved.<br>
               Himachal Pradesh & Uttarakhand Tourism Reg. No. HY/TOUR/2026/891
             </td>
           </tr>
@@ -147,7 +147,7 @@ export async function sendViaResend({ to, subject, html, fromName }) {
   try {
     const { Resend } = await import('resend');
     const resend = new Resend(apiKey);
-    const from = process.env.RESEND_FROM || `${fromName || 'Valley Vista'} <onboarding@resend.dev>`;
+    const from = process.env.RESEND_FROM || `${fromName || 'HIM YTRA'} <onboarding@resend.dev>`;
     const data = await resend.emails.send({
       from,
       to,
@@ -162,7 +162,7 @@ export async function sendViaResend({ to, subject, html, fromName }) {
 }
 
 // Universal Sender: Attempts Resend first, then SMTP Nodemailer, then guaranteed FormSubmit direct delivery
-export async function sendEmail({ to, subject, html, fromName = 'Valley Vista' }) {
+export async function sendEmail({ to, subject, html, fromName = 'HIM YTRA' }) {
   if (!to || !/^\S+@\S+\.\S+$/.test(to)) {
     return { success: false, error: 'Invalid recipient email' };
   }
@@ -209,7 +209,7 @@ export async function sendEmail({ to, subject, html, fromName = 'Valley Vista' }
         _template: 'box',
         _captcha: 'false',
         'Sender': fromName,
-        'Notice': 'Official Travel Communication from Valley Vista',
+        'Notice': 'Official Travel Communication from HIM YTRA',
         'Details': plainTextSummary.slice(0, 1200)
       })
     });
@@ -272,14 +272,14 @@ export default async function handler(req, res) {
     if (type === 'welcome') {
       const email = body.email;
       const username = body.username || 'Traveler';
-      const subject = `🎉 Welcome to Valley Vista, @${username}! Your Mountain & Worldwide Adventures Await`;
+      const subject = `🎉 Welcome to HIM YTRA, @${username}! Your Mountain & Worldwide Adventures Await`;
       const html = buildEmailContainer(
-        'Welcome to Valley Vista Family',
+        'Welcome to HIM YTRA Family',
         'Official Account Registration',
         `
         <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>@${username}</strong>,</p>
         <p style="font-size: 14px; line-height: 22px; color: #334155;">
-          Welcome to <strong>Valley Vista</strong>! Your verified travel account has been successfully created. You can now effortlessly browse handpicked tour packages, book dedicated hill cabs, customize itineraries, and manage reservations directly from your personal dashboard.
+          Welcome to <strong>HIM YTRA</strong>! Your verified travel account has been successfully created. You can now effortlessly browse handpicked tour packages, book dedicated hill cabs, customize itineraries, and manage reservations directly from your personal dashboard.
         </p>
         <div style="background-color: #f0fdf4; border: 1px solid #86efac; border-radius: 12px; padding: 18px; margin: 20px 0;">
           <h3 style="margin: 0 0 8px 0; color: #166534; font-size: 15px;">🌟 Your Member Benefits:</h3>
@@ -298,7 +298,7 @@ export default async function handler(req, res) {
         `
       );
 
-      const result = await sendEmail({ to: email, subject, html, fromName: 'Valley Vista Team' });
+      const result = await sendEmail({ to: email, subject, html, fromName: 'HIM YTRA Team' });
       return res.status(200).json({ success: true, delivered: result.success, provider: result.provider });
     }
 
@@ -307,14 +307,14 @@ export default async function handler(req, res) {
     // ──────────────────────────────────────────────────────────────────
     if (type === 'otp') {
       const { email, username, otpCode, purpose = 'Account Verification' } = body;
-      const subject = `🔐 Valley Vista Security Code: ${otpCode} (Valid for 5 Mins)`;
+      const subject = `🔐 HIM YTRA Security Code: ${otpCode} (Valid for 5 Mins)`;
       const html = buildEmailContainer(
         'One-Time Security Passcode',
         'Email Verification & Authentication',
         `
         <p style="font-size: 14px; color: #334155; margin-top: 0;">Hello <strong>${username || 'Valued Traveler'}</strong>,</p>
         <p style="font-size: 14px; line-height: 22px; color: #334155;">
-          Use the one-time passcode below to complete your <strong>${purpose}</strong> on Valley Vista:
+          Use the one-time passcode below to complete your <strong>${purpose}</strong> on HIM YTRA:
         </p>
         <div style="background: linear-gradient(135deg, #12372F 0%, #1F6B55 100%); border-radius: 12px; padding: 24px; text-align: center; margin: 22px 0;">
           <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #C6A15B; font-weight: 700; display: block; margin-bottom: 6px;">
@@ -328,12 +328,12 @@ export default async function handler(req, res) {
           </span>
         </div>
         <div style="background-color: #fefce8; border: 1px solid #fef08a; padding: 12px 16px; border-radius: 8px; font-size: 12px; color: #713f12;">
-          🛡️ <strong>Security Tip:</strong> Never share this OTP with anyone. Valley Vista representatives will never call or ask for your password or verification code.
+          🛡️ <strong>Security Tip:</strong> Never share this OTP with anyone. HIM YTRA representatives will never call or ask for your password or verification code.
         </div>
         `
       );
 
-      const result = await sendEmail({ to: email, subject, html, fromName: 'Valley Vista Security' });
+      const result = await sendEmail({ to: email, subject, html, fromName: 'HIM YTRA Security' });
       return res.status(200).json({ success: true, delivered: result.success, provider: result.provider });
     }
 
@@ -342,14 +342,14 @@ export default async function handler(req, res) {
     // ──────────────────────────────────────────────────────────────────
     if (type === 'password_reset') {
       const { email, username, resetOtp } = body;
-      const subject = `🔑 Valley Vista Password Reset Code: ${resetOtp}`;
+      const subject = `🔑 HIM YTRA Password Reset Code: ${resetOtp}`;
       const html = buildEmailContainer(
         'Password Reset Request',
         'Account Security Center',
         `
         <p style="font-size: 14px; color: #334155; margin-top: 0;">Dear <strong>@${username || 'Traveler'}</strong>,</p>
         <p style="font-size: 14px; line-height: 22px; color: #334155;">
-          We received a request to reset the password for your Valley Vista account. Enter this 6-digit verification code to choose a new password:
+          We received a request to reset the password for your HIM YTRA account. Enter this 6-digit verification code to choose a new password:
         </p>
         <div style="background-color: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0;">
           <span style="font-size: 32px; font-weight: 900; letter-spacing: 6px; color: #12372F; font-family: monospace;">
@@ -363,7 +363,7 @@ export default async function handler(req, res) {
         `
       );
 
-      const result = await sendEmail({ to: email, subject, html, fromName: 'Valley Vista Security' });
+      const result = await sendEmail({ to: email, subject, html, fromName: 'HIM YTRA Security' });
       return res.status(200).json({ success: true, delivered: result.success, provider: result.provider });
     }
 
@@ -438,7 +438,7 @@ export default async function handler(req, res) {
       );
 
       // 2. Customer Confirmation Email
-      const custSubject = `🏔️ Booking Confirmed: Ref ${bookingRef} — ${pkgTitle} | Valley Vista`;
+      const custSubject = `🏔️ Booking Confirmed: Ref ${bookingRef} — ${pkgTitle} | HIM YTRA`;
       const custHtml = buildEmailContainer(
         'Your Booking is Confirmed',
         'Official E-Ticket & Vacation Confirmation Voucher',
@@ -447,7 +447,7 @@ export default async function handler(req, res) {
           Dear <strong>${custName}</strong>,
         </p>
         <p style="font-size: 14px; line-height: 22px; color: #334155;">
-          Thank you for choosing <strong>Valley Vista</strong>! We are delighted to confirm your mountain vacation reservation for <strong>${pkgTitle}</strong>. Your dedicated private cab, verified stays, and sightseeing plan are secured.
+          Thank you for choosing <strong>HIM YTRA</strong>! We are delighted to confirm your mountain vacation reservation for <strong>${pkgTitle}</strong>. Your dedicated private cab, verified stays, and sightseeing plan are secured.
         </p>
 
         <!-- Booking ID Card -->
@@ -506,11 +506,11 @@ export default async function handler(req, res) {
       );
 
       // Send to Owner
-      const ownerRes = await sendEmail({ to: ownerEmail, subject: ownerSubject, html: ownerHtml, fromName: 'Valley Vista Bookings' });
+      const ownerRes = await sendEmail({ to: ownerEmail, subject: ownerSubject, html: ownerHtml, fromName: 'HIM YTRA Bookings' });
       // Send to Customer
       let custRes = null;
       if (custEmail) {
-        custRes = await sendEmail({ to: custEmail, subject: custSubject, html: custHtml, fromName: 'Valley Vista Travel Desk' });
+        custRes = await sendEmail({ to: custEmail, subject: custSubject, html: custHtml, fromName: 'HIM YTRA Travel Desk' });
       }
 
       return res.status(200).json({
@@ -526,7 +526,7 @@ export default async function handler(req, res) {
     // ──────────────────────────────────────────────────────────────────
     if (type === 'booking_cancellation') {
       const { bookingRef, customerName, customerEmail, packageTitle, refundAmount = 0, reason = 'Customer requested' } = body;
-      const subject = `⚠️ Booking Cancelled: Ref ${bookingRef} | Valley Vista`;
+      const subject = `⚠️ Booking Cancelled: Ref ${bookingRef} | HIM YTRA`;
       const html = buildEmailContainer(
         'Booking Cancellation Notice',
         'Official Refund & Status Update',
@@ -552,14 +552,14 @@ export default async function handler(req, res) {
 
       // Notify customer
       if (customerEmail) {
-        await sendEmail({ to: customerEmail, subject, html, fromName: 'Valley Vista Support' });
+        await sendEmail({ to: customerEmail, subject, html, fromName: 'HIM YTRA Support' });
       }
       // Notify admin
       await sendEmail({
         to: ownerEmail,
         subject: `⚠️ [CANCELLATION ALERT] ${bookingRef} cancelled by ${customerName}`,
         html,
-        fromName: 'Valley Vista Alerts'
+        fromName: 'HIM YTRA Alerts'
       });
 
       return res.status(200).json({ success: true, message: 'Cancellation notifications dispatched' });
@@ -570,7 +570,7 @@ export default async function handler(req, res) {
     // ──────────────────────────────────────────────────────────────────
     if (type === 'payment_confirmation') {
       const { bookingRef, customerName, customerEmail, packageTitle, amountPaid, paymentId, remainingBalance = 0 } = body;
-      const subject = `💳 Payment Receipt: ₹${amountPaid.toLocaleString('en-IN')} Received for Ref ${bookingRef} | Valley Vista`;
+      const subject = `💳 Payment Receipt: ₹${amountPaid.toLocaleString('en-IN')} Received for Ref ${bookingRef} | HIM YTRA`;
       const html = buildEmailContainer(
         'Payment Receipt & Voucher',
         'Official Financial Confirmation',
@@ -597,7 +597,7 @@ export default async function handler(req, res) {
       );
 
       if (customerEmail) {
-        await sendEmail({ to: customerEmail, subject, html, fromName: 'Valley Vista Billing' });
+        await sendEmail({ to: customerEmail, subject, html, fromName: 'HIM YTRA Billing' });
       }
       return res.status(200).json({ success: true, message: 'Payment receipt dispatched' });
     }
@@ -607,7 +607,7 @@ export default async function handler(req, res) {
     // ──────────────────────────────────────────────────────────────────
     if (type === 'status_update') {
       const { bookingRef, customerName, customerEmail, packageTitle, oldStatus, newStatus, adminNote } = body;
-      const subject = `📍 Status Update: Ref ${bookingRef} is now "${newStatus.toUpperCase()}" | Valley Vista`;
+      const subject = `📍 Status Update: Ref ${bookingRef} is now "${newStatus.toUpperCase()}" | HIM YTRA`;
       const html = buildEmailContainer(
         'Tour Status Update',
         'Real-Time Reservation Progress',
@@ -634,7 +634,7 @@ export default async function handler(req, res) {
       );
 
       if (customerEmail) {
-        await sendEmail({ to: customerEmail, subject, html, fromName: 'Valley Vista Operations' });
+        await sendEmail({ to: customerEmail, subject, html, fromName: 'HIM YTRA Operations' });
       }
       return res.status(200).json({ success: true, message: 'Status update email dispatched' });
     }
@@ -653,7 +653,7 @@ export default async function handler(req, res) {
       const guests = trip.travelersCount || 2;
       const budget = trip.estimatedPrice || 'Custom Quote';
 
-      const subject = `✨ Custom Trip Request: ${name} (${region} - ${duration} Days) | Valley Vista`;
+      const subject = `✨ Custom Trip Request: ${name} (${region} - ${duration} Days) | HIM YTRA`;
       const html = buildEmailContainer(
         'Custom Trip Itinerary Request',
         'Bespoke Vacation Planning Desk',
@@ -678,14 +678,14 @@ export default async function handler(req, res) {
 
       // Customer acknowledgment
       if (email) {
-        await sendEmail({ to: email, subject: `Trip Plan Received: ${region} (${duration} Days) | Valley Vista`, html, fromName: 'Valley Vista Custom Desk' });
+        await sendEmail({ to: email, subject: `Trip Plan Received: ${region} (${duration} Days) | HIM YTRA`, html, fromName: 'HIM YTRA Custom Desk' });
       }
       // Admin notification
       await sendEmail({
         to: ownerEmail,
         subject: `🔔 [CUSTOM TRIP INQUIRY] ${name} | ${region} | 📞 ${phone}`,
         html,
-        fromName: 'Valley Vista Leads'
+        fromName: 'HIM YTRA Leads'
       });
 
       return res.status(200).json({ success: true, message: 'Custom trip inquiry registered' });
@@ -740,7 +740,7 @@ export default async function handler(req, res) {
     if (email) {
       const custAckHtml = buildEmailContainer(
         'We Have Received Your Inquiry',
-        'Valley Vista Travel Desk',
+        'HIM YTRA Travel Desk',
         `
         <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Hello <strong>${name}</strong>,</p>
         <p style="font-size: 14px; line-height: 22px; color: #334155;">
@@ -751,10 +751,10 @@ export default async function handler(req, res) {
         </p>
         `
       );
-      await sendEmail({ to: email, subject: `Inquiry Received: ${destination} Tours | Valley Vista`, html: custAckHtml, fromName: 'Valley Vista Concierge' });
+      await sendEmail({ to: email, subject: `Inquiry Received: ${destination} Tours | HIM YTRA`, html: custAckHtml, fromName: 'HIM YTRA Concierge' });
     }
 
-    const adminRes = await sendEmail({ to: ownerEmail, subject: adminSubject, html: adminHtml, fromName: 'Valley Vista Inquiries' });
+    const adminRes = await sendEmail({ to: ownerEmail, subject: adminSubject, html: adminHtml, fromName: 'HIM YTRA Inquiries' });
 
     return res.status(200).json({
       success: true,

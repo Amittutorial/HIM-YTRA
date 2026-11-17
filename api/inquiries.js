@@ -109,30 +109,30 @@ export default async function handler(req, res) {
       </table>
 
       <div style="margin-top: 20px; text-align: center;">
-        <a href="https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(name)}!%20Thank%20you%20for%20contacting%20Valley%20Vista.%20I%20am%20Amit%20Verma,%20how%20can%20I%20help%20you%20with%20your%20${encodeURIComponent(destination)}%20trip?" style="display: inline-block; background-color: #12372F; color: #ffffff; padding: 10px 20px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">
+        <a href="https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(name)}!%20Thank%20you%20for%20contacting%20HIM%20YTRA.%20I%20am%20Amit%20Verma,%20how%20can%20I%20help%20you%20with%20your%20${encodeURIComponent(destination)}%20trip?" style="display: inline-block; background-color: #12372F; color: #ffffff; padding: 10px 20px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;">
           📲 Reply to Customer on WhatsApp
         </a>
       </div>
       `
     );
 
-    sendEmail({ to: ownerEmail, subject: adminSubject, html: adminHtml, fromName: 'Valley Vista Inquiries' }).catch(() => {});
+    sendEmail({ to: ownerEmail, subject: adminSubject, html: adminHtml, fromName: 'HIM YTRA Inquiries' }).catch(() => {});
 
     if (email) {
       const custHtml = buildEmailContainer(
         'Inquiry Received',
-        'Valley Vista Travel Desk',
+        'HIM YTRA Travel Desk',
         `
         <p style="font-size: 15px; color: #0f172a; margin-top: 0;">Dear <strong>${name}</strong>,</p>
         <p style="font-size: 14px; line-height: 22px; color: #334155;">
-          Thank you for reaching out to <strong>Valley Vista</strong>! We have received your inquiry for <strong>${destination}</strong>. Our senior travel consultant will connect with you shortly with customized quotes and itinerary options.
+          Thank you for reaching out to <strong>HIM YTRA</strong>! We have received your inquiry for <strong>${destination}</strong>. Our senior travel consultant will connect with you shortly with customized quotes and itinerary options.
         </p>
         <p style="font-size: 13px; color: #64748b;">
           Direct 24/7 Helpline: <strong>+91 76199 17057</strong> (Founder Amit Verma).
         </p>
         `
       );
-      sendEmail({ to: email, subject: `Inquiry Received: ${destination} Tours | Valley Vista`, html: custHtml, fromName: 'Valley Vista Concierge' }).catch(() => {});
+      sendEmail({ to: email, subject: `Inquiry Received: ${destination} Tours | HIM YTRA`, html: custHtml, fromName: 'HIM YTRA Concierge' }).catch(() => {});
     }
 
     return res.status(201).json({

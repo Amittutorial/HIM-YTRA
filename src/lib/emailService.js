@@ -1,5 +1,5 @@
 /**
- * Automated Enterprise Email & Notification Service for Valley Vista
+ * Automated Enterprise Email & Notification Service for HIM YTRA
  * Securely delivers customer inquiries and booking confirmations to amitpatel42203@gmail.com
  * and dispatches branded customer confirmation vouchers via /api/send-email.
  *

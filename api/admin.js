@@ -144,7 +144,7 @@ module.exports = async function handler(req, res) {
           completedBookings: completedCount,
           totalRevenue,
           totalInquiries: Array.isArray(inquiries) ? inquiries.length : 0,
-          verifiedDesk: 'Valley Vista Mountain Command'
+          verifiedDesk: 'HIM YTRA Mountain Command'
         }
       });
     }

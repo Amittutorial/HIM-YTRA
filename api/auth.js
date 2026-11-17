@@ -111,10 +111,10 @@ export default async function handler(req, res) {
       // Send actual email to customer's Gmail
       const emailRes = await sendEmail({
         to: email,
-        subject: `🔐 Valley Vista Security Code: ${otpCode} (Expires in 5 Mins)`,
+        subject: `🔐 HIM YTRA Security Code: ${otpCode} (Expires in 5 Mins)`,
         html: `
         <div style="font-family: Arial, sans-serif; max-width: 520px; margin: auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
-          <h2 style="color: #12372F; margin-top: 0;">Valley Vista Security Passcode</h2>
+          <h2 style="color: #12372F; margin-top: 0;">HIM YTRA Security Passcode</h2>
           <p style="color: #475569; font-size: 14px;">Your one-time verification code for <strong>${purpose}</strong> is:</p>
           <div style="background-color: #12372F; color: #ffffff; padding: 18px; text-align: center; border-radius: 8px; font-size: 32px; font-weight: bold; letter-spacing: 6px; font-family: monospace;">
             ${otpCode}
@@ -124,11 +124,11 @@ export default async function handler(req, res) {
           </p>
           <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
           <p style="color: #94a3b8; font-size: 11px; text-align: center; margin: 0;">
-            Valley Vista Tours & Travels • Founder Amit Verma (+91 76199 17057)
+            HIM YTRA Tours & Travels • Founder Amit Verma (+91 76199 17057)
           </p>
         </div>
         `,
-        fromName: 'Valley Vista Security'
+        fromName: 'HIM YTRA Security'
       });
 
       return res.status(200).json({
@@ -292,9 +292,9 @@ export default async function handler(req, res) {
       // Send welcome email
       sendEmail({
         to: email,
-        subject: `🎉 Welcome to Valley Vista, @${username}!`,
-        html: `<h2>Welcome to Valley Vista!</h2><p>Your travel account @${username} is now verified and active.</p>`,
-        fromName: 'Valley Vista'
+        subject: `🎉 Welcome to HIM YTRA, @${username}!`,
+        html: `<h2>Welcome to HIM YTRA!</h2><p>Your travel account @${username} is now verified and active.</p>`,
+        fromName: 'HIM YTRA'
       }).catch(() => {});
 
       return res.status(200).json({

@@ -64,7 +64,7 @@ export default function RoadWeatherAlerts() {
     const alertInquiry = {
       name: 'WhatsApp Road/Weather Alert Subscriber',
       phone,
-      email: 'whatsapp_alert_signup@valleyvista.com',
+      email: 'whatsapp_alert_signup@himytra.com',
       destination: routeInterest,
       message: `Customer subscribed for real-time mountain road status and weather alerts for: ${routeInterest}`,
       source: 'Road & Weather Alert Section'
@@ -129,7 +129,7 @@ export default function RoadWeatherAlerts() {
                 <div className="text-[11px] text-slate-500 flex items-center gap-2 pt-0.5">
                   <span>⏱️ {alert.lastUpdated}</span>
                   <span>•</span>
-                  <span className="text-teal-400 font-medium">Verified by Valley Vista Ops</span>
+                  <span className="text-teal-400 font-medium">Verified by HIM YTRA Ops</span>
                 </div>
               </div>
 
@@ -163,7 +163,7 @@ export default function RoadWeatherAlerts() {
                 You will receive urgent road updates for <strong className="text-teal-300">{routeInterest}</strong> directly on WhatsApp.
               </p>
               <a
-                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi Valley Vista! I subscribed for road alerts for ${routeInterest}. Please send current live advisory.`)}`}
+                href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HIM YTRA! I subscribed for road alerts for ${routeInterest}. Please send current live advisory.`)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-md"

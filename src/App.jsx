@@ -34,7 +34,7 @@ import { TOUR_PACKAGES, DESTINATIONS } from './data/travelData';
 export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('valleyvista-theme') || localStorage.getItem('himyatra-theme') || 'dark';
+    return localStorage.getItem('himyatra-theme') || 'dark';
   });
 
   const [activeRegion, setActiveRegion] = useState('himachal');
@@ -47,11 +47,11 @@ export default function App() {
   const [preAppliedCoupon, setPreAppliedCoupon] = useState('');
 
   // Modals & Enhanced Features State
-  const [lang, setLang] = useState(() => localStorage.getItem('valleyvista-lang') || localStorage.getItem('himyatra-lang') || 'en');
+  const [lang, setLang] = useState(() => localStorage.getItem('himyatra-lang') || 'en');
   const t = useMemo(() => createTranslator(lang), [lang]);
   const [quizModalOpen, setQuizModalOpen] = useState(false);
   const [trackingModalOpen, setTrackingModalOpen] = useState(false);
-  const [trackingTripId, setTrackingTripId] = useState('VV-TRIP-8821');
+  const [trackingTripId, setTrackingTripId] = useState('HY-TRIP-8821');
   const [compareModalOpen, setCompareModalOpen] = useState(false);
   const [viewingPackage, setViewingPackage] = useState(null);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
@@ -78,7 +78,6 @@ export default function App() {
 
   // Synchronize theme with html and body classes
   useEffect(() => {
-    localStorage.setItem('valleyvista-theme', theme);
     localStorage.setItem('himyatra-theme', theme);
     const root = document.documentElement;
     if (theme === 'light') {
@@ -104,9 +103,9 @@ export default function App() {
         const match = TOUR_PACKAGES.find(p => p.id === pkgId);
         if (match) {
           setViewingPackage(match);
-          document.title = `${match.title} (${match.duration}) — Valley Vista Packages`;
+          document.title = `${match.title} (${match.duration}) — HIM YTRA Packages`;
           const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with Valley Vista.`);
+          if (metaDesc) metaDesc.setAttribute('content', match.desc || `Book ${match.title} with HIM YTRA.`);
         }
       }
 
@@ -115,7 +114,7 @@ export default function App() {
         const matchDest = DESTINATIONS.find(d => d.id === destId || d.searchKeyword?.toLowerCase() === destId.toLowerCase());
         if (matchDest) {
           handleSelectDestination(matchDest);
-          document.title = `${matchDest.name} Tours & Sightseeing — Valley Vista`;
+          document.title = `${matchDest.name} Tours & Sightseeing — HIM YTRA`;
           const el = document.getElementById('destinations');
           setTimeout(() => el?.scrollIntoView({ behavior: 'smooth' }), 300);
         }
@@ -156,7 +155,6 @@ export default function App() {
   const toggleLanguage = () => {
     setLang((prev) => {
       const next = prev === 'en' ? 'hi' : 'en';
-      localStorage.setItem('valleyvista-lang', next);
       localStorage.setItem('himyatra-lang', next);
       return next;
     });
@@ -167,9 +165,9 @@ export default function App() {
     if (pkg) {
       const newUrl = `${window.location.pathname}?pkg=${encodeURIComponent(pkg.id)}`;
       window.history.pushState({ pkgId: pkg.id }, '', newUrl);
-      document.title = `${pkg.title} (${pkg.duration}) — Valley Vista Packages`;
+      document.title = `${pkg.title} (${pkg.duration}) — HIM YTRA Packages`;
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with Valley Vista.`);
+      if (metaDesc) metaDesc.setAttribute('content', pkg.desc || `Book ${pkg.title} with HIM YTRA.`);
     }
   };
 
@@ -178,7 +176,7 @@ export default function App() {
     const currentParams = new URLSearchParams(window.location.search);
     if (currentParams.has('pkg')) {
       window.history.pushState({}, '', window.location.pathname);
-      document.title = 'Valley Vista — Worldwide Travel, Tours & Experiences | Founder Amit Verma +91 76199 17057';
+      document.title = 'HIM YTRA – Premium Himachal & Uttarakhand Tours & Travels | Founder Amit Verma +91 76199 17057';
     }
   };
 
@@ -351,7 +349,7 @@ export default function App() {
           t={t}
         />
 
-        {/* Why Choose Valley Vista & Trust Credibility */}
+        {/* Why Choose HIM YTRA & Trust Credibility */}
         <TrustStats lang={lang} t={t} />
 
         {/* Destinations: Himachal, Uttarakhand, Ayodhya & More */}

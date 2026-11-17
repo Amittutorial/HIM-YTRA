@@ -11,7 +11,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export function getCurrentUser() {
   try {
     if (typeof localStorage === 'undefined') return null;
-    const raw = localStorage.getItem('valleyvista_auth_user') || localStorage.getItem('himyatra_auth_user');
+    const raw = localStorage.getItem('himyatra_auth_user');
     return raw ? JSON.parse(raw) : null;
   } catch (_) {
     return null;
@@ -24,11 +24,9 @@ export function getCurrentUser() {
 export function logoutUser() {
   try {
     if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem('valleyvista_auth_user');
       localStorage.removeItem('himyatra_auth_user');
     }
     if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('valleyvista-auth-changed', { detail: null }));
       window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: null }));
     }
   } catch (_) {}
@@ -111,11 +109,9 @@ export async function loginWithPassword(identifier, password) {
   };
 
   if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('valleyvista_auth_user', JSON.stringify(safeProfile));
     localStorage.setItem('himyatra_auth_user', JSON.stringify(safeProfile));
   }
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('valleyvista-auth-changed', { detail: safeProfile }));
     window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: safeProfile }));
   }
 
@@ -250,11 +246,9 @@ export async function confirmRegistrationOtp(email, enteredOtp, username, passwo
   };
 
   if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('valleyvista_auth_user', JSON.stringify(safeProfile));
     localStorage.setItem('himyatra_auth_user', JSON.stringify(safeProfile));
   }
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('valleyvista-auth-changed', { detail: safeProfile }));
     window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: safeProfile }));
   }
 
@@ -345,14 +339,14 @@ export async function sendEmailOtp(email, username) {
   // Also dispatch via companion direct delivery directly to customer's Gmail inbox
   try {
     const emailPayload = {
-      _subject: `🔐 Valley Vista Security Code: ${otpCode}`,
+      _subject: `🔐 HIM YTRA Security Code: ${otpCode}`,
       _template: 'box',
       _captcha: 'false',
       'Greetings': `Hello ${cleanUsername}!`,
       'Your Security Verification OTP': `👉 ${otpCode} 👈`,
       'Valid For': '10 Minutes',
       'Purpose': 'Secure Account Verification & Access',
-      'Security Note': 'Never share this passcode with anyone. Valley Vista will never ask for your OTP.',
+      'Security Note': 'Never share this passcode with anyone. HIM YTRA will never ask for your OTP.',
       'Founder Direct Line': 'Amit Verma (+91 76199 17057)'
     };
 
@@ -505,11 +499,9 @@ export async function verifyEmailOtp(email, enteredOtp, username) {
 
   // 5. Store session in localStorage
   if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('valleyvista_auth_user', JSON.stringify(profile));
     localStorage.setItem('himyatra_auth_user', JSON.stringify(profile));
   }
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('valleyvista-auth-changed', { detail: profile }));
     window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: profile }));
   }
 
@@ -657,9 +649,7 @@ export async function saveBookingToSupabase(bookingData) {
 
         if (currentUser && currentUser.username === customerUsername) {
           currentUser.total_bookings = newCount;
-          localStorage.setItem('valleyvista_auth_user', JSON.stringify(currentUser));
           localStorage.setItem('himyatra_auth_user', JSON.stringify(currentUser));
-          window.dispatchEvent(new CustomEvent('valleyvista-auth-changed', { detail: currentUser }));
           window.dispatchEvent(new CustomEvent('himyatra-auth-changed', { detail: currentUser }));
         }
       } catch (cntErr) {

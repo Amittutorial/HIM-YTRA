@@ -22,7 +22,7 @@ import {
   Download
 } from 'lucide-react';
 import { TOUR_PACKAGES } from '../data/travelData';
-import { getSmartAssistantResponse, VALLEYVISTA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
+import { getSmartAssistantResponse, HIMYATRA_PACKAGES, detectLanguage } from '../lib/chatbotEngine';
 import { generatePackageItineraryPDF } from '../lib/pdfGenerator';
 
 /* ─── Package card parser ─── */
@@ -158,13 +158,13 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
     const pkgId = data.pkgId || data.id;
     return (
       TOUR_PACKAGES.find((p) => p.id === pkgId) ||
-      VALLEYVISTA_PACKAGES.find((p) => p.id === pkgId) ||
+      HIMYATRA_PACKAGES.find((p) => p.id === pkgId) ||
       data
     );
   }, [data]);
 
   const whatsappMsg = encodeURIComponent(
-    `Hi Valley Vista! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
+    `Hi HIM YTRA! I saw "${fullPkg.title || data.title}" (${fullPkg.discountedPrice || fullPkg.price || data.price}/person) on your AI Assistant. Please share details and availability!`
   );
 
   // Instantly open details modal & minimize chat so user immediately sees the package modal!
@@ -216,7 +216,7 @@ function PackageCard({ data, onSelectPackage, onBookPackage, onMinimizeChat }) {
       {/* Badge & Title */}
       <div>
         <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 mb-1">
-          {fullPkg.badge || data.badge || 'Valley Vista Special'}
+          {fullPkg.badge || data.badge || 'HIM YTRA Special'}
         </span>
         <h4 className="font-bold text-sm text-white leading-snug group-hover:text-teal-300 transition-colors">
           {fullPkg.title || data.title}
@@ -302,7 +302,7 @@ function TypingIndicator() {
           />
         ))}
       </div>
-      <span className="text-[11px] text-teal-300 font-medium">Valley Vista AI...</span>
+      <span className="text-[11px] text-teal-300 font-medium">HIM YTRA AI...</span>
     </div>
   );
 }
@@ -320,7 +320,7 @@ function MessageBubble({ msg, onFeedback, onSelectPackage, onBookPackage, onMini
             <div className="w-5 h-5 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center">
               <Compass className="w-3.5 h-3.5 text-teal-400" />
             </div>
-            <span className="text-[11px] font-bold text-teal-400">Valley Vista Assistant</span>
+            <span className="text-[11px] font-bold text-teal-400">HIM YTRA Assistant</span>
           </div>
         )}
 
@@ -407,12 +407,12 @@ export default function AIChatbot({ onSelectPackage, onBookPackage, isAnyModalOp
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const WELCOME_EN = `Hello! 🙏 I am your **Valley Vista AI Travel Assistant**.
+  const WELCOME_EN = `Hello! 🙏 I am your **HIM YTRA AI Travel Assistant**.
 Ask me anything about worldwide holiday packages, domestic India tours, honeymoon specials, Char Dham 2026, fixed cab rentals, or custom itineraries!
 
 I can generate tailor-made itineraries and pricing instantly. Where would you like to travel?`;
 
-  const WELCOME_HI = `Namaste! 🙏 Main **Valley Vista Assistant** hoon.
+  const WELCOME_HI = `Namaste! 🙏 Main **HIM YTRA Assistant** hoon.
 Worldwide holidays, domestic tours, honeymoon packages, fixed-route cabs, ya Char Dham Yatra ke bare mein kuch bhi poochiye!
 
 Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta hoon. Aap kahan ghoomna chahte hain?`;
@@ -593,7 +593,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
       .slice(-3)
       .join(' | ');
     const text = encodeURIComponent(
-      `Hi Valley Vista Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a holiday trip'}. Please assist me!`
+      `Hi HIM YTRA Desk! I am chatting on your website. My enquiry: ${summary || 'I need help planning a holiday trip'}. Please assist me!`
     );
     window.open(`https://wa.me/917619917057?text=${text}`, '_blank');
   };
@@ -646,7 +646,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             </div>
             <div className="text-xs text-left">
               <div className="font-bold flex items-center gap-1.5">
-                <span>Valley Vista Assistant</span>
+                <span>HIM YTRA Assistant</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <div className="text-[10px] text-teal-300">Click to resume conversation</div>
@@ -752,7 +752,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-emerald-300 ring-1 ring-slate-950 animate-pulse" />
               </div>
               <div>
-                <div className="text-xs font-bold leading-tight">Valley Vista AI Assistant</div>
+                <div className="text-xs font-bold leading-tight">HIM YTRA AI Assistant</div>
                 <div className="text-[10px] text-teal-100 flex items-center gap-1">
                   <span>Worldwide Travel Specialist</span>
                   <span>•</span>
@@ -845,7 +845,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
                 className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
                 maxLength={500}
                 disabled={isTyping}
-                aria-label="Ask Valley Vista AI"
+                aria-label="Ask HIM YTRA AI"
               />
               <button
                 type="submit"
@@ -905,7 +905,7 @@ Aapke liye main best itineraries aur budget estimates instantly taiyar kar sakta
             }}
             className="relative w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-teal-600 to-teal-400 text-white shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-108 active:scale-95 cursor-pointer teal-launcher-glow group"
             aria-label="Open AI Mountain Guide"
-            title="Chat with Valley Vista AI Assistant"
+            title="Chat with HIM YTRA AI Assistant"
           >
             <Compass className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 group-hover:rotate-45 transition-transform duration-500 drop-shadow" />
 

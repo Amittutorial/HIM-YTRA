@@ -369,7 +369,7 @@ export default function CabRentalCalculator({ onOpenBooking }) {
           {/* Action Buttons */}
           <div className="space-y-3">
             <a
-              href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi Valley Vista! I want to book a cab:
+              href={`https://wa.me/917619917057?text=${encodeURIComponent(`Hi HIM YTRA! I want to book a cab:
 📍 Route: ${currentRoute.from} to ${currentRoute.to}
 🚗 Vehicle: ${vehicleDetails[vehicleType]?.name}
 📅 Date: ${pickupDate}
@@ -382,7 +382,7 @@ Please confirm availability!`)}`}
                 const cabInq = {
                   name: 'Cab Booking Visitor',
                   phone: '+91 76199 17057',
-                  email: 'cab_booking@valleyvista.com',
+                  email: 'cab_booking@himytra.com',
                   destination: `${currentRoute.from} to ${currentRoute.to}`,
                   travelDate: pickupDate,
                   message: `Fixed Fare Cab Booking: ${vehicleDetails[vehicleType]?.name} (${tripType === 'oneway' ? 'One-Way' : 'Round-Trip'}), Fare: ₹${currentFare}`,

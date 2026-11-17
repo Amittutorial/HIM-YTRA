@@ -201,7 +201,7 @@ export default function AdminDashboardModal({ isOpen, onClose }) {
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Amit Verma (+91 76199 17057) • Valley Vista Operations
+                Amit Verma (+91 76199 17057) • HIM YTRA Operations
               </p>
             </div>
           </div>

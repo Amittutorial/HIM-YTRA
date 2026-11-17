@@ -20,14 +20,14 @@ function writeBoth(subPath, content) {
   }
 }
 
-console.log('🏔️ Starting Valley Vista Pre-rendering engine...');
+console.log('🏔️ Starting HIM YTRA Pre-rendering engine...');
 
 // 1. Generate Static Pre-rendered Pages for Every Tour Package
 TOUR_PACKAGES.forEach((pkg) => {
 
   const canonicalUrl = `https://him-ytra.vercel.app/?pkg=${pkg.id}`;
   const ogImage = pkg.image || 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&h=630&q=85';
-  const pageTitle = `${pkg.title} (${pkg.duration}) — ₹${pkg.discountedPrice?.toLocaleString('en-IN') || pkg.price} | Valley Vista`;
+  const pageTitle = `${pkg.title} (${pkg.duration}) — ₹${pkg.discountedPrice?.toLocaleString('en-IN') || pkg.price} | HIM YTRA`;
   const metaDesc = `${pkg.desc || pkg.subtitle || ''} Experience ${pkg.title} across ${pkg.state}. Includes ${pkg.transport || 'private cab'}, hotel stays, meals & 24/7 mountain support.`;
 
   const itineraryHtml = (pkg.itinerary || [])
@@ -59,12 +59,12 @@ TOUR_PACKAGES.forEach((pkg) => {
   <meta name="description" content="${metaDesc.replace(/"/g, '&quot;')}" />
   <link rel="canonical" href="${canonicalUrl}" />
   <meta name="theme-color" content="#12372F" />
-  <meta name="application-name" content="Valley Vista" />
-  <meta name="apple-mobile-web-app-title" content="Valley Vista" />
+  <meta name="application-name" content="HIM YTRA" />
+  <meta name="apple-mobile-web-app-title" content="HIM YTRA" />
   <meta name="author" content="Amit Verma (+91 76199 17057)" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/mountain-logo.jpg" />
-  <meta property="og:site_name" content="Valley Vista" />
+  <meta property="og:site_name" content="HIM YTRA" />
 
   <!-- Open Graph / Facebook / WhatsApp (1200x630) -->
   <meta property="og:type" content="website" />
@@ -99,7 +99,7 @@ TOUR_PACKAGES.forEach((pkg) => {
     },
     "provider": {
       "@type": "TravelAgency",
-      "name": "Valley Vista Worldwide Tours & Travels",
+      "name": "HIM YTRA – Premium Himachal & Uttarakhand Tours & Travels",
       "founder": {
         "@type": "Person",
         "name": "Amit Verma",
@@ -133,7 +133,7 @@ TOUR_PACKAGES.forEach((pkg) => {
 <body>
   <div class="container">
     <div style="margin-bottom: 1.5rem;">
-      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to Valley Vista Home</a>
+      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to HIM YTRA Home</a>
     </div>
 
     <div>
@@ -156,7 +156,7 @@ TOUR_PACKAGES.forEach((pkg) => {
         </div>
       </div>
       <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi Valley Vista! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice}/person). Please share details!`)}" class="btn btn-primary">
+        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi HIM YTRA! I want to inquire about "${pkg.title}" (₹${pkg.discountedPrice}/person). Please share details!`)}" class="btn btn-primary">
           💬 WhatsApp Inquiry
         </a>
         <a href="/?pkg=${pkg.id}" class="btn btn-secondary">
@@ -198,7 +198,7 @@ TOUR_PACKAGES.forEach((pkg) => {
     </div>
 
     <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #64748b; font-size: 0.85rem; text-align: center;">
-      <p>© 2026 Valley Vista Worldwide Tours & Travels. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
+      <p>© 2026 HIM YTRA Tours & Travels. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
     </footer>
   </div>
 </body>
@@ -213,7 +213,7 @@ console.log(`✅ Pre-rendered ${TOUR_PACKAGES.length} individual tour package pa
 DESTINATIONS.forEach((dest) => {
   const canonicalUrl = `https://him-ytra.vercel.app/?dest=${dest.id}`;
   const ogImage = dest.image || 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&h=630&q=85';
-  const pageTitle = `${dest.name} Tour Packages, Cabs & Travel Guide (${dest.state}) — Valley Vista`;
+  const pageTitle = `${dest.name} Tour Packages, Cabs & Travel Guide (${dest.state}) — HIM YTRA`;
   const metaDesc = `Explore ${dest.name} in ${dest.state}. ${dest.tagline || ''}. Altitude: ${dest.altitude || 'Himalayas'}. Best time to visit: ${dest.bestTime}. Starting ₹${dest.startingPrice?.toLocaleString('en-IN') || '4,999'} per person.`;
 
   const highlightsHtml = (dest.highlights || [])
@@ -229,12 +229,12 @@ DESTINATIONS.forEach((dest) => {
   <meta name="description" content="${metaDesc.replace(/"/g, '&quot;')}" />
   <link rel="canonical" href="${canonicalUrl}" />
   <meta name="theme-color" content="#12372F" />
-  <meta name="application-name" content="Valley Vista" />
-  <meta name="apple-mobile-web-app-title" content="Valley Vista" />
+  <meta name="application-name" content="HIM YTRA" />
+  <meta name="apple-mobile-web-app-title" content="HIM YTRA" />
   <meta name="author" content="Amit Verma (+91 76199 17057)" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/mountain-logo.jpg" />
-  <meta property="og:site_name" content="Valley Vista" />
+  <meta property="og:site_name" content="HIM YTRA" />
 
   <!-- Open Graph / Facebook / WhatsApp (1200x630) -->
   <meta property="og:type" content="website" />
@@ -288,7 +288,7 @@ DESTINATIONS.forEach((dest) => {
 <body>
   <div class="container">
     <div style="margin-bottom: 1.5rem;">
-      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to Valley Vista Home</a>
+      <a href="/" style="color: #2dd4bf; text-decoration: none; font-weight: 600;">← Back to HIM YTRA Home</a>
     </div>
 
     <div>
@@ -314,11 +314,11 @@ DESTINATIONS.forEach((dest) => {
         
       </div>
       <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi Valley Vista! I want to plan a tour to ${dest.name} (${dest.state}). Please send available packages and cab options!`)}" class="btn btn-primary">
+        <a href="https://wa.me/917619917057?text=${encodeURIComponent(`Hi HIM YTRA! I want to plan a tour to ${dest.name} (${dest.state}). Please send available packages and cab options!`)}" class="btn btn-primary">
           💬 Plan on WhatsApp
         </a>
         <a href="/?dest=${dest.id}" class="btn btn-secondary">
-          ✨ View Packages on Valley Vista
+          ✨ View Packages on HIM YTRA
         </a>
       </div>
     </div>
@@ -329,7 +329,7 @@ DESTINATIONS.forEach((dest) => {
     </ul>
 
     <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #64748b; font-size: 0.85rem; text-align: center;">
-      <p>© 2026 Valley Vista Worldwide Tours & Travels. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
+      <p>© 2026 HIM YTRA Tours & Travels. Registered Travel Agency (HP-TO-2024-8841). GSTIN: 02AAACH7891K1Z5. Himachal Pradesh & Uttarakhand Specialist.</p>
     </footer>
   </div>
 </body>

@@ -258,7 +258,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-emerald-400">
                 Journeys Worldwide
               </span> <br />
-              <span className="text-white/95">by Valley Vista</span>
+              <span className="text-white/95">by HIM YTRA</span>
             </h1>
 
             {/* Quick trust metrics */}
@@ -280,7 +280,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
             <p className="text-xs sm:text-base lg:text-lg text-slate-200/90 leading-relaxed font-light backdrop-blur-md bg-slate-950/40 p-3 sm:p-5 rounded-2xl border border-white/10 shadow-lg">
               {lang === 'hi'
                 ? 'दुनिया भर की खूबसूरत यात्राएं, घरेलू और अंतर्राष्ट्रीय हॉलिडे पैकेज, कस्टमाइज्ड ट्रिप और लक्जरी टूर — वैलीविस्टा के साथ।'
-                : 'Discover the world, experience different cultures, and create unforgettable journeys. Worldwide holiday packages, domestic India tours, and luxury getaways with Valley Vista.'}
+                : 'Discover the world, experience different cultures, and create unforgettable journeys. Worldwide holiday packages, domestic India tours, and luxury getaways with HIM YTRA.'}
             </p>
 
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
@@ -293,7 +293,7 @@ export default function Hero({ onOpenBooking, onExploreClick, onQuickSearch, the
               </button>
 
               <a
-                href="https://wa.me/917619917057?text=Hi%20Valley%20Vista!%20I%20want%20to%20plan%20a%20holiday%20trip.%20Please%20guide%20me."
+                href="https://wa.me/917619917057?text=Hi%20HIM%20YTRA!%20I%20want%20to%20plan%20a%20holiday%20trip.%20Please%20guide%20me."
                 target="_blank"
                 rel="noreferrer"
                 className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 sm:px-6 py-2.5 sm:py-3.5 rounded-full text-xs sm:text-base flex items-center gap-2 shadow-lg shadow-emerald-500/25 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"

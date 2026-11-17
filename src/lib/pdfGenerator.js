@@ -3,7 +3,7 @@ import QRCode from 'qrcode';
 
 /**
  * ══════════════════════════════════════════════════════════════════════════
- * VALLEY VISTA LUXURY BOOKING CONFIRMATION & E-TICKET PDF GENERATOR
+ * HIM YTRA LUXURY BOOKING CONFIRMATION & E-TICKET PDF GENERATOR
  * ══════════════════════════════════════════════════════════════════════════
  * Visual Style:
  * - A4 Portrait (210mm x 297mm)
@@ -89,7 +89,7 @@ function createSignatureDataUrl(signerName) {
 }
 
 /**
- * Generate official corporate seal stamp data URL for Valley Vista
+ * Generate official corporate seal stamp data URL for HIM YTRA
  */
 function createCorporateSealDataUrl() {
   if (typeof document === 'undefined') return null;
@@ -131,7 +131,7 @@ function createCorporateSealDataUrl() {
     ctx.font = 'bold 15px Arial, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('★ VALLEY VISTA ★', cx, cy - 36);
+    ctx.fillText('★ HIM YTRA ★', cx, cy - 36);
 
     ctx.fillStyle = '#C6A15B';
     ctx.font = 'bold 10px Arial, sans-serif';
@@ -262,7 +262,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
     doc.setFontSize(7.5);
     doc.setTextColor(COLOR_TEXT_LIGHT[0], COLOR_TEXT_LIGHT[1], COLOR_TEXT_LIGHT[2]);
     doc.text(
-      `Valley Vista Worldwide Tours & Travels • Official E-Ticket Voucher • Ref: ${bookingRef} • Page ${pageNum} of ${totalPages}`,
+      `HIM YTRA Tours & Travels • Official E-Ticket Voucher • Ref: ${bookingRef} • Page ${pageNum} of ${totalPages}`,
       pageWidth / 2,
       pageHeight - 10,
       { align: 'center' }
@@ -304,7 +304,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(255, 255, 255);
-  doc.text('VALLEY VISTA', marginX + 5, currentY + 8.5);
+  doc.text('HIM YTRA', marginX + 5, currentY + 8.5);
 
   // Brand Category & Tagline
   doc.setFont('helvetica', 'bold');
@@ -636,7 +636,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.text(`Direct: ${FOUNDER_INFO.contact} • Verified Email`, marginX + 3.5, currentY + 27);
   doc.text(FOUNDER_INFO.email, marginX + 3.5, currentY + 30.5);
   doc.setFontSize(5.2);
-  doc.text('Valley Vista Worldwide Tours & Travels Pvt Ltd', marginX + 3.5, currentY + 34);
+  doc.text('HIM YTRA Tours & Travels Pvt Ltd', marginX + 3.5, currentY + 34);
 
   // 2. CO-FOUNDER (Center Column)
   const coFounderX = marginX + authW + 3;
@@ -662,7 +662,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.setFontSize(5.8);
   doc.setTextColor(COLOR_TEXT_MUTED[0], COLOR_TEXT_MUTED[1], COLOR_TEXT_MUTED[2]);
   doc.text(`Direct: ${CO_FOUNDER_INFO.contact} • Verified Exec`, coFounderX + 3.5, currentY + 27);
-  doc.text('Operations Desk, Valley Vista HQ', coFounderX + 3.5, currentY + 30.5);
+  doc.text('Operations Desk, HIM YTRA HQ', coFounderX + 3.5, currentY + 30.5);
   doc.setFontSize(5.2);
   doc.text('Executive Management Board Verified', coFounderX + 3.5, currentY + 34);
 
@@ -711,7 +711,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
   doc.setTextColor(COLOR_GOLD[0], COLOR_GOLD[1], COLOR_GOLD[2]);
-  doc.text('THANK YOU FOR CHOOSING VALLEY VISTA!', pageWidth / 2, currentY + 4, { align: 'center' });
+  doc.text('THANK YOU FOR CHOOSING HIM YTRA!', pageWidth / 2, currentY + 4, { align: 'center' });
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6);
@@ -722,7 +722,7 @@ export async function generateBookingConfirmationPDF(bookingData, returnType = '
   drawPageBorderAndDecor(1, 1);
 
   // 3. Return requested format
-  const cleanFileName = `ValleyVista_Booking_Confirmation_${bookingRef}.pdf`;
+  const cleanFileName = `HIM_YTRA_Booking_Confirmation_${bookingRef}.pdf`;
 
   if (returnType === 'blob') {
     return {
@@ -775,7 +775,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   const price = pkg.discountedPrice ? `INR ${pkg.discountedPrice.toLocaleString('en-IN')}` : pkg.price || 'INR 13,999';
   const state = pkg.state || 'Himachal Pradesh & Uttarakhand';
   const cleanTitle = pkgTitle.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 30);
-  const cleanFileName = `ValleyVista_Itinerary_${cleanTitle}.pdf`;
+  const cleanFileName = `HIM_YTRA_Itinerary_${cleanTitle}.pdf`;
 
   // Draw Border Helper
   const drawPageBorder = (pageNum, totalPages) => {
@@ -791,7 +791,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
     doc.setFontSize(7.5);
     doc.setTextColor(COLOR_TEXT_LIGHT[0], COLOR_TEXT_LIGHT[1], COLOR_TEXT_LIGHT[2]);
     doc.text(
-      `Valley Vista Official Tour Itinerary & Vacation Guide • Page ${pageNum} of ${totalPages} • 24/7 Helpline: +91 76199 17057`,
+      `HIM YTRA Official Tour Itinerary & Vacation Guide • Page ${pageNum} of ${totalPages} • 24/7 Helpline: +91 76199 17057`,
       pageWidth / 2,
       pageHeight - 10,
       { align: 'center' }
@@ -825,7 +825,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(255, 255, 255);
-  doc.text('VALLEY VISTA', marginX + 5, currentY + 8.5);
+  doc.text('HIM YTRA', marginX + 5, currentY + 8.5);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
@@ -1020,7 +1020,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   doc.setTextColor(COLOR_TEXT_MUTED[0], COLOR_TEXT_MUTED[1], COLOR_TEXT_MUTED[2]);
   doc.text(`Direct Helpline: ${FOUNDER_INFO.contact}`, marginX + 4, currentY + 26);
   doc.text(FOUNDER_INFO.email, marginX + 4, currentY + 29.5);
-  doc.text('Valley Vista Worldwide Tours & Travels Pvt Ltd', marginX + 4, currentY + 33);
+  doc.text('HIM YTRA Tours & Travels Pvt Ltd', marginX + 4, currentY + 33);
 
   // Corporate Seal in Center
   const corporateSealImg = createCorporateSealDataUrl();
@@ -1067,7 +1067,7 @@ export async function generatePackageItineraryPDF(pkg, returnType = 'save') {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.2);
   doc.setTextColor(COLOR_GOLD[0], COLOR_GOLD[1], COLOR_GOLD[2]);
-  doc.text('THANK YOU FOR CHOOSING VALLEY VISTA!', pageWidth / 2, currentY + 4, { align: 'center' });
+  doc.text('THANK YOU FOR CHOOSING HIM YTRA!', pageWidth / 2, currentY + 4, { align: 'center' });
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(6);
