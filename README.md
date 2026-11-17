@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# 🌄 Valley Vista
+# 🌄  HIM-YTRA
 ### Worldwide Travel, Tours & Holiday Experiences
 
 **From Everywhere. To Everywhere. 🏔️**
@@ -22,7 +22,7 @@ A premier travel and vacation portal for domestic India, Himalayan circuits, and
 
 ## 📌 About the Project
 
-**Valley Vista** is a comprehensive travel booking platform focused on premium vacation packages across **Himachal Pradesh, Uttarakhand, Kashmir, Rajasthan, Ladakh, and Spiritual Circuits**. It offers live online booking, interactive PDF itineraries, dedicated cab rentals, and 24/7 concierge assistance.
+**Him Ytra** is a comprehensive travel booking platform focused on premium vacation packages across **Himachal Pradesh, Uttarakhand, Kashmir, Rajasthan, Ladakh, and Spiritual Circuits**. It offers live online booking, interactive PDF itineraries, dedicated cab rentals, and 24/7 concierge assistance.
 
 🌐 **Live Website:** https://him-ytra.vercel.app/  
 💻 **Repository:** https://github.com/Amittutorial/HIM-YTRA
@@ -173,7 +173,7 @@ Have a suggestion or found an issue?
 
 ## ⭐ Support the Project
 
-If you like Valley Vista, visit the live website and consider giving the repository a ⭐ star.
+If you like Him Ytra, visit the live website and consider giving the repository a ⭐ star.
 
 ---
 
@@ -181,7 +181,7 @@ If you like Valley Vista, visit the live website and consider giving the reposit
 
 **Made with ❤️ by Amit Verma**
 
-### 🌄 Explore More. Discover Valley Vista.
+### 🌄 Explore More. Discover Him Ytra.
 
 </div>
 .
